@@ -1,78 +1,146 @@
 package com.example.tableorder
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-import com.example.tableorder.data.MemberModel
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.tableorder.databinding.ActivityMainBinding
-import com.example.tableorder.retrofit.INetworkService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-
-class MainActivity : AppCompatActivity() {
-
-//    val URL = "10.100.203.11"
+import com.google.android.material.navigation.NavigationView
 
 
-    private fun saveMember() {
-        val retrofit: Retrofit =
-            Retrofit.Builder()
-                .baseUrl("http://10.100.203.11/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-        var networkService: INetworkService = retrofit.create(INetworkService::class.java)
+class MainActivity : AppCompatActivity(){
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
-        val signOnCall: Call<MemberModel> = networkService.signOn(
-            MemberModel(
-                username = "이름인부분",
-                password = "123",
-                email = "123@naver",
-                phone = "000-000"
-            )
-        )
-
-        signOnCall.enqueue(object : Callback<MemberModel> {
-            override fun onResponse(call: Call<MemberModel>, response: Response<MemberModel>) {
-                if(response.isSuccessful){
-                    Log.i("$$ homecall success ", response.body().toString())
-
-                    val result : MemberModel = response.body() as MemberModel
-
-                    Log.d("$$ :::", result.toString())
-
-
-                } else {
-                    Log.i("$$ homecall result resonse not ok", response.code().toString())
-                    Log.i("$$ homecall result resonse not ok", response.body().toString())
-
-
-                }
-            }
-
-            override fun onFailure(call: Call<MemberModel>, t: Throwable) {
-                call.cancel()
-            }
-        })
-
-    }
+    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnId.setOnClickListener {/*
-            val backgroundScope = CoroutineScope(Dispatchers.Default)
-            backgroundScope.launch {
-                saveMember()
-            }*/
-            saveMember()
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val drawerLayout: DrawerLayout = binding.drawerLayout
+        val navView: NavigationView = binding.navigationView
+        navView.setupWithNavController(navController)
+       /* appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.homeFragment,
+                R.id.adminHomeFragment,
+                R.id.donorsHomeFragment
+            ), drawerLayout
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment)) {
+                supportActionBar?.hide()
+            }
+            if (destination.id in listOf(
+                    R.id.donateFragment,
+                    R.id.receiveFragment,
+                    R.id.donationsFragment,
+                    R.id.foodMapFragment,
+                    R.id.historyFragment,
+                    R.id.aboutUsFragment,
+                )
+            ) {
+                supportActionBar?.show()
+                supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true)
+            }
+        }*/
+
+        /*val header = binding.navigationView.getHeaderView(0)
+        val imageView = header.findViewById<ImageView>(R.id.imageView)
+        val userImage = auth.currentUser?.photoUrl
+        lifecycleScope.launch {
+            whenCreated {
+                RepositoryImpl.getInstance().getCurrentUserEmail {
+                    val userEmailText = header.findViewById<android.widget.TextView>(R.id.useremail)
+                    userEmailText.text = it
+                }
+            }
         }
 
+        Glide
+            .with(this)
+            .load(userImage)
+            .apply(RequestOptions().override(150, 150))
+            .placeholder(R.drawable.ic_person)
+            .into(imageView)*/
+
+        /*binding.navigationView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.action_help -> {
+                    startActivity(Intent(this, HelpActivity::class.java))
+                    true
+                }
+                R.id.action_home -> {
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    true
+                }
+                R.id.nav_share -> {
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.type = "text/plain"
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "FOODONOR")
+                    intent.putExtra(Intent.EXTRA_TEXT, "")
+                    startActivity(Intent.createChooser(intent, "Share via"))
+                    true
+                }
+                R.id.action_feedback -> {
+                    val intent = Intent(Intent.ACTION_SENDTO)
+                    intent.data =
+                        Uri.parse("mailto:" + "leencelidoros@gmail.com") // only email apps should handle this
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback")
+                    if (intent.resolveActivity(this.packageManager) != null) {
+                        startActivity(intent)
+                    }
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }*/
+
+       /* val handler = Handler(Looper.getMainLooper())
+
+        handler.postDelayed({
+            // 5초 후에 실행할 코드를 여기에 작성
+            // 다른 엑티비티로 이동하려면 Intent를 사용하면 됩니다.
+            val intent = Intent(this, YourNextActivity::class.java)
+            startActivity(intent)
+            finish() // 현재 엑티비티를 종료하고 다른 엑티비티로 이동
+        }, 5000)*/
+
     }
+    override fun onResume() {
+        super.onResume()
+        setSupportActionBar(binding.toolbar)
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        return navController.navigateUp(appBarConfiguration)
+                || super.onSupportNavigateUp()
+    }
+
+    override fun onBackPressed() {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+
+
 }

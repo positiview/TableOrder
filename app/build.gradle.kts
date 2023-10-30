@@ -1,7 +1,14 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+
+    id("kotlin-kapt")
+    id("kotlin-parcelize")
+    id("androidx.navigation.safeargs.kotlin")
 }
+
+
 
 android {
     namespace = "com.example.tableorder"
@@ -37,6 +44,22 @@ android {
 }
 
 dependencies {
+
+    //구글디펜던시추가
+    implementation("com.google.android.gms:play-services-maps:18.0.2")
+    implementation("com.google.android.gms:play-services-location:19.0.1")
+
+    //Navigation
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.5.0")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.5.0")
+    //circle image view
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+
+    //hiltdagger
+    implementation ("com.google.dagger:hilt-android:2.41")
+//    kapt ("com.google.dagger:hilt-android-compiler:2.40.5")
+    //Glide
+    implementation ("com.github.bumptech.glide:glide:4.13.0")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

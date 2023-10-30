@@ -21,9 +21,11 @@ import com.google.android.gms.maps.model.Marker
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+
     private lateinit var gMap: GoogleMap
     private lateinit var bindMain: ActivityMainBinding
 
+    //FusedLocationProviderClient 를 이용해서 위치 정보 제공 함
     lateinit var fusedLocationClient : FusedLocationProviderClient
 
     val curLocation : PointD = PointD()
@@ -84,9 +86,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         restaurantMap = mutableMapOf<String, RestaurantInfoDTO>()
-        restaurantMap.put("AAA", RestaurantInfoDTO("AAA", 35.88, 128.59))
-        restaurantMap.put("BBB", RestaurantInfoDTO("BBB", 35.89, 128.58))
-        restaurantMap.put("CCC", RestaurantInfoDTO("CCC", 35.86, 128.605))
+
+        restaurantMap.put("삼환축산", RestaurantInfoDTO("삼환축산", 35.1557217,129.0597084 ))
+        restaurantMap.put("멕도날드", RestaurantInfoDTO("멕도날드", 35.1546287, 129.0610991))
+        restaurantMap.put("먹담", RestaurantInfoDTO("먹담", 35.1535201, 129.0613613))
 
         bindMain = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindMain.root)

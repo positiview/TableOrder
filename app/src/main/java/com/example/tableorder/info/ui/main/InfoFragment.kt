@@ -131,5 +131,4 @@ class InfoFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickList
             return "PointD(x=$x, y=$y)"
         }
     }
-
 }

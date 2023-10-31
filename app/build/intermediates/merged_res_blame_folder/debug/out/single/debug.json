@@ -1,0 +1,298 @@
+[
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_instagram.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_instagram.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_login.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_login.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_group_people_svgrepo_com.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_group_people_svgrepo_com.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_lock.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_lock.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_fooddonation.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_fooddonation.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_admin_home.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_admin_home.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_warning.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_warning.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_account.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_account.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_activity_main.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_pin_map_location_svgrepo_com.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_pin_map_location_svgrepo_com.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_custom_dialog.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/custom_dialog.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_baseline_history_24.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_baseline_history_24.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_nav_header_items.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/nav_header_items.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_nav_drawer_icon.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_nav_drawer_icon.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_donations_row_layout.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/donations_row_layout.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_facebook.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_facebook.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_donor_location.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_donor_location.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_progress.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/progress.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_reset_password.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_reset_password.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/xml_data_extraction_rules.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.example.tableorder.app-main-54:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_splash.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_splash.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_donation_item.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/donation_item.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_baseline_home_24.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_baseline_home_24.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_customer_service_svgrepo_com.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_customer_service_svgrepo_com.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/navigation_nav_graph.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/navigation/nav_graph.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_pins.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_pins.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_food_map.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_food_map.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.tableorder.app-main-54:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/xml_backup_rules.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_activity_help.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/activity_help.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_baseline_account_circle_24.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_baseline_account_circle_24.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_twitter.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_twitter.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_help.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_help.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_receive_row_layout.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/receive_row_layout.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.example.tableorder.app-main-54:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_share.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_share.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.tableorder.app-main-54:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_logout.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_logout.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_donors_home.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_donors_home.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_about_us.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_about_us.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_location.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_location.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_mail.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_mail.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_person.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_person.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.tableorder.app-main-54:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_history.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_history.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.tableorder.app-main-54:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/menu_drawer_items.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/menu/drawer_items.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/menu_admin_menu.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/menu/admin_menu.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_donate.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_donate.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_exit_logout_svgrepo_com.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_exit_logout_svgrepo_com.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_donations.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_donations.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_user_item.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/user_item.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_feedback.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_feedback.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_receive.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_receive.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_outline_history_edu_24.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_outline_history_edu_24.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_phone.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_phone.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_location_svgrepo_com.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_location_svgrepo_com.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_btn_background.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/btn_background.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.tableorder.app-main-54:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_home.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_sign_up.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_sign_up.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.example.tableorder.app-main-54:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_receive.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_receive.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_donate.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_donate.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/layout_fragment_contact_us.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_contact_us.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_foodonor.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_foodonor.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/drawable_ic_baseline_arrow_back_24.xml.flat",
+        "source": "com.example.tableorder.app-main-54:/drawable/ic_baseline_arrow_back_24.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.example.tableorder.app-main-54:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.example.tableorder.app-merged_res-52:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.example.tableorder.app-main-54:/mipmap-xxhdpi/ic_launcher.webp"
+    }
+]

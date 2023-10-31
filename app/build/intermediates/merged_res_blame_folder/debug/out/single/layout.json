@@ -1,0 +1,94 @@
+[
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_sign_up.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_sign_up.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_login.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_login.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_donor_location.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_donor_location.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_receive.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_receive.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_home.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/activity_help.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/activity_help.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/donation_item.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/donation_item.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_history.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_history.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_food_map.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_food_map.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_about_us.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_about_us.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_contact_us.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_contact_us.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/activity_main.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/user_item.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/user_item.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/receive_row_layout.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/receive_row_layout.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/nav_header_items.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/nav_header_items.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/custom_dialog.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/custom_dialog.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_admin_home.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_admin_home.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_donate.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_donate.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_donors_home.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_donors_home.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/donations_row_layout.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/donations_row_layout.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_reset_password.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_reset_password.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_splash.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_splash.xml"
+    },
+    {
+        "merged": "com.example.tableorder.app-mergeDebugResources-51:/layout/fragment_donations.xml",
+        "source": "com.example.tableorder.app-main-54:/layout/fragment_donations.xml"
+    }
+]

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="http://schemas.android.com/tools">
+    <color name="black">#FF000000</color>
+    <color name="orange">#FF9801</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="about_us">About Us</string>
+    <string name="admin">Admin</string>
+    <string name="already_having_an_account">Already having an account?</string>
+    <string name="app_name">TableOrder</string>
+    <string name="communicate">Communicate</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="description">Description</string>
+    <string name="donated_food_item">Donated Food Item</string>
+    <string name="dont_have_an_account">Dont have an account?</string>
+    <string name="email_address">Email Address</string>
+    <string name="feedback">Feedback</string>
+    <string name="fill_in_the_details_to_create_account">Fill in the details to create account</string>
+    <string name="food_item">Food item</string>
+    <string name="forexample_gmail_com">forexample@gmail.com</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="help">Help</string>
+    <string name="history">History</string>
+    <string name="home">Home</string>
+    <string name="loading">Loading..</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et_dolore_magna_aliqua">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="my_pins">My pins</string>
+    <string name="name">Name</string>
+    <string name="organization_receiver">Organization</string>
+    <string name="password">Password</string>
+    <string name="phone_number">Phone number</string>
+    <string name="receiver_name">Receiver name</string>
+    <string name="register">Register</string>
+    <string name="reset">Reset</string>
+    <string name="resturant_donor">Resturant</string>
+    <string name="share">Share</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="submit">Submit</string>
+    <string name="welcome_to_foodonor">Welcome to FoodOnUs</string>
+    <style name="Theme.TableOrder" parent="Theme.MaterialComponents.Light.NoActionBar">
+        
+        <item name="android:forceDarkAllowed" ns1:targetApi="q">false</item>
+
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryVariant">@color/orange</item>
+        <item name="colorOnPrimary">@color/white</item>
+        
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        
+    </style>
+</resources>

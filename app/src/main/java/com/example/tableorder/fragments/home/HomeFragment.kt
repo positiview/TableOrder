@@ -12,7 +12,7 @@ import com.example.tableorder.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment1 : Fragment() {
+class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 //    private lateinit var auth: FirebaseAuth
     override fun onCreateView(
@@ -25,10 +25,10 @@ class HomeFragment1 : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.show()
 //        auth = FirebaseAuth.getInstance()
 
-        binding.cardLogout.setOnClickListener {
-//            auth.signOut()
-            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
-        }
+//        binding.cardLogout.setOnClickListener {
+////            auth.signOut()
+//            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+//        }
         /*binding.cardDonate.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_donateFragment)
         }*/
@@ -38,15 +38,15 @@ class HomeFragment1 : Fragment() {
     /*binding.cardMyPin.setOnClickListener {
         findNavController().navigate(R.id.action_homeFragment_to_donationsFragment)
     }*/
-        binding.cardFoodmap.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_foodMapFragment)
-        }
-        binding.cardAboutus.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_aboutUsFragment)
-        }
-        binding.cardContact.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_contactUsFragment)
-        }
+//        binding.cardFoodmap.setOnClickListener {
+//            findNavController().navigate(R.id.action_homeFragment_to_foodMapFragment)
+//        }
+//        binding.cardAboutus.setOnClickListener {
+//            findNavController().navigate(R.id.action_homeFragment_to_aboutUsFragment)
+//        }
+//        binding.cardContact.setOnClickListener {
+//            findNavController().navigate(R.id.action_homeFragment_to_contactUsFragment)
+//        }
         /*binding.cardHistory.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_historyFragment)
         }*/

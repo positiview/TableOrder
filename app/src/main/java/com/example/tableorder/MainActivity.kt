@@ -14,9 +14,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.viewpager2.widget.ViewPager2
+import com.example.tableorder.adapter.MyFragmentStateAdapter
 import com.example.tableorder.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 
 class MainActivity : AppCompatActivity(){
@@ -30,10 +33,53 @@ class MainActivity : AppCompatActivity(){
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
+
+
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navigationView
+
+//--------------------------------------------------------------------------
+        // 이하에 탭 간 이동 처리 코드
         val tabLayout: TabLayout = findViewById(R.id.tabs)
+
+        val viewPager: ViewPager2 = findViewById(R.id.viewPager)
+        viewPager.adapter = MyFragmentStateAdapter(this)
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = "홈"
+                1 -> tab.text = "예약내역"
+                2 -> tab.text = "즐겨찾기"
+                3 -> tab.text = "자유\n게시판"
+                4 -> tab.text = "마이\n페이지"
+                // 다른 탭에 대한 설정을 추가합니다.
+            }
+        }.attach()
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> navController.navigate(R.id.homeFragment)
+                    1 -> navController.navigate(R.id.aboutUsFragment)
+                    2 -> navController.navigate(R.id.homeFragment)
+                    3 -> navController.navigate(R.id.InfoActivity)
+                    4 -> navController.navigate(R.id.homeFragment)
+                    // 다른 탭에 대한 액션을 추가합니다.
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                // 이전에 선택한 탭에 대한 처리 (옵션)
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                // 같은 탭을 다시 선택한 경우에 대한 처리 (옵션)
+            }
+        })
+
+
+//--------------------------------------------------------------------------
 
         navView.setupWithNavController(navController)
         appBarConfiguration = AppBarConfiguration(

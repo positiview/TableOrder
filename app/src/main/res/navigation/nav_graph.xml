@@ -5,7 +5,7 @@
     android:id="@+id/nav_graph.xml"
     app:startDestination="@id/splashFragment">
     <fragment
-        android:id="@+id/InfoActivity"
+        android:id="@+id/InfoFragment"
         android:name="com.example.tableorder.info.ui.main.InfoFragment"
         android:label="Dashboard"
         tools:layout="@layout/fragment_home" >

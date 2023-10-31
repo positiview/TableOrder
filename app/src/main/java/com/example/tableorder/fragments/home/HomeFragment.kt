@@ -12,7 +12,7 @@ import com.example.tableorder.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment1 : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 //    private lateinit var auth: FirebaseAuth
     override fun onCreateView(
@@ -32,12 +32,12 @@ class HomeFragment : Fragment() {
         /*binding.cardDonate.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_donateFragment)
         }*/
-        /*binding.cardReceive.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_receiveFragment)
-        }
-        binding.cardMyPin.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_donationsFragment)
-        }*/
+//        binding.cardReceive.setOnClickListener {
+//            findNavController().navigate(R.id.action_homeFragment_to_receiveFragment)
+//        }
+    /*binding.cardMyPin.setOnClickListener {
+        findNavController().navigate(R.id.action_homeFragment_to_donationsFragment)
+    }*/
         binding.cardFoodmap.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_foodMapFragment)
         }

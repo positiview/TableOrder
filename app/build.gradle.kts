@@ -56,7 +56,7 @@ dependencies {
     implementation ("de.hdodenhof:circleimageview:3.1.0")
 
     //hiltdagger
-    implementation ("com.google.dagger:hilt-android:2.41")
+    implementation ("com.google.dagger:hilt-android:2.44")
 //    kapt ("com.google.dagger:hilt-android-compiler:2.40.5")
     //Glide
     implementation ("com.github.bumptech.glide:glide:4.13.0")

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -15,6 +16,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.tableorder.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.tabs.TabLayout
 
 
 class MainActivity : AppCompatActivity(){
@@ -26,36 +28,45 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navigationView
+        val tabLayout: TabLayout = findViewById(R.id.tabs)
+
         navView.setupWithNavController(navController)
-       /* appBarConfiguration = AppBarConfiguration(
+        appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.homeFragment,
-                R.id.adminHomeFragment,
-                R.id.donorsHomeFragment
+//                R.id.adminHomeFragment,
+//                R.id.donorsHomeFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment)) {
                 supportActionBar?.hide()
-            }
-            if (destination.id in listOf(
-                    R.id.donateFragment,
-                    R.id.receiveFragment,
-                    R.id.donationsFragment,
-                    R.id.foodMapFragment,
-                    R.id.historyFragment,
-                    R.id.aboutUsFragment,
-                )
-            ) {
+                tabLayout.visibility = View.GONE
+            }else {
                 supportActionBar?.show()
-                supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true)
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                tabLayout.visibility = View.VISIBLE
             }
-        }*/
+//            if (destination.id in listOf(
+////                    R.id.donateFragment,
+////                    R.id.receiveFragment,
+////                    R.id.donationsFragment,
+//                    R.id.foodMapFragment,
+////                    R.id.historyFragment,
+//                    R.id.aboutUsFragment,
+//                )
+//            ) {
+//
+//                supportActionBar?.show()
+//                supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true)
+//            }
+        }
 
         /*val header = binding.navigationView.getHeaderView(0)
         val imageView = header.findViewById<ImageView>(R.id.imageView)

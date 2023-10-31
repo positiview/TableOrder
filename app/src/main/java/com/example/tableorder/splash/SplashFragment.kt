@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.tableorder.databinding.FragmentSplashBinding
@@ -25,8 +26,8 @@ class SplashFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSplashBinding.inflate(inflater, container, false)
         val view = binding.root
-        //(activity as AppCompatActivity).supportActionBar?.hide()
-        /*activity?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN*/
+//        (activity as AppCompatActivity).supportActionBar?.hide()
+//        activity?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
 //        val user = auth.currentUser
         val user = null
@@ -59,13 +60,13 @@ class SplashFragment : Fragment() {
 
                 }else{
                     val action =
-                        SplashFragmentDirections.actionSplashFragmentToLoginFragment()
+                        SplashFragmentDirections.actionSplashFragmentToHomeFragment()
                     findNavController().navigate(action)
                 }
 
             } else {
                 val action =
-                    SplashFragmentDirections.actionSplashFragmentToLoginFragment()
+                    SplashFragmentDirections.actionSplashFragmentToHomeFragment()
                 findNavController().navigate(action)
                 //findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
 

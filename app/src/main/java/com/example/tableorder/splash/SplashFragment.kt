@@ -14,12 +14,20 @@ import com.example.tableorder.databinding.FragmentSplashBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 
+
 @AndroidEntryPoint
+//Fragment() 를 확장 하여 Fragment 를 정의
 class SplashFragment : Fragment() {
+
+    //FragmentSplashBinding 타입의 변수 binding 을 선어하며 데이터 바인딩을 통해 화면 요소와 상호작용할떄 사용
     private lateinit var binding: FragmentSplashBinding
 
     override fun onCreateView(
+        //inflater 레이아웃XML 을 로드 하기위한 LayoutInflater,container는 Fragment 가 표시될 ViewGroup
         inflater: LayoutInflater, container: ViewGroup?,
+        //사용 자가 입력한 텍스트 등 사라지지 않고 복구 될수있음
+        //Bundle 은 키-값 쌍으로 데이터를 저장하고 다른 액티비티, 프로그래그먼트 또는 컴포넌트로 데이터를 전달하
+        //는데 주로 사용함. 예를들어 이전 화면 또는 다른 액티비티로 이동하는 경우 데이터 보존하고 복구하는데 유용.
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment

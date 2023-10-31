@@ -17,13 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TableOrder"
-
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCUtZQamwKp53YhIbSs_Vh6TIrDox3Cda4"/>
+            android:value="${GOOGLE_MAPS_API_KEY}"/>
 
 
     <activity

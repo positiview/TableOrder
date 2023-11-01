@@ -1,164 +1,220 @@
 package com.example.mytableorder
 
-import android.content.pm.PackageManager
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
+import android.view.MotionEvent
+import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.GravityCompat
+import androidx.core.view.WindowCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenCreated
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import androidx.viewpager2.widget.ViewPager2
+import com.example.mytableorder.R
+import com.example.mytableorder.adapter.MyFragmentStateAdapter
 import com.example.mytableorder.databinding.ActivityMainBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import android.Manifest
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.Marker
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
-    private lateinit var gMap: GoogleMap
-    private lateinit var bindMain: ActivityMainBinding
-    
-    //viewModel 추가
-    private lateinit var viewModel: ShopViewModel
-
-    lateinit var fusedLocationClient : FusedLocationProviderClient
-
-
-    val permissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) {
-        // xml에 있는 권한 file들 하나하나에 대한 설정값을 체크해서 각각
-        if (it.all { permission -> permission.value == true }) {
-            Toast.makeText(this, "permission permitted...", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, "permission denied...", Toast.LENGTH_SHORT).show()
-        }
-    }
-    //initializeViewModel
-    fun initializeViewModel() : Unit{
-        viewModel = ViewModelProvider(this)[ShopViewModel::class.java]
-
-        viewModel.getRestaurantList().observe(this, Observer{
-            Log.i("observer", "RestaurantMap ${viewModel.getRestaurantList().value}")
-            viewModel.getRestaurantList().value?.let{
-                for((key,rest) in it){
-                    Log.i("add marker", rest.latitude.toString() + rest.longitude.toString())
-                    Log.i("gamap", gMap.toString())
-                    gMap?.addMarker(MarkerOptions().position(LatLng(rest.latitude+0.02, rest.longitude)).title(rest.name))
-                }
-            }
-        })
-
-        viewModel.getCurLocation().observe(this, Observer{
-            Log.i("observer", "CurLocation")
-            viewModel.getCurLocation().value?.let{
-                gMap?.addMarker(MarkerOptions().position(LatLng(it.lati, it.longti)).title("나"))
-                gMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.lati, it.longti), 15f))
-            }
-
-        })
-    }
-
-
-    fun checkPermission(){
-        // permission을 확인하고, 없으면 요청한다
-        val status = ContextCompat.checkSelfPermission(this,
-            "android.permission.ACCESS_FINE_LOCATION")
-        if (status == PackageManager.PERMISSION_GRANTED) {
-            Log.d(">>", "Permission Granted")
-        } else {
-            Log.d(">>", "Permission Denied")
-            permissionLauncher.launch(
-                arrayOf(
-                    "android.permission.ACCESS_FINE_LOCATION"
-                )
-            )
-        }
-        //End of request for permission
-    }
-
-    private fun setLastKnownLocation() {
-        if(ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION)  === PackageManager.PERMISSION_GRANTED){
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener(this) { location ->
-                    if (location != null) {
-                        viewModel.setCurrentLocation( PointD(location.latitude, location.longitude) )
-                    } else {
-                        Toast.makeText(this, "Location not available", Toast.LENGTH_SHORT).show()
-                    }
-                }
-        }
-
-    }
+class MainActivity : AppCompatActivity(){
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var auth: FirebaseAuth
+   /* private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        checkPermission()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-
-        bindMain = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(bindMain.root)
-
-        initializeViewModel()
-
-//        val mapFragment: SupportMapFragment? =
-//            bindMain.childFragmentManager
-//                .findFragmentById(fragmentId) as SupportMapFragment
-
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        setSupportActionBar(binding.toolbar)
+        auth = FirebaseAuth.getInstance()
 
 
-        bindMain.buttonCurrent.setOnClickListener {
-           setLastKnownLocation()
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val drawerLayout: DrawerLayout = binding.drawerLayout
+        val navView: NavigationView = binding.navigationView
+
+//--------------------------------------------------------------------------
+        // 이하에 탭 간 이동 처리 코드
+        val tabLayout: TabLayout = findViewById(R.id.tabs)
+
+        val viewPager: ViewPager2 = findViewById(R.id.viewPager)
+        viewPager.adapter = MyFragmentStateAdapter(this)
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = "홈"
+                1 -> tab.text = "예약내역"
+                2 -> tab.text = "즐겨찾기"
+                3 -> tab.text = "자유\n게시판"
+                4 -> tab.text = "마이\n페이지"
+                // 다른 탭에 대한 설정을 추가합니다.
+            }
+        }.attach()
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+//                    0 -> navController.navigate(R.id.homeFragment)
+//                    1 -> navController.navigate(R.id.aboutUsFragment)
+//                    2 -> navController.navigate(R.id.homeFragment)
+                    3 -> navController.navigate(R.id.InfoFragment)
+//                    4 -> navController.navigate(R.id.homeFragment)
+                    // 다른 탭에 대한 액션을 추가합니다.
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                // 이전에 선택한 탭에 대한 처리 (옵션)
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                // 같은 탭을 다시 선택한 경우에 대한 처리 (옵션)
+            }
+        })
+
+
+//--------------------------------------------------------------------------
+
+        navView.setupWithNavController(navController)
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+//                R.id.homeFragment,
+//                R.id.adminHomeFragment,
+//                R.id.donorsHomeFragment
+                R.id.InfoFragment
+            ), drawerLayout
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment)) {
+                supportActionBar?.hide()
+                tabLayout.visibility = View.GONE
+            }else {
+                supportActionBar?.show()
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                tabLayout.visibility = View.VISIBLE
+            }
+//            if (destination.id in listOf(
+////                    R.id.donateFragment,
+////                    R.id.receiveFragment,
+////                    R.id.donationsFragment,
+//                    R.id.foodMapFragment,
+////                    R.id.historyFragment,
+//                    R.id.aboutUsFragment,
+//                )
+//            ) {
+//
+//                supportActionBar?.show()
+//                supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true)
+//            }
         }
-
-        var db: FirebaseFirestore = FirebaseFirestore.getInstance()
-        db.collection("shops").add(RestaurantInfoDTO("ssis",35.09,129.03))
-            .addOnSuccessListener { doc ->
-                Log.d("dddd","suceess")
+        val header = binding.navigationView.getHeaderView(0)
+        val imageView = header.findViewById<ImageView>(R.id.imageView)
+        /*val userImage = auth.currentUser?.photoUrl
+        lifecycleScope.launch {
+            whenCreated {
+                RepositoryImpl.getInstance().getCurrentUserEmail {
+                    val userEmailText = header.findViewById<android.widget.TextView>(R.id.useremail)
+                    userEmailText.text = it
+                }
             }
-            .addOnFailureListener{
-                e -> Log.e("fail","error",e)
+        }*/
+
+        /*Glide
+            .with(this)
+            .load(userImage)
+            .apply(RequestOptions().override(150, 150))
+            .placeholder(R.drawable.ic_person)
+            .into(imageView)*/
+
+        /*binding.navigationView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.action_help -> {
+                    startActivity(Intent(this, HelpActivity::class.java))
+                    true
+                }
+                R.id.action_home -> {
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    true
+                }
+                R.id.nav_share -> {
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.type = "text/plain"
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "TalbeOrder")
+                    intent.putExtra(Intent.EXTRA_TEXT, "")
+                    startActivity(Intent.createChooser(intent, "Share via"))
+                    true
+                }
+                R.id.action_feedback -> {
+                    val intent = Intent(Intent.ACTION_SENDTO)
+                    intent.data =
+                        Uri.parse("mailto:" + "goaud2022@gmail.com") // only email apps should handle this
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback")
+                    if (intent.resolveActivity(this.packageManager) != null) {
+                        startActivity(intent)
+                    }
+                    true
+                }
+                else -> {
+                    false
+                }
             }
-
-
+        }*/
 
 
 
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        when(event?.action){
+            MotionEvent.ACTION_DOWN->{
+                Log.d("status", "Touch Down Event")
+            }
 
-
-    override fun onMapReady(googleMap: GoogleMap) {
-
-        gMap = googleMap
-        //mapReady = true
-        gMap.setOnMarkerClickListener(this)
-        setLastKnownLocation()
-        viewModel.getRestaurantListFromServer()
+            MotionEvent.ACTION_UP->{
+                Log.d("status", "Touch Up Event")
+            }
+        }
+        return super.onTouchEvent(event)
     }
 
+    override fun onResume() {
+        super.onResume()
+        setSupportActionBar(binding.toolbar)
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+    }
 
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        return navController.navigateUp(appBarConfiguration)
+                || super.onSupportNavigateUp()
+    }
 
-
-    
-    override fun onMarkerClick(p0: Marker): Boolean {
-        Log.i("onMarkerClick", p0.title.toString())
-        bindMain.textView.text = viewModel.getRestaurantList().value?.get(p0.title.toString()).toString()
-        return true
+    override fun onBackPressed() {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
     }
 
 

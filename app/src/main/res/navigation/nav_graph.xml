@@ -23,41 +23,41 @@
             app:destination="@id/historyFragment" />-->
     </fragment>
 
-    <!--<fragment
+    <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.tableorder.fragments.home.HomeFragment"
+        android:name="com.example.mytableorder.fragment.home.HomeFragment"
         android:label="Dashboard"
         tools:layout="@layout/fragment_home" >
-        &lt;!&ndash;<action
+        <!--<action
             android:id="@+id/action_homeFragment_to_donateFragment"
-            app:destination="@id/donateFragment" />&ndash;&gt;
-      &lt;!&ndash;  <action
+            app:destination="@id/donateFragment" />-->
+      <!--  <action
             android:id="@+id/action_homeFragment_to_receiveFragment"
-            app:destination="@id/receiveFragment" />&ndash;&gt;
+            app:destination="@id/receiveFragment" />-->
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
-        <action
+        <!--<action
             android:id="@+id/action_homeFragment_to_aboutUsFragment"
-            app:destination="@id/aboutUsFragment" />
-&lt;!&ndash;        <action&ndash;&gt;
-&lt;!&ndash;            android:id="@+id/action_homeFragment_to_donationsFragment"&ndash;&gt;
-&lt;!&ndash;            app:destination="@id/donationsFragment" />&ndash;&gt;
-        &lt;!&ndash;<action
+            app:destination="@id/aboutUsFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_homeFragment_to_donationsFragment"-->
+<!--            app:destination="@id/donationsFragment" />-->
+        <!--<action
             android:id="@+id/action_homeFragment_to_foodMapFragment"
-            app:destination="@id/foodMapFragment" />&ndash;&gt;
-        <action
+            app:destination="@id/foodMapFragment" />-->
+        <!--<action
             android:id="@+id/action_homeFragment_to_aboutUsFragment2"
             app:destination="@id/aboutUsFragment" />
         <action
             android:id="@+id/action_homeFragment_to_contactUsFragment"
-            app:destination="@id/contactUsFragment" />
-      &lt;!&ndash;  <action
+            app:destination="@id/contactUsFragment" />-->
+      <!--  <action
             android:id="@+id/action_homeFragment_to_historyFragment"
-            app:destination="@id/historyFragment" />&ndash;&gt;
-    </fragment>-->
+            app:destination="@id/historyFragment" />-->
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.mytableorder.loginSignUp.LoginFragment"
@@ -67,8 +67,8 @@
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_infoFragment"
-            app:destination="@id/InfoFragment"
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
         <action
@@ -129,11 +129,11 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
-       <!-- <action
+        <action
             android:id="@+id/action_splashFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
+            app:destination="@id/InfoFragment"
             app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true" />-->
+            app:popUpToInclusive="true" />
         <!--<action
             android:id="@+id/action_splashFragment_to_donorsHomeFragment"
             app:destination="@id/donorsHomeFragment" />-->
@@ -154,6 +154,10 @@
         android:id="@+id/resetPasswordFragment"
         android:name="com.example.mytableorder.loginSignUp.ResetPasswordFragment"
         android:label="ResetPasswordFragment" />
+    <dialog
+        android:id="@+id/confirmLayout"
+        android:name="com.example.mytableorder.fragment.ConfirmLayoutFragment"
+        android:label="ConfirmLayout" />
     <!--<fragment
         android:id="@+id/donorLocationFragment"
         android:name="edu.puo.foodonus.fragments.donate.DonorLocationFragment"

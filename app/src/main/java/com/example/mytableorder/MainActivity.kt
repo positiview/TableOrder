@@ -1,6 +1,9 @@
 package com.example.mytableorder
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,6 +11,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
@@ -73,11 +77,14 @@ class MainActivity : AppCompatActivity(){
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
-//                    0 -> navController.navigate(R.id.homeFragment)
-//                    1 -> navController.navigate(R.id.aboutUsFragment)
-//                    2 -> navController.navigate(R.id.homeFragment)
-                    3 -> navController.navigate(R.id.InfoFragment)
-//                    4 -> navController.navigate(R.id.homeFragment)
+                    0 -> navController.navigate(R.id.homeFragment)
+                    1 -> {
+                        // 스와이프 동작을 위한 리사이클러뷰가 있는 Fragment로 이동
+                        navController.navigate(R.id.InfoFragment)
+                    }
+//                    2 -> navController.navigate(R.id.InfoFragment)
+//                    3 -> navController.navigate(R.id.InfoFragment)
+//                    4 -> navController.navigate(R.id.InfoFragment)
                     // 다른 탭에 대한 액션을 추가합니다.
                 }
             }
@@ -97,7 +104,7 @@ class MainActivity : AppCompatActivity(){
         navView.setupWithNavController(navController)
         appBarConfiguration = AppBarConfiguration(
             setOf(
-//                R.id.homeFragment,
+                R.id.homeFragment,
 //                R.id.adminHomeFragment,
 //                R.id.donorsHomeFragment
                 R.id.InfoFragment
@@ -105,7 +112,7 @@ class MainActivity : AppCompatActivity(){
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment)) {
+            if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment, R.id.signUpFragment)) {
                 supportActionBar?.hide()
                 tabLayout.visibility = View.GONE
             }else {
@@ -146,24 +153,24 @@ class MainActivity : AppCompatActivity(){
             .placeholder(R.drawable.ic_person)
             .into(imageView)*/
 
-        /*binding.navigationView.setNavigationItemSelectedListener { item ->
+        binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.action_help -> {
+                /*R.id.action_help -> {
                     startActivity(Intent(this, HelpActivity::class.java))
                     true
-                }
+                }*/
                 R.id.action_home -> {
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
-                R.id.nav_share -> {
+                /*R.id.nav_share -> {
                     val intent = Intent(Intent.ACTION_SEND)
                     intent.type = "text/plain"
                     intent.putExtra(Intent.EXTRA_SUBJECT, "TalbeOrder")
                     intent.putExtra(Intent.EXTRA_TEXT, "")
                     startActivity(Intent.createChooser(intent, "Share via"))
                     true
-                }
+                }*/
                 R.id.action_feedback -> {
                     val intent = Intent(Intent.ACTION_SENDTO)
                     intent.data =
@@ -174,11 +181,18 @@ class MainActivity : AppCompatActivity(){
                     }
                     true
                 }
+                R.id.logout -> {
+                    auth.signOut()
+                    Toast.makeText(this, "로그아웃 완료", Toast.LENGTH_SHORT).show()
+                    navController.navigate(R.id.splashFragment)
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    true
+                }
                 else -> {
                     false
                 }
             }
-        }*/
+        }
 
 
 

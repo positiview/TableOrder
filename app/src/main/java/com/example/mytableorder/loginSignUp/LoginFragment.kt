@@ -23,7 +23,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 
@@ -41,7 +40,7 @@ class LoginFragment : Fragment() {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         val view = binding.root
         //disable dark mode
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
 
         (activity as AppCompatActivity).supportActionBar?.hide()
@@ -157,7 +156,7 @@ class LoginFragment : Fragment() {
                                                                 "Login in successful",
                                                                 Toast.LENGTH_SHORT
                                                             ).show()
-                                                            findNavController().navigate(R.id.action_loginFragment_to_infoFragment)
+                                                            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                                                         }
                                                     }
 

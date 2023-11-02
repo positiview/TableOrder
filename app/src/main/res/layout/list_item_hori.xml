@@ -17,6 +17,7 @@
         android:scaleType="fitXY"
         android:src="@drawable/gogi" />
 
+
     <TextView
         android:id="@+id/textImg"
         android:layout_width="match_parent"

@@ -19,6 +19,10 @@ import com.example.mytableorder.utils.CheckInternet
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
@@ -26,7 +30,8 @@ import com.google.firebase.ktx.Firebase
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
+
+
 //    private val viewModel : LoginViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +41,7 @@ class LoginFragment : Fragment() {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         val view = binding.root
         //disable dark mode
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
 
         (activity as AppCompatActivity).supportActionBar?.hide()
@@ -45,10 +50,11 @@ class LoginFragment : Fragment() {
         auth = Firebase.auth
 
         binding.registerTv.setOnClickListener {
-            Log.d("$$", "클릭 리스너 실행")
+            Log.d("$$", "회원가입 실행")
             findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
         }
         binding.forgotPasswordTv.setOnClickListener {
+            Log.d("$$", "비밀번호수정 실행")
             findNavController().navigate(R.id.action_loginFragment_to_resetPasswordFragment)
         }
 
@@ -79,6 +85,7 @@ class LoginFragment : Fragment() {
                     binding.btnLogin.isEnabled = false
 
                     if (CheckInternet.isConnected(requireActivity())) {
+                        Log.d("$$", "인터넷 연결됨")
                         //Toast.makeText(activity, "Internet is available", Toast.LENGTH_SHORT).show()
                         binding.emailTinputLayout.isEnabled = false
                         binding.passwordInputLayout.isEnabled = false
@@ -126,18 +133,20 @@ class LoginFragment : Fragment() {
                         auth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(requireActivity()) { task ->
                                 val currentUser = auth.currentUser
+                                Log.d("$$", "로그인 실행")
                                 if (task.isSuccessful) {
                                        if (currentUser!!.isEmailVerified) {
-                                        db = FirebaseFirestore.getInstance("Users")
+                                           var databaseReference =
+                                               FirebaseDatabase.getInstance().getReference("User")
                                         val firebaseUser: FirebaseUser? =
                                             FirebaseAuth.getInstance().currentUser
                                         val uid: String? = firebaseUser?.uid
                                         uid?.let { id ->
-                                            db.collection("member").get()
-                                                .addOnSuccessListener { doc ->
-                                                    for (document in doc) {
+                                            databaseReference.child(id)
+                                                .addValueEventListener(object : ValueEventListener {
+                                                    override fun onDataChange(snapshot: DataSnapshot) {
                                                         val user =
-                                                            document.toObject(User::class.java)
+                                                            snapshot.getValue(User::class.java)
                                                         if (user != null) {
                                                             binding.progressCircular.isVisible =
                                                                 false
@@ -151,22 +160,22 @@ class LoginFragment : Fragment() {
                                                             findNavController().navigate(R.id.action_loginFragment_to_infoFragment)
                                                         }
                                                     }
-                                                }
-                                                .addOnFailureListener {
-                                                    binding.progressCircular.isVisible = false
-                                                    binding.btnLogin.isEnabled = true
-                                                    binding.btnLogin.text = "Login"
-                                                    binding.emailTinputLayout.editText?.text?.clear()
-                                                    binding.passwordInputLayout.editText?.text?.clear()
-                                                    binding.emailTinputLayout.isEnabled = true
-                                                    binding.passwordInputLayout.isEnabled = true
-                                                    Toast.makeText(
-                                                        activity,
-                                                        "Error: 에러바알생",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
 
+                                                    override fun onCancelled(error: DatabaseError) {
+                                                        binding.progressCircular.isVisible = false
+                                                        binding.btnLogin.isEnabled = true
+                                                        binding.btnLogin.text = "Login"
+                                                        binding.emailTinputLayout.editText?.text?.clear()
+                                                        binding.passwordInputLayout.editText?.text?.clear()
+                                                        binding.emailTinputLayout.isEnabled = true
+                                                        binding.passwordInputLayout.isEnabled = true
+                                                        Toast.makeText(
+                                                            activity,
+                                                            "Error: ${error.message}",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
+                                                })
                                         }
 
                                     } else {

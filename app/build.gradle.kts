@@ -47,6 +47,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
     //파이어베이스 디비
     implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
+    implementation("com.google.firebase:firebase-database:20.3.0")
     //파이어베이스 Auth
     implementation ("com.google.firebase:firebase-auth-ktx:22.2.0")
 

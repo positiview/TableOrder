@@ -17,20 +17,42 @@ import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentSignUpBinding
 
 import com.example.mytableorder.utils.CheckInternet
+import com.example.mytableorder.utils.Resource
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 class SignUpFragment : Fragment() {
     private lateinit var binding: FragmentSignUpBinding
-    private  val viewModel : SignUpViewModel by viewModels()
+    private lateinit var databaseReference: DatabaseReference
+//    private  val viewModel : SignUpViewModel by viewModels()
     lateinit var auth :FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val context = requireContext()
+        if (context != null) {
+            // 컨텍스트가 올바르게 설정된 경우
+            // ...
+            Log.d("MyFragment", "Context is not null")
+        } else {
+            // 컨텍스트가 null인 경우
+            Log.e("MyFragment", "Context is null")
+        }
+        if (isAdded && !isDetached) {
+            val context = requireContext()
+            // context 사용
+            Log.d("MyFragment", "Context is in an active state")
+        } else {
+            Log.e("MyFragment", "Fragment is not in an active state")
+        }
+
         // Inflate the layout for this fragment
         binding = FragmentSignUpBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -38,7 +60,8 @@ class SignUpFragment : Fragment() {
 
         /*var firebaseDatabase = FirebaseDatabase.getInstance()
         var databaseReference = firebaseDatabase.getReference("Users")*/
-        var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        var db = FirebaseDatabase.getInstance()
+        databaseReference = db.getReference("User")
         auth = Firebase.auth
 
         binding.loginTv.setOnClickListener {
@@ -109,14 +132,14 @@ class SignUpFragment : Fragment() {
 //                        RetrofitController.register(memberModel)
 
 
-                      /*  val user = User(
+                        /*val user = User(
                             email,
                             name,
                             phone,
                             userType
                         )*/
 
-                        /*viewModel.register(email, password, user)
+                       /* viewModel.register(email, password, user)
                         viewModel.registerRequest.observe(viewLifecycleOwner){
                             when(it){
                                 is Resource.Loading -> {
@@ -136,14 +159,12 @@ class SignUpFragment : Fragment() {
                             .addOnCompleteListener {
                                 if (it.isSuccessful) {
                                     val currentUser = auth.currentUser
+                                    val popupText = Snackbar.make(view, "인증링크를 이메일로 보냈습니다. 확인해주세요.", Snackbar.LENGTH_SHORT)
                                     binding.progressCircular.isVisible = false
                                     currentUser?.sendEmailVerification()
                                         ?.addOnCompleteListener {
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "인증링크를 이메일로 보냈습니다. 확인해주세요.",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                            
+                                            popupText.show()
                                     }
                                     val userId = currentUser?.uid
                                     val user =
@@ -151,18 +172,21 @@ class SignUpFragment : Fragment() {
                                     // 위 코드는 userId가 null이 아닐 때만 User 객체를 생성하고 해당 객체를 user 변수에 할당합니다.
 
                                     if (userId != null) {
-                                        /*databaseReference.child(userId).setValue(user)*/
-                                        if (user != null) {
+                                        val popupText = Snackbar.make(view, "계정이 성공적으로 생성되었습니다.", Snackbar.LENGTH_SHORT)
+                                        databaseReference.child(userId).setValue(user)
+                                            .addOnSuccessListener {
+                                                Log.d("$$", "successful signUp")
+                                                popupText.show()
+                                            }
+                                            .addOnFailureListener{ e -> Log.e("fail","error",e)}
+
+                                        /*if (user != null) {
                                             db.collection("member").add(user)
                                                 .addOnSuccessListener { r -> Log.d("$$", "successful signUp with ID :${r.id}") }
                                                 .addOnFailureListener{ e -> Log.e("fail","error",e)
                                                 }
-                                        }
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "계정이 성공적으로 생성되었습니다.",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        }*/
+
                                     }
                                     requireActivity().onBackPressed()
                                 }

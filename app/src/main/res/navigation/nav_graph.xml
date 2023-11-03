@@ -4,40 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
     app:startDestination="@id/splashFragment">
-<<<<<<< HEAD
-
-
-    <fragment
-        android:id="@+id/InfoFragment"
-        android:name="com.example.tableorder.info.ui.main.InfoFragment"
-        android:label="Info"
-        tools:layout="@layout/fragment_info" >
-    </fragment>
-    <fragment
-        android:id="@+id/OneFragment"
-        android:name="com.example.tableorder.fragments.home.HomeFragment"
-        android:label="OneFragment"
-        tools:layout="@layout/fragment_home" >
-
-
-
-    </fragment>
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.tableorder.fragments.home.HomeFragment"
-        android:label="Dashboard"
-        tools:layout="@layout/fragment_home" >
-        <!--<action
-            android:id="@+id/action_homeFragment_to_donateFragment"
-            app:destination="@id/donateFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_receiveFragment"
-            app:destination="@id/receiveFragment" />-->
-
-
-    </fragment>
-
-=======
     <fragment
         android:id="@+id/InfoFragment"
         android:name="com.example.mytableorder.fragment.InfoFragment"
@@ -67,9 +33,9 @@
         <!--<action
             android:id="@+id/action_homeFragment_to_donateFragment"
             app:destination="@id/donateFragment" />-->
-      <!--  <action
-            android:id="@+id/action_homeFragment_to_receiveFragment"
-            app:destination="@id/receiveFragment" />-->
+        <!--  <action
+              android:id="@+id/action_homeFragment_to_receiveFragment"
+              app:destination="@id/receiveFragment" />-->
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
             app:destination="@id/loginFragment"
@@ -93,12 +59,12 @@
         <action
             android:id="@+id/action_loginFragment_to_resetPasswordFragment"
             app:destination="@id/resetPasswordFragment" />
-       <!-- <action
-            android:id="@+id/action_loginFragment_to_donorsHomeFragment"
-            app:destination="@id/donorsHomeFragment" />-->
-       <!-- <action
-            android:id="@+id/action_loginFragment_to_adminHomeFragment"
-            app:destination="@id/adminHomeFragment" />-->
+        <!-- <action
+             android:id="@+id/action_loginFragment_to_donorsHomeFragment"
+             app:destination="@id/donorsHomeFragment" />-->
+        <!-- <action
+             android:id="@+id/action_loginFragment_to_adminHomeFragment"
+             app:destination="@id/adminHomeFragment" />-->
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -109,7 +75,6 @@
             android:id="@+id/action_signUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
->>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
     <!--<fragment
         android:id="@+id/donateFragment"
         android:name="com.example.tableorder.fragments.donate.DonateFragment"
@@ -120,42 +85,27 @@
         android:name="com.example.tableorder.fragments.receive.ReceiveFragment"
         android:label="Receive"
         tools:layout="@layout/fragment_receive" >
-<<<<<<< HEAD
-        <action
-            android:id="@+id/action_receiveFragment_to_donorLocationFragment"
-            app:destination="@id/donorLocationFragment" />
-    </fragment>-->
-
-   <!-- <fragment
-=======
         &lt;!&ndash;<action
             android:id="@+id/action_receiveFragment_to_donorLocationFragment"
             app:destination="@id/donorLocationFragment" />&ndash;&gt;
     </fragment>-->
-   <!-- <fragment
-        android:id="@+id/aboutUsFragment"
-        android:name="com.example.tableorder.about.AboutUsFragment"
-        android:label="About us"
-        tools:layout="@layout/fragment_about_us" />-->
-   <!-- <fragment
-        android:id="@+id/foodMapFragment"
-        android:name="com.example.tableorder.fragments.foodmap.FoodMapFragment"
-        android:label="Food map"
-        tools:layout="@layout/fragment_food_map" />
-    <fragment
->>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
-        android:id="@+id/historyFragment"
-        android:name="com.example.tableorder.fragments.history.HistoryFragment"
-        android:label="History"
-        tools:layout="@layout/fragment_history" />-->
+    <!-- <fragment
+         android:id="@+id/aboutUsFragment"
+         android:name="com.example.tableorder.about.AboutUsFragment"
+         android:label="About us"
+         tools:layout="@layout/fragment_about_us" />-->
+    <!-- <fragment
+         android:id="@+id/foodMapFragment"
+         android:name="com.example.tableorder.fragments.foodmap.FoodMapFragment"
+         android:label="Food map"
+         tools:layout="@layout/fragment_food_map" />
+     <fragment
+         android:id="@+id/historyFragment"
+         android:name="com.example.tableorder.fragments.history.HistoryFragment"
+         android:label="History"
+         tools:layout="@layout/fragment_history" />-->
     <fragment
         android:id="@+id/splashFragment"
-<<<<<<< HEAD
-        android:name="com.example.tableorder.splash.SplashFragment"
-        android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" >
-
-=======
         android:name="com.example.mytableorder.fragment.splash.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
@@ -164,30 +114,17 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
->>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
         <action
             android:id="@+id/action_splashFragment_to_homeFragment"
             app:destination="@id/homeFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
-<<<<<<< HEAD
-
-
-       <!-- <action
-            android:id="@+id/action_splashFragment_to_donorsHomeFragment"
-            app:destination="@id/donorsHomeFragment" />
-        <action
-            android:id="@+id/action_splashFragment_to_adminHomeFragment"
-            app:destination="@id/adminHomeFragment" />-->
-    </fragment>
-
-=======
         <!--<action
             android:id="@+id/action_splashFragment_to_donorsHomeFragment"
             app:destination="@id/donorsHomeFragment" />-->
-       <!-- <action
-            android:id="@+id/action_splashFragment_to_adminHomeFragment"
-            app:destination="@id/adminHomeFragment" />-->
+        <!-- <action
+             android:id="@+id/action_splashFragment_to_adminHomeFragment"
+             app:destination="@id/adminHomeFragment" />-->
     </fragment>
     <!--<fragment
         android:id="@+id/donationsFragment"
@@ -251,5 +188,4 @@
             android:id="@+id/action_adminHomeFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>-->
->>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
 </navigation>

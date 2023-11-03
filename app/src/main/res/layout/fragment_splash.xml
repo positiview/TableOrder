@@ -5,11 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/orange"
-<<<<<<< HEAD
-    tools:context=".splash.SplashFragment">
-=======
     tools:context=".fragment.splash.SplashFragment">
->>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
+
 
     <ImageView
         android:layout_width="wrap_content"

@@ -33,8 +33,6 @@
         </menu>
     </item>
 
-<<<<<<< HEAD
-=======
     <item android:title="@string/my_menu">
 
         <menu>
@@ -42,8 +40,7 @@
                 android:id="@+id/logout"
                 android:title="@string/logout"
                 android:icon="@drawable/ic_logout"
-            />
+                />
         </menu>
     </item>
->>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
 </menu>

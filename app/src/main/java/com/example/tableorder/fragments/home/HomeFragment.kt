@@ -4,54 +4,38 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+
 import com.example.tableorder.R
-import com.example.tableorder.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
-    private lateinit var binding: FragmentHomeBinding
-//    private lateinit var auth: FirebaseAuth
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        // Inflate the layout for this fragment
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val view = binding.root
-        (activity as AppCompatActivity).supportActionBar?.show()
-//        auth = FirebaseAuth.getInstance()
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-//        binding.cardLogout.setOnClickListener {
-////            auth.signOut()
-//            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
-//        }
-        /*binding.cardDonate.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_donateFragment)
-        }*/
-//        binding.cardReceive.setOnClickListener {
-//            findNavController().navigate(R.id.action_homeFragment_to_receiveFragment)
-//        }
-    /*binding.cardMyPin.setOnClickListener {
-        findNavController().navigate(R.id.action_homeFragment_to_donationsFragment)
-    }*/
-//        binding.cardFoodmap.setOnClickListener {
-//            findNavController().navigate(R.id.action_homeFragment_to_foodMapFragment)
-//        }
-//        binding.cardAboutus.setOnClickListener {
-//            findNavController().navigate(R.id.action_homeFragment_to_aboutUsFragment)
-//        }
-//        binding.cardContact.setOnClickListener {
-//            findNavController().navigate(R.id.action_homeFragment_to_contactUsFragment)
-//        }
-        /*binding.cardHistory.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_historyFragment)
-        }*/
+    val recyclerVertical = view.findViewById<RecyclerView>(R.id.recyclerVertical)
+    val recyclerHorizon = view.findViewById<RecyclerView>(R.id.recyclerHorizon)
 
-        return view
-    }
+    val manager01 = LinearLayoutManager(requireContext())
+    val adapter01 = ListAdapterVertical()
 
+    recyclerVertical.adapter = adapter01
+    recyclerVertical.layoutManager = manager01
+
+    val list = arrayListOf("Test 1", "Test 2", "Test 3", "Test 4")
+    val manager02 = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+    val adapter02 = ListAdapterHorizontal(list)
+
+    recyclerHorizon.adapter = adapter02
+    recyclerHorizon.layoutManager = manager02
+
+    return view
+  }
 }

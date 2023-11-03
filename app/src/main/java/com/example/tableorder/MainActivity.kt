@@ -22,9 +22,11 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 
+
 class MainActivity : AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
+
 
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,17 +37,16 @@ class MainActivity : AppCompatActivity(){
 
 
 
+//--------------------------------------------------------------------------
+        // 이하에 탭 간 이동 처리 코드
+        val tabLayout: TabLayout = findViewById(R.id.tabs)
+        val viewPager: ViewPager2 = findViewById(R.id.viewPager)
+
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navigationView
 
-//--------------------------------------------------------------------------
-        // 이하에 탭 간 이동 처리 코드
-        val tabLayout: TabLayout = findViewById(R.id.tabs)
-
-        val viewPager: ViewPager2 = findViewById(R.id.viewPager)
         viewPager.adapter = MyFragmentStateAdapter(this)
-
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
                 0 -> tab.text = "홈"
@@ -57,14 +58,20 @@ class MainActivity : AppCompatActivity(){
             }
         }.attach()
 
+
+
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                // 페이지 이동 코드는 이곳에 남겨둡니다.
                 when (tab?.position) {
                     0 -> navController.navigate(R.id.homeFragment)
-                    1 -> navController.navigate(R.id.aboutUsFragment)
-                    2 -> navController.navigate(R.id.homeFragment)
+                    1 -> {
+                        // 스와이프 동작을 위한 리사이클러뷰가 있는 Fragment로 이동
+                        navController.navigate(R.id.InfoFragment)
+                    }
+                    2 -> navController.navigate(R.id.InfoFragment)
                     3 -> navController.navigate(R.id.InfoFragment)
-                    4 -> navController.navigate(R.id.homeFragment)
+                    4 -> navController.navigate(R.id.InfoFragment)
                     // 다른 탭에 대한 액션을 추가합니다.
                 }
             }
@@ -91,7 +98,7 @@ class MainActivity : AppCompatActivity(){
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment)) {
+            if (destination.id in listOf(R.id.splashFragment, R.id.OneFragment)) {
                 supportActionBar?.hide()
                 tabLayout.visibility = View.GONE
             }else {
@@ -197,7 +204,4 @@ class MainActivity : AppCompatActivity(){
             super.onBackPressed()
         }
     }
-
-
-
 }

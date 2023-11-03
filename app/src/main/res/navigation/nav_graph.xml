@@ -90,14 +90,23 @@
              android:id="@+id/action_loginFragment_to_donorsHomeFragment"
              app:destination="@id/donorsHomeFragment" />-->
          <action
-             android:id="@+id/action_loginFragment_to_adminHomeFragment"
-             app:destination="@id/adminHomeFragment" />
+             android:id="@+id/action_loginFragment_to_rregiFragment"
+             app:destination="@id/rregiFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.example.mytableorder.loginSignUp.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/rregiFragment"
+        android:name="com.example.mytableorder.RregiFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_rregi" >
         <action
             android:id="@+id/action_signUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -150,8 +159,8 @@
             android:id="@+id/action_splashFragment_to_donorsHomeFragment"
             app:destination="@id/donorsHomeFragment" />-->
          <action
-             android:id="@+id/action_splashFragment_to_adminHomeFragment"
-             app:destination="@id/adminHomeFragment" />
+             android:id="@+id/action_splashFragment_to_rregiFragment"
+             app:destination="@id/rregiFragment" />
     </fragment>
     <!--<fragment
         android:id="@+id/donationsFragment"
@@ -211,8 +220,11 @@
         android:name="com.example.mytableorder.fragment.admin.AdminHomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_admin_home" >
-        <action
+        <!--<action
             android:id="@+id/action_adminHomeFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment" />-->
+       <!-- <action
+            android:id="@+id/action_adminHomeFragment_to_rregiFragment"
+            app:destination="@id/rregiFragment" />-->
     </fragment>
 </navigation>

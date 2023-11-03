@@ -37,10 +37,23 @@
 
         <menu>
             <item
+                android:id="@+id/adminHome"
+                android:title="@string/admin_home"
+                />
+            <item
+                android:id="@+id/regiRestaurant"
+                android:title="@string/admin_regiRestaurant"
+                />
+            <item
+                android:id="@+id/myPage"
+                android:title="@string/my_page"
+                />
+            <item
                 android:id="@+id/logout"
                 android:title="@string/logout"
                 android:icon="@drawable/ic_logout"
                 />
+
         </menu>
     </item>
 </menu>

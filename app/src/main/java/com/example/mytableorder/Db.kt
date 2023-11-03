@@ -5,14 +5,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 object Db {
 
-    var firestore_database : FirebaseFirestore = FirebaseFirestore.getInstance()
-    var realtime_database : FirebaseDatabase = FirebaseDatabase.getInstance()
+    var db : FirebaseFirestore = FirebaseFirestore.getInstance()
+    var reatimedb : FirebaseDatabase = FirebaseDatabase.getInstance()
 
     fun getInstance() : FirebaseFirestore{
-        return firestore_database
+        return db
     }
 
     fun getRealtimeInstance() :FirebaseDatabase{
-        return realtime_database
+        return reatimedb
     }
 }

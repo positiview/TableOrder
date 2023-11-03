@@ -54,4 +54,7 @@
     <string name="failed_login">구글 로그인 실패</string>
     <string name="success_logout">로그아웃 되었습니다</string>
     <string name="status_login">이미 로그인 되어있습니다</string>
+    <string name="admin_home">관리자 페이지</string>
+    <string name="admin_regiRestaurant">식당 등록</string>
+    <string name="my_page">마이 페이지</string>
 </resources>

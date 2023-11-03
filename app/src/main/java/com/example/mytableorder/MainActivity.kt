@@ -1,23 +1,22 @@
 package com.example.mytableorder
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.whenCreated
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -25,16 +24,17 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.example.mytableorder.R
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.example.mytableorder.Db.db
 import com.example.mytableorder.adapter.MyFragmentStateAdapter
 import com.example.mytableorder.databinding.ActivityMainBinding
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInResult
-import com.google.android.gms.tasks.Task
+import com.example.mytableorder.model.User
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 
@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var auth: FirebaseAuth
+    private val TAG = "userInfo"
    /* private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference*/
 
@@ -139,22 +140,38 @@ class MainActivity : AppCompatActivity(){
         }
         val header = binding.navigationView.getHeaderView(0)
         val imageView = header.findViewById<ImageView>(R.id.imageView)
-        /*val userImage = auth.currentUser?.photoUrl
+        val userImage = auth.currentUser?.photoUrl
+
         lifecycleScope.launch {
-            whenCreated {
-                RepositoryImpl.getInstance().getCurrentUserEmail {
-                    val userEmailText = header.findViewById<android.widget.TextView>(R.id.useremail)
-                    userEmailText.text = it
+            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                val user = auth.currentUser
+                val userEmailText = header.findViewById<TextView>(R.id.useremail)
+
+                user?.let {
+                    db.collection("users")
+                        .document(it.uid)
+                        .get()
+                        .addOnSuccessListener { snapshot ->
+                            val user = snapshot.toObject(User::class.java)
+                            if (user != null) {
+                                val userEmail = user.email ?: ""
+                                userEmailText.text = userEmail
+                            }
+                        }
+                        .addOnFailureListener {
+                            Log.e(TAG, "Error: ${it.message}")
+                        }
                 }
             }
-        }*/
+        }
 
-        /*Glide
-            .with(this)
+        Glide.with(this)
             .load(userImage)
             .apply(RequestOptions().override(150, 150))
             .placeholder(R.drawable.ic_person)
-            .into(imageView)*/
+            .error(R.drawable.ic_person)
+            .into(imageView)
+
 
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -184,6 +201,18 @@ class MainActivity : AppCompatActivity(){
                     }
                     true
                 }
+               /* R.id.adminHome ->{
+
+                }
+
+                R.id.regiRestaurant ->{
+
+                }
+                
+                R.id.myPage->{
+
+                }*/
+
                 R.id.logout -> {
                     auth.signOut()
                     Toast.makeText(this, "로그아웃 완료", Toast.LENGTH_SHORT).show()
@@ -201,18 +230,6 @@ class MainActivity : AppCompatActivity(){
 
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        when(event?.action){
-            MotionEvent.ACTION_DOWN->{
-                Log.d("status", "Touch Down Event")
-            }
-
-            MotionEvent.ACTION_UP->{
-                Log.d("status", "Touch Up Event")
-            }
-        }
-        return super.onTouchEvent(event)
-    }
 
     override fun onResume() {
         super.onResume()

@@ -1,6 +1,5 @@
 package com.example.mytableorder.loginSignUp
 
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
@@ -21,29 +19,16 @@ import com.example.mytableorder.Db.db
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentLoginBinding
 import com.example.mytableorder.loginSignUp.viewmodel.LoginViewModel
-import com.example.mytableorder.model.User
 import com.example.mytableorder.utils.CheckInternet
 import com.example.mytableorder.utils.Resource
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 
 
@@ -55,23 +40,9 @@ class LoginFragment : Fragment() {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     private val viewModel: LoginViewModel by viewModels()
-    private fun moveFragment() {
-        Toast.makeText(
-            requireContext(),
-            "로그인 성공!!",
-            Toast.LENGTH_SHORT
-        ).show()
-        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-    }
 
-    /* private fun moveSignUpActivity() {
-         requireActivity().run {
-             startActivity(Intent(requireContext(), SignUpActivity::class.java))
-             finish()
-         }
-     }*/
 
-    //    private val viewModel : LoginViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -185,6 +156,10 @@ class LoginFragment : Fragment() {
 
                                             when (userType) {
                                                 "admin" -> {
+                                                    val sharedPref = requireActivity().getSharedPreferences("userType", Context.MODE_PRIVATE)
+                                                    val editor = sharedPref.edit()
+                                                    editor.putString("user_type", userType)
+                                                    editor.commit()
                                                     moveAdmin()
                                                 }
 
@@ -200,6 +175,7 @@ class LoginFragment : Fragment() {
                                 Resource.Error(it.message.toString())
                             }
 
+                        // 아래는 realtime database를 이용한 회원로그인
                         /*auth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(requireActivity()) { task ->
                                 val currentUser = auth.currentUser
@@ -298,7 +274,14 @@ class LoginFragment : Fragment() {
         }
         return view
     }
-
+    private fun moveFragment() {
+        Toast.makeText(
+            requireContext(),
+            "로그인 성공!!",
+            Toast.LENGTH_SHORT
+        ).show()
+        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+    }
     private fun moveAdmin() {
         Toast.makeText(
             requireContext(),

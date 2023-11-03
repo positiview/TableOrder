@@ -36,22 +36,7 @@ class SignUpFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val context = requireContext()
-        if (context != null) {
-            // 컨텍스트가 올바르게 설정된 경우
-            // ...
-            Log.d("MyFragment", "Context is not null")
-        } else {
-            // 컨텍스트가 null인 경우
-            Log.e("MyFragment", "Context is null")
-        }
-        if (isAdded && !isDetached) {
-            val context = requireContext()
-            // context 사용
-            Log.d("MyFragment", "Context is in an active state")
-        } else {
-            Log.e("MyFragment", "Fragment is not in an active state")
-        }
+
 
         // Inflate the layout for this fragment
         binding = FragmentSignUpBinding.inflate(inflater, container, false)

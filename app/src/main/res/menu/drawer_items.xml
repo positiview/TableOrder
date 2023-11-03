@@ -40,7 +40,7 @@
                 android:id="@+id/logout"
                 android:title="@string/logout"
                 android:icon="@drawable/ic_logout"
-            />
+                />
         </menu>
     </item>
 </menu>

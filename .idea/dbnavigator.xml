@@ -12,9 +12,12 @@
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
   </component>
+<<<<<<< HEAD
+=======
   <component name="DBNavigator.Project.ParserDiagnosticsManager">
     <diagnostics-history />
   </component>
+>>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
   <component name="DBNavigator.Project.Settings">
     <connections />
     <browser-settings>

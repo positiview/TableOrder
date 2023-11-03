@@ -159,8 +159,8 @@
             android:id="@+id/action_splashFragment_to_donorsHomeFragment"
             app:destination="@id/donorsHomeFragment" />-->
          <action
-             android:id="@+id/action_splashFragment_to_rregiFragment"
-             app:destination="@id/rregiFragment" />
+             android:id="@+id/action_splashFragment_to_adminHomeFragment"
+             app:destination="@id/adminHomeFragment" />
     </fragment>
     <!--<fragment
         android:id="@+id/donationsFragment"

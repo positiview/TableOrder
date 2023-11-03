@@ -5,21 +5,18 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.whenCreated
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -36,7 +33,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 
@@ -108,15 +104,25 @@ class MainActivity : AppCompatActivity(){
 //--------------------------------------------------------------------------
 
         navView.setupWithNavController(navController)
+
+
+        //"AppBarConfiguration"은 앱 바의 동작을 설정하는 데 사용됩니다.
+        // 첫 번째 매개변수인 setOf(R.id.homeFragment, R.id.InfoFragment)는 상위 레벨 대상의 ID 세트를 나타내며,
+        // 이 대상들은 '뒤로' 버튼을 눌렀을 때 앱을 종료하도록 설정됩니다.
+        // 두 번째 매개변수인 drawerLayout는 NavigationView가 포함된 DrawerLayout을 지정합니다.
+        // 이를 통해 '뒤로' 버튼이나 홈버튼을 눌렀을 때 드로어가 열리도록 설정할 수 있습니다. < GPT설명 >
+        // 뒤로가기 눌렀을때 상위 레벨대상으로 돌아가고 홈버튼 눌렀을때 드로어가 열리고 setof것들에서는 뒤로가기 눌렀을때 종료가 되는건가???
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.homeFragment,
-//                R.id.adminHomeFragment,
-//                R.id.donorsHomeFragment
+                R.id.adminHomeFragment,
+                R.id.BoardFragment,
                 R.id.InfoFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment, R.id.signUpFragment)) {
                 supportActionBar?.hide()
@@ -126,19 +132,19 @@ class MainActivity : AppCompatActivity(){
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 tabLayout.visibility = View.VISIBLE
             }
-//            if (destination.id in listOf(
-////                    R.id.donateFragment,
-////                    R.id.receiveFragment,
-////                    R.id.donationsFragment,
-//                    R.id.foodMapFragment,
-////                    R.id.historyFragment,
-//                    R.id.aboutUsFragment,
-//                )
-//            ) {
-//
-//                supportActionBar?.show()
-//                supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true)
-//            }
+            /*if (destination.id in listOf(
+//                    R.id.donateFragment,
+//                    R.id.receiveFragment,
+//                    R.id.donationsFragment,
+                    R.id.foodMapFragment,
+//                    R.id.historyFragment,
+                    R.id.aboutUsFragment,
+                )
+            ) {
+
+                supportActionBar?.show()
+                supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true) //위로 버튼 활성화
+            }*/
         }
         val header = binding.navigationView.getHeaderView(0)
         val imageView = header.findViewById<ImageView>(R.id.imageView)
@@ -177,6 +183,11 @@ class MainActivity : AppCompatActivity(){
         val sharedPref = this.getSharedPreferences("userType", Context.MODE_PRIVATE)
         val userType = sharedPref.getString("user_type", "user")
 
+
+        val navAdminhome = navView.menu.findItem(R.id.adminHome)
+        val navRegiRestautrant = navView.menu.findItem(R.id.regiRestaurant)
+        navAdminhome.isVisible = userType == "admin"
+        navRegiRestautrant.isVisible = userType == "admin"
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 /*R.id.action_help -> {
@@ -210,13 +221,14 @@ class MainActivity : AppCompatActivity(){
                         navController.navigate(R.id.adminHomeFragment)
                         true
                     } else {
+
                         false
                     }
                 }
 
                 R.id.regiRestaurant ->{
                     if (userType == "admin") {
-
+                        navController.navigate(R.id.rregiFragment)
                         true
                     } else {
                         false
@@ -229,6 +241,12 @@ class MainActivity : AppCompatActivity(){
 
                 R.id.logout -> {
                     auth.signOut()
+                    val sharedPreference = getSharedPreferences("userType", MODE_PRIVATE)
+                    val editor = sharedPreference.edit()
+
+                    editor.remove("user_type")
+                    // 전체 삭제는 editor.clear()
+                    editor.commit()
                     Toast.makeText(this, "로그아웃 완료", Toast.LENGTH_SHORT).show()
                     navController.navigate(R.id.splashFragment)
                     binding.drawerLayout.closeDrawer(GravityCompat.START)

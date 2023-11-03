@@ -61,7 +61,7 @@ class SplashFragment : Fragment() {
                 // 개발자가 직접 파일을 읽고 쓰는 코드를 작성하지 않고 SharedPreferences 객체를 이용해서 간단하게 이용할 수 있습니다.
                 val userType = sharedPrefs.getString("user_type", null)
                 if (userType == "admin"){
-                    val action = ActionOnlyNavDirections(R.id.action_splashFragment_to_rregiFragment);
+                    val action = ActionOnlyNavDirections(R.id.action_splashFragment_to_adminHomeFragment);
                     findNavController().navigate(action)
 
 

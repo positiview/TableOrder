@@ -1,6 +1,7 @@
 package com.example.mytableorder.loginSignUp
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,11 +15,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.mytableorder.Db.db
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentLoginBinding
+import com.example.mytableorder.loginSignUp.viewmodel.LoginViewModel
 import com.example.mytableorder.model.User
 import com.example.mytableorder.utils.CheckInternet
+import com.example.mytableorder.utils.Resource
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
@@ -49,7 +54,7 @@ class LoginFragment : Fragment() {
     private val RC_SIGN_IN = 100
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
-
+    private val viewModel: LoginViewModel by viewModels()
     private fun moveFragment() {
         Toast.makeText(
             requireContext(),
@@ -133,7 +138,12 @@ class LoginFragment : Fragment() {
                         binding.passwordInputLayout.isEnabled = false
                         binding.btnLogin.isEnabled = false
                         binding.btnLogin.text = "Loading..."
-                       /* viewModel.login(email, password)
+
+                        /*val sharedPref = requireActivity().getSharedPreferences("userType", Context.MODE_PRIVATE)
+                        val editor = sharedPref.edit()
+                        editor.putString("user_type", result)
+                        editor.apply()*/
+                        /*viewModel.login(email, password)
                         viewModel.loginRequest.observe(viewLifecycleOwner){
                             when(it){
                                 is Resource.Loading -> {
@@ -154,25 +164,43 @@ class LoginFragment : Fragment() {
                                     editor.putString("user_type", result)
                                     editor.apply()
 
-                                    if (result == "Organization"){
-                                        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-                                        Toast.makeText(requireContext(), "Logged in as Organization", Toast.LENGTH_SHORT).show()
-                                    }else if (result == "Restaurant"){
-                                        //Navigate to Donors View
-//                                        findNavController().navigate(R.id.action_loginFragment_to_donorsHomeFragment)
-                                        Toast.makeText(requireContext(), "Logged in as Restaurant", Toast.LENGTH_SHORT).show()
-                                    }else if(result == "Admin"){
-                                        //Navigate to Admin
+                                    if (result == "Admin"){
 //                                        findNavController().navigate(R.id.action_loginFragment_to_adminHomeFragment)
-                                        Toast.makeText(requireContext(), "Logged in as Admin", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(requireContext(), "Logged in as Organization", Toast.LENGTH_SHORT).show()
                                     }else{
                                         Toast.makeText(requireContext(), "You are not registered yet or an error occurred", Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             }
                         }*/
-
                         auth.signInWithEmailAndPassword(email, password)
+                            .addOnSuccessListener {
+                                val currentUser = auth.currentUser
+                                if(currentUser!!.isEmailVerified){
+                                    db.collection("users")
+                                        .document(currentUser.uid)
+                                        .get()
+                                        .addOnSuccessListener {
+                                            val userType = it.get("user_type") as String
+
+                                            when (userType) {
+                                                "admin" -> {
+                                                    moveAdmin()
+                                                }
+
+                                                else -> {
+                                                    moveFragment()
+                                                }
+                                            }
+                                        }
+                                }else{
+                                    Resource.Error("Email not verified")
+                                }
+                            }.addOnFailureListener {
+                                Resource.Error(it.message.toString())
+                            }
+
+                        /*auth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(requireActivity()) { task ->
                                 val currentUser = auth.currentUser
                                 Log.d("$$", "로그인 실행")
@@ -189,12 +217,19 @@ class LoginFragment : Fragment() {
                                                     override fun onDataChange(snapshot: DataSnapshot) {
                                                         val user =
                                                             snapshot.getValue(User::class.java)
+                                                        val userType = user?.user_type
+
                                                         if (user != null) {
+
                                                             binding.progressCircular.isVisible =
                                                                 false
                                                             binding.btnLogin.isEnabled = true
                                                             binding.btnLogin.text = "Login"
-                                                            moveFragment()
+                                                            if(userType == "admin"){
+                                                                moveAdmin()
+                                                            }else{
+                                                                moveFragment()
+                                                            }
                                                         }
                                                     }
 
@@ -242,7 +277,7 @@ class LoginFragment : Fragment() {
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
-                            }
+                            }*/
 
                     } else {
                         Toast.makeText(activity, "No internet connection", Toast.LENGTH_SHORT)
@@ -260,19 +295,24 @@ class LoginFragment : Fragment() {
             val signInIntent = mGoogleSignInClient?.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
 
-
-
-
-
         }
         return view
     }
 
- /*   override fun onStart() {
-        super.onStart()
-        val currentUser = auth.currentUser
-        updateUI(currentUser)
-    }*/
+    private fun moveAdmin() {
+        Toast.makeText(
+            requireContext(),
+            "관리자 로그인 성공!!",
+            Toast.LENGTH_SHORT
+        ).show()
+        findNavController().navigate(R.id.action_loginFragment_to_adminHomeFragment)
+    }
+
+    /*   override fun onStart() {
+           super.onStart()
+           val currentUser = auth.currentUser
+           updateUI(currentUser)
+       }*/
 
     private fun updateUI(currentUser: FirebaseUser?) {
 

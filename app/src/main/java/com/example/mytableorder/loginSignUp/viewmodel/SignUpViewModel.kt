@@ -1,4 +1,4 @@
-package com.example.mytableorder.loginSignUp
+package com.example.mytableorder.loginSignUp.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,23 +12,24 @@ import javax.inject.Inject
 
 class SignUpViewModel @Inject constructor(
     private val repository: AuthRepository
-) : ViewModel() {
-
-
+): ViewModel() {
 
     private val _registerRequest = MutableLiveData<Resource<String>>()
-    val registerRequest: LiveData<Resource<String>> = _registerRequest
+    val registerRequest = _registerRequest as LiveData<Resource<String>>
 
-    fun register(email: String, password: String, user: User) {
+
+    fun register(email: String, password: String, user: User){
         viewModelScope.launch {
             _registerRequest.value = Resource.Loading
             try {
-                repository.register(email, password, user) { result ->
-                    _registerRequest.value = result
+                repository.register(email, password, user){
+                    _registerRequest.value = it
                 }
-            } catch (e: Exception) {
+            }catch (e: Exception){
                 _registerRequest.value = Resource.Error(e.message.toString())
+
             }
         }
     }
+
 }

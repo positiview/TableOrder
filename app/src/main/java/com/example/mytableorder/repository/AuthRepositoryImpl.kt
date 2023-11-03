@@ -33,15 +33,11 @@ class AuthRepositoryImpl : AuthRepository {
 
                             when (userType) {
                                 "Admin" -> {
-                                    result.invoke(Resource.Success("Admin"))
+                                    result.invoke(Resource.Success("admin"))
                                 }
-                                "Organization" -> {
-                                    result.invoke(
-                                        Resource.Success("Organization")
-                                    )
-                                }
+
                                 else -> {
-                                    result.invoke(Resource.Success("Restaurant"))
+                                    result.invoke(Resource.Success("user"))
                                 }
                             }
                         }

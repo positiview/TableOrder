@@ -18,10 +18,37 @@
         android:label="Details"
         tools:layout="@layout/fragment_details" />
 
+<!--자유게시판-->
+    <fragment
+        android:id="@+id/BoardFragment"
+        android:name="com.example.mytableorder.fragment.board.BoardFragment"
+        android:label="Board"
+        tools:layout="@layout/fragment_board" >
+        <action
+            android:id="@+id/action_boardFragment_to_boardDetailsFragment"
+            app:destination="@id/BoardDetailsFragment" />
+        <action
+            android:id="@+id/action_boardFragment_to_WriteFragment"
+            app:destination="@id/WriteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/BoardDetailsFragment"
+        android:name="com.example.mytableorder.fragment.board.BoardDetailsFragment"
+        android:label="Board Details"
+        tools:layout="@layout/fragment_boarddetails" />
+    <fragment
+        android:id="@+id/WriteFragment"
+        android:name="com.example.mytableorder.fragment.board.WriteFragment"
+        android:label="Board Write"
+        tools:layout="@layout/fragment_write" />
+    <action
+        android:id="@+id/action_writeFragment_to_BoardDetailsFragment"
+        app:destination="@id/BoardDetailsFragment" />
+    <action
+        android:id="@+id/action_writeFragment_to_BoardFragment"
+        app:destination="@id/BoardFragment" />
 
-
-
-
+    <!--자유게시판-->
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.mytableorder.fragment.home.HomeFragment"

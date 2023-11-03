@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(){
                         navController.navigate(R.id.InfoFragment)
                     }
 //                    2 -> navController.navigate(R.id.InfoFragment)
-//                    3 -> navController.navigate(R.id.InfoFragment)
+                    3 -> navController.navigate(R.id.BoardFragment)
 //                    4 -> navController.navigate(R.id.InfoFragment)
                     // 다른 탭에 대한 액션을 추가합니다.
                 }

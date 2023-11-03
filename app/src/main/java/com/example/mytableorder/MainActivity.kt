@@ -28,6 +28,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.mytableorder.R
 import com.example.mytableorder.adapter.MyFragmentStateAdapter
 import com.example.mytableorder.databinding.ActivityMainBinding
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInResult
+import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -230,6 +233,7 @@ class MainActivity : AppCompatActivity(){
             super.onBackPressed()
         }
     }
+
 
 
 

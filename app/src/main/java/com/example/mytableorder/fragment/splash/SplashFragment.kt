@@ -50,7 +50,7 @@ class SplashFragment : Fragment() {
             if (user != null) {
                 /*val action =
                     SplashFragmentDirections.actionSplashFragmentToHomeFragment()
-                findNavController().navigate(action)*//*
+                findNavController().navigate(action)*/
                 //findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                 val sharedPrefs = requireActivity().getSharedPreferences("userType", Context.MODE_PRIVATE)
                 //SharedPreferences는 앱의 데이터를 영속적으로 저장하기 위한 클래스입니다.
@@ -60,29 +60,22 @@ class SplashFragment : Fragment() {
                 // SharedPreferences로 저장하는 데이터 역시 결국은 파일(XML)로 저장되지만,
                 // 개발자가 직접 파일을 읽고 쓰는 코드를 작성하지 않고 SharedPreferences 객체를 이용해서 간단하게 이용할 수 있습니다.
                 val userType = sharedPrefs.getString("user_type", null)
-                if (userType == "Admin"){
-//                    val action = SplashFragmentDirections.actionSplashFragmentToAdminHomeFragment()
-//                    findNavController().navigate(action)
-
-                }else if(userType == "Organization"){
-                    *//*val action = SplashFragmentDirections.actionSplashFragmentToHomeFragment()
-                    findNavController().navigate(action)*//*
-
-                }else if(userType == "Restaurant"){
-                   *//* val action = SplashFragmentDirections.actionSplashFragmentToDonorsHomeFragment()
-                    findNavController().navigate(action)*//*
-
-                }else{*/
-                    val action =
-                        ActionOnlyNavDirections(R.id.action_splashFragment_to_homeFragment)
+                if (userType == "admin"){
+                    val action = ActionOnlyNavDirections(R.id.action_splashFragment_to_adminHomeFragment);
                     findNavController().navigate(action)
 
 
-            } else {
-//                val action = ActionOnlyNavDirections(R.id.action_splashFragment_to_loginFragment)
 
-                findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
-                //findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+                    }else {
+                    val action =
+                        ActionOnlyNavDirections(R.id.action_splashFragment_to_homeFragment)
+                    findNavController().navigate(action)
+                }
+
+            } else {
+                val action = ActionOnlyNavDirections(R.id.action_splashFragment_to_loginFragment)
+
+                 findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
 
             }
         }, 3000)

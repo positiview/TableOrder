@@ -16,6 +16,7 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
+        multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -50,7 +51,11 @@ dependencies {
     implementation("com.google.firebase:firebase-database:20.3.0")
     //파이어베이스 Auth
     implementation ("com.google.firebase:firebase-auth-ktx:22.2.0")
+    implementation ("androidx.multidex:multidex:2.0.1")
 
+    //소셜 로그인
+    implementation("com.google.firebase:firebase-auth:22.2.0")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
     //Navigation
     implementation ("androidx.navigation:navigation-fragment-ktx:2.5.0")
     implementation ("androidx.navigation:navigation-ui-ktx:2.5.0")
@@ -61,6 +66,7 @@ dependencies {
     //구글디펜던시추가
     implementation("com.google.android.gms:play-services-maps:18.0.1")
     implementation("com.google.android.gms:play-services-location:19.0.1")
+
 
 
     implementation("androidx.cardview:cardview:1.0.0")

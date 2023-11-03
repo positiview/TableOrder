@@ -11,10 +11,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.mytableorder.Db.db
 import com.example.mytableorder.model.User
 import com.example.mytableorder.MainActivity
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentSignUpBinding
+import com.example.mytableorder.loginSignUp.viewmodel.SignUpViewModel
 
 import com.example.mytableorder.utils.CheckInternet
 import com.example.mytableorder.utils.Resource
@@ -29,29 +31,14 @@ import com.google.firebase.ktx.Firebase
 class SignUpFragment : Fragment() {
     private lateinit var binding: FragmentSignUpBinding
     private lateinit var databaseReference: DatabaseReference
-//    private  val viewModel : SignUpViewModel by viewModels()
+    private  val viewModel : SignUpViewModel by viewModels()
     lateinit var auth :FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val context = requireContext()
-        if (context != null) {
-            // 컨텍스트가 올바르게 설정된 경우
-            // ...
-            Log.d("MyFragment", "Context is not null")
-        } else {
-            // 컨텍스트가 null인 경우
-            Log.e("MyFragment", "Context is null")
-        }
-        if (isAdded && !isDetached) {
-            val context = requireContext()
-            // context 사용
-            Log.d("MyFragment", "Context is in an active state")
-        } else {
-            Log.e("MyFragment", "Fragment is not in an active state")
-        }
+
 
         // Inflate the layout for this fragment
         binding = FragmentSignUpBinding.inflate(inflater, container, false)
@@ -60,8 +47,9 @@ class SignUpFragment : Fragment() {
 
         /*var firebaseDatabase = FirebaseDatabase.getInstance()
         var databaseReference = firebaseDatabase.getReference("Users")*/
-        var db = FirebaseDatabase.getInstance()
-        databaseReference = db.getReference("User")
+       /* var db = FirebaseDatabase.getInstance()
+        databaseReference = db.getReference("User")*/
+
         auth = Firebase.auth
 
         binding.loginTv.setOnClickListener {
@@ -76,9 +64,9 @@ class SignUpFragment : Fragment() {
 
 
             when {
-                !(binding.btnResturant.isChecked || binding.btnOrganization.isChecked || binding.btnAdmin.isChecked) -> {
+                /*!(binding.btnResturant.isChecked || binding.btnOrganization.isChecked || binding.btnAdmin.isChecked) -> {
                     Toast.makeText(requireContext(), "Please select user type", Toast.LENGTH_SHORT).show()
-                }
+                }*/
 
                 name.isEmpty() -> {
                     binding.nameInputLayout.error = "Name is required"
@@ -114,32 +102,24 @@ class SignUpFragment : Fragment() {
                     binding.btnRegister.isEnabled = false
 
 
-                    val selectedItemId = binding.radioGroup.checkedRadioButtonId
-                    val selectedItem = binding.radioGroup.findViewById<RadioButton>(selectedItemId)
-                    val userType = selectedItem.text.toString()
+                    /*val selectedItemId = binding.radioGroup.checkedRadioButtonId
+                    val selectedItem = binding.radioGroup.findViewById<RadioButton>(selectedItemId)*/
+                    val userType = "user"
 
                     if (CheckInternet.isConnected(requireContext())) {
                         //Toast.makeText(activity, "Internet is available", Toast.LENGTH_SHORT).show()
                         binding.progressCircular.isVisible = true
-                       /* val memberModel = MemberModel(
-                            email,
-                            name,
-                            phone,
-                            userType,
-                            password
-                        )*/
-
-//                        RetrofitController.register(memberModel)
 
 
-                        /*val user = User(
+
+                        val user = User(
                             email,
                             name,
                             phone,
                             userType
-                        )*/
+                        )
 
-                       /* viewModel.register(email, password, user)
+                        /*viewModel.register(email, password, user)
                         viewModel.registerRequest.observe(viewLifecycleOwner){
                             when(it){
                                 is Resource.Loading -> {
@@ -154,8 +134,27 @@ class SignUpFragment : Fragment() {
                                 }
                             }
                         }*/
-
                         auth.createUserWithEmailAndPassword(email, password)
+                            .addOnSuccessListener {
+                                auth.currentUser?.sendEmailVerification()
+                                    ?.addOnSuccessListener {
+                                        db.collection("users")
+                                            .document(auth.uid.toString())
+                                            .set(user)
+                                            .addOnSuccessListener {
+                                                val popupText =
+                                                    Snackbar.make(view,"Account Created Successfully\n Check your email for verification Link", Snackbar.LENGTH_LONG)
+                                                popupText.show()
+                                                requireActivity().onBackPressed()
+                                            }
+                                    }
+                            }
+                            .addOnFailureListener {
+                               Resource.Error(it.message.toString())
+                            }
+
+                        // 아래는 realtime database 이용하는 방법 위는 fire
+                        /*auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener {
                                 if (it.isSuccessful) {
                                     val currentUser = auth.currentUser
@@ -168,7 +167,7 @@ class SignUpFragment : Fragment() {
                                     }
                                     val userId = currentUser?.uid
                                     val user =
-                                        userId?.let { id -> User(email, name, phone, id) }
+                                        userId?.let { id -> User(email, name, phone, userType) }
                                     // 위 코드는 userId가 null이 아닐 때만 User 객체를 생성하고 해당 객체를 user 변수에 할당합니다.
 
                                     if (userId != null) {
@@ -180,12 +179,6 @@ class SignUpFragment : Fragment() {
                                             }
                                             .addOnFailureListener{ e -> Log.e("fail","error",e)}
 
-                                        /*if (user != null) {
-                                            db.collection("member").add(user)
-                                                .addOnSuccessListener { r -> Log.d("$$", "successful signUp with ID :${r.id}") }
-                                                .addOnFailureListener{ e -> Log.e("fail","error",e)
-                                                }
-                                        }*/
 
                                     }
                                     requireActivity().onBackPressed()
@@ -196,7 +189,7 @@ class SignUpFragment : Fragment() {
                                 binding.btnRegister.isEnabled = true
                                 Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT)
                                     .show()
-                            }
+                            }*/
                     }
                 }
             }

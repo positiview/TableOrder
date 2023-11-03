@@ -1,5 +1,6 @@
 package com.example.mytableorder
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -172,6 +174,8 @@ class MainActivity : AppCompatActivity(){
             .error(R.drawable.ic_person)
             .into(imageView)
 
+        val sharedPref = this.getSharedPreferences("userType", Context.MODE_PRIVATE)
+        val userType = sharedPref.getString("user_type", "user")
 
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -201,15 +205,25 @@ class MainActivity : AppCompatActivity(){
                     }
                     true
                 }
-               /* R.id.adminHome ->{
-
+                R.id.adminHome -> {
+                    if (userType == "admin") {
+                        navController.navigate(R.id.adminHomeFragment)
+                        true
+                    } else {
+                        false
+                    }
                 }
 
                 R.id.regiRestaurant ->{
+                    if (userType == "admin") {
 
+                        true
+                    } else {
+                        false
+                    }
                 }
-                
-                R.id.myPage->{
+
+                /*R.id.myPage->{
 
                 }*/
 

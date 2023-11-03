@@ -33,6 +33,8 @@
         </menu>
     </item>
 
+<<<<<<< HEAD
+=======
     <item android:title="@string/my_menu">
 
         <menu>
@@ -43,4 +45,5 @@
             />
         </menu>
     </item>
+>>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
 </menu>

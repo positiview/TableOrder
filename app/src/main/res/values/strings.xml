@@ -10,6 +10,13 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="dont_have_an_account">Dont have an account?</string>
     <string name="register">Register</string>
+<<<<<<< HEAD
+    <string name="confirm_password">Confirm password</string>
+    <string name="phone_number">Phone number</string>
+    <string name="name">Name</string>
+    <string name="already_having_an_account">Already having an account?</string>
+    <string name="fill_in_the_details_to_create_account">Fill in the details to create account</string>
+=======
     <string name="confirm">확인</string>
     <string name="confirm_password">Confirm password</string>
     <string name="confirm_logout">정말 로그아웃 하시겠습니까?</string>
@@ -17,11 +24,15 @@
     <string name="name">Name</string>
     <string name="already_having_an_account">Already having an account?</string>
     <string name="fill_in_the_details_to_create_account">계정을 만들기 위해 세부 정보를 입력하세요.</string>
+>>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
     <string name="loading">Loading..</string>
     <string name="help">Help</string>
     <string name="my_pins">My pins</string>
     <string name="communicate">Communicate</string>
+<<<<<<< HEAD
+=======
     <string name="my_menu">My Menu</string>
+>>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
     <string name="share">Share</string>
     <string name="feedback">Feedback</string>
     <string name="logout">Logout</string>
@@ -40,6 +51,8 @@
     <string name="resturant_donor">Resturant</string>
     <string name="organization_receiver">Organization</string>
     <string name="admin">Admin</string>
+<<<<<<< HEAD
+=======
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -49,4 +62,5 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+>>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
 </resources>

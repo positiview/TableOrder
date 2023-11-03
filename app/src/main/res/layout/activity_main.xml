@@ -72,10 +72,18 @@
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
             app:navGraph="@navigation/nav_graph" />
 
+<<<<<<< HEAD
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+=======
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="0.01dp"
+>>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -84,7 +92,10 @@
             app:layout_constraintVertical_bias="1.0" />
 
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView

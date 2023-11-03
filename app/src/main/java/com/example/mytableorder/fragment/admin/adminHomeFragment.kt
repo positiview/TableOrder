@@ -122,7 +122,7 @@ class AdminHomeFragment : Fragment(), MenuProvider {
         menuInflater.inflate(R.menu.admin_menu, menu)
         menu.findItem(R.id.action_logout).setOnMenuItemClickListener {
             auth.signOut()
-            findNavController().navigate(R.id.action_adminHomeFragment_to_loginFragment)
+            //findNavController().navigate(R.id.action_adminHomeFragment_to_loginFragment)
             true
         }
     }
@@ -131,7 +131,7 @@ class AdminHomeFragment : Fragment(), MenuProvider {
         when(menuItem.itemId){
             R.id.action_logout -> {
                 auth.signOut()
-                findNavController().navigate(R.id.action_adminHomeFragment_to_loginFragment)
+                //findNavController().navigate(R.id.action_adminHomeFragment_to_loginFragment)
             }
         }
         return true

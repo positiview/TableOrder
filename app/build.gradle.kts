@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+<<<<<<< HEAD
 
     id("kotlin-kapt")
     id("kotlin-parcelize")
@@ -12,11 +13,22 @@ plugins {
 
 android {
     namespace = "com.example.tableorder"
+=======
+    id("com.google.gms.google-services")
+}
+
+android {
+    namespace = "com.example.mytableorder"
+>>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
     compileSdk = 34
     viewBinding { enable = true }
 
     defaultConfig {
+<<<<<<< HEAD
         applicationId = "com.example.tableorder"
+=======
+        applicationId = "com.example.mytableorder"
+>>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -41,14 +53,39 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+<<<<<<< HEAD
+=======
+    buildFeatures {
+        viewBinding = true
+    }
+>>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
 }
 
 dependencies {
 
+<<<<<<< HEAD
+=======
+    //파이어베이스
+    implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
+    //파이어베이스 디비
+    implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
+    implementation("com.google.firebase:firebase-database:20.3.0")
+    //파이어베이스 Auth
+    implementation ("com.google.firebase:firebase-auth-ktx:22.2.0")
+
+    //Navigation
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.5.0")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.5.0")
+
+    //circle image view
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+
+>>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
     //구글디펜던시추가
     implementation("com.google.android.gms:play-services-maps:18.0.1")
     implementation("com.google.android.gms:play-services-location:19.0.1")
 
+<<<<<<< HEAD
     //Navigation
     implementation ("androidx.navigation:navigation-fragment-ktx:2.5.0")
     implementation ("androidx.navigation:navigation-ui-ktx:2.5.0")
@@ -65,13 +102,28 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+=======
+
+    implementation("androidx.cardview:cardview:1.0.0")
+
+
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.6.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.annotation:annotation:1.7.0")
+>>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
+<<<<<<< HEAD
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+=======
+
+>>>>>>> 9df6c260fbe896d42a275eaae091c2da26bfb349
 }

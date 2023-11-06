@@ -288,7 +288,7 @@ class LoginFragment : Fragment() {
             "관리자 로그인 성공!!",
             Toast.LENGTH_SHORT
         ).show()
-        findNavController().navigate(R.id.action_loginFragment_to_rregiFragment)
+        findNavController().navigate(R.id.action_loginFragment_to_adminHomeFragment)
     }
 
     /*   override fun onStart() {

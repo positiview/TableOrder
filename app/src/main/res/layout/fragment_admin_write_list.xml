@@ -157,7 +157,7 @@
                 android:textSize="30sp" />
 
             <EditText
-                android:id="@+id/Longitude"
+                android:id="@+id/raLongitude"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"

@@ -2,17 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <!--<data>
-        <variable
-            name="viewmodel"
-            type="com.example.knucseapp.ui.mypage.MypageViewModel" />
 
-    </data>-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/material_dynamic_neutral_variant95"
-        tools:context=".mypage.mypageFragment">
+        android:background="@color/gray"
+        tools:context=".fragment.mypage.MypageFragment">
 
         <ScrollView
             android:id="@+id/connected_layout"
@@ -46,13 +41,13 @@
                         android:text="@string/mypage_menu_account_management" />
 
                     <TextView
-                        android:id="@+id/btn_mypage_mypage"
+                        android:id="@+id/btn_mypage_myInfo"
                         style="@style/mypage_textviewstyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/mypage_textview_top_edge"
                         android:clickable="true"
-                        android:text="@string/mypage_mypage" />
+                        android:text="@string/mypage_myInfo" />
 
                     <TextView
                         android:id="@+id/btn_mypage_change_password"

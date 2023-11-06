@@ -57,4 +57,23 @@
     <string name="admin_home">관리자 페이지</string>
     <string name="admin_regiRestaurant">식당 등록</string>
     <string name="my_page">마이 페이지</string>
+    <string name="mypage_menu_account_management">계정 관리</string>
+    <string name="mypage_menu_board">게시판</string>
+    <string name="mypage_menu_app_management">앱 관리</string>
+    <string name="mypage_myInfo">나의 정보</string>
+    <string name="mypage_change_password">비밀번호 변경</string>
+    <string name="mypage_delete_member">회원 탈퇴</string>
+    <string name="mypage_reservation_history">예약내역</string>
+    <string name="mypage_my_write">내가 쓴 글</string>
+    <string name="mypage_my_comment">내가 쓴 댓/답글</string>
+    <string name="mypage_setting">환경설정</string>
+    <string name="mypage_logout">로그아웃</string>
+    <string name="mypage_table_reservation">내 예약</string>
+    <string name="mypage_review">내 리뷰</string>
+    <string name="mypage_review_history">내 리뷰 내역</string>
+    <string name="disconnected">네트워크에 연결되지 않았습니다.</string>
+    <string name="disconnected2">연결 시도 후 잠시만 기다려 주세요.</string>
+    <string name="nickname">닉네임</string>
+    <string name="edit">수정</string>
+    <string name="complete">완료</string>
 </resources>

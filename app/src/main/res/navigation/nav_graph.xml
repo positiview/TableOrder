@@ -229,6 +229,9 @@
         <action
             android:id="@+id/action_adminHomeFragment_to_adminWriteFragment"
             app:destination="@+id/adminWriteFragment"/>
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminListFragment"
+            app:destination="@+id/adminListFragment"/>
 
     </fragment>
 </navigation>

@@ -42,6 +42,11 @@ class AdminHomeFragment : Fragment(), MenuProvider {
             // 여기에서 Navigation Component를 사용하여 AdminWriteListFragment로 이동합니다.
             findNavController().navigate(R.id.action_adminHomeFragment_to_adminWriteFragment)
         }
+        // 리스트보기
+        val buttonList = binding.buttonList
+        buttonList.setOnClickListener {
+            findNavController().navigate(R.id.action_adminHomeFragment_to_adminListFragment)
+        }
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

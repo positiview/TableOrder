@@ -40,6 +40,8 @@ class MainActivity : AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var auth: FirebaseAuth
+    private var authStateListener: FirebaseAuth.AuthStateListener? = null
+
     private val TAG = "userInfo"
    /* private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference*/
@@ -86,7 +88,7 @@ class MainActivity : AppCompatActivity(){
                     }
 //                    2 -> navController.navigate(R.id.InfoFragment)
                     3 -> navController.navigate(R.id.BoardFragment)
-//                    4 -> navController.navigate(R.id.InfoFragment)
+                    4 -> navController.navigate(R.id.mypageFragment)
                     // 다른 탭에 대한 액션을 추가합니다.
                 }
             }
@@ -163,6 +165,7 @@ class MainActivity : AppCompatActivity(){
                             val user = snapshot.toObject(User::class.java)
                             if (user != null) {
                                 val userEmail = user.email ?: ""
+                                Log.d("$$", "user email : "+ userEmail)
                                 userEmailText.text = userEmail
                             }
                         }
@@ -172,6 +175,7 @@ class MainActivity : AppCompatActivity(){
                 }
             }
         }
+
 
         Glide.with(this)
             .load(userImage)
@@ -219,6 +223,7 @@ class MainActivity : AppCompatActivity(){
                 R.id.adminHome -> {
                     if (userType == "admin") {
                         navController.navigate(R.id.adminHomeFragment)
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
                         true
                     } else {
 
@@ -229,6 +234,7 @@ class MainActivity : AppCompatActivity(){
                 R.id.regiRestaurant ->{
                     if (userType == "admin") {
                         navController.navigate(R.id.rregiFragment)
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
                         true
                     } else {
                         false
@@ -267,6 +273,37 @@ class MainActivity : AppCompatActivity(){
         super.onResume()
         setSupportActionBar(binding.toolbar)
         binding.drawerLayout.closeDrawer(GravityCompat.START)
+
+        val header = binding.navigationView.getHeaderView(0)
+        val imageView = header.findViewById<ImageView>(R.id.imageView)
+        val userImage = auth.currentUser?.photoUrl
+
+        val user = auth.currentUser
+        val userEmailText = header.findViewById<TextView>(R.id.useremail)
+
+        user?.let {
+            db.collection("users")
+                .document(it.uid)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    val user = snapshot.toObject(User::class.java)
+                    if (user != null) {
+                        val userEmail = user.email ?: ""
+                        Log.d("$$", "user email : "+ userEmail)
+                        userEmailText.text = userEmail
+                    }
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, "Error: ${it.message}")
+                }
+        }
+        Glide.with(this)
+            .load(userImage)
+            .apply(RequestOptions().override(150, 150))
+            .placeholder(R.drawable.ic_person)
+            .error(R.drawable.ic_person)
+            .into(imageView)
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

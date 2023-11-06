@@ -162,15 +162,13 @@
              android:id="@+id/action_splashFragment_to_adminHomeFragment"
              app:destination="@id/adminHomeFragment" />
     </fragment>
-    <!--<fragment
-        android:id="@+id/donationsFragment"
-        android:name="edu.puo.foodonus.fragments.donations.DonationsFragment"
-        android:label="Donations"
-        tools:layout="@layout/fragment_donations" >
-        <action
-            android:id="@+id/action_donationsFragment_to_donorLocationFragment"
-            app:destination="@id/donorLocationFragment" />
-    </fragment>-->
+    <fragment
+        android:id="@+id/mypageFragment"
+        android:name="com.example.mytableorder.fragment.mypage.mypageFragment"
+        android:label="@string/my_page"
+        tools:layout="@layout/fragment_mypage" >
+
+    </fragment>
     <dialog
         android:id="@+id/resetPasswordFragment"
         android:name="com.example.mytableorder.loginSignUp.ResetPasswordFragment"

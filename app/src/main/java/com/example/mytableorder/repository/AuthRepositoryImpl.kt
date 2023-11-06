@@ -32,7 +32,7 @@ class AuthRepositoryImpl : AuthRepository {
                             val userType = it.get("user_type") as String
 
                             when (userType) {
-                                "Admin" -> {
+                                "admin" -> {
                                     result.invoke(Resource.Success("admin"))
                                 }
 

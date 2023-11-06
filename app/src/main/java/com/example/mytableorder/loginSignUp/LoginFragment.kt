@@ -69,11 +69,11 @@ class LoginFragment : Fragment() {
 
         binding.registerTv.setOnClickListener {
             Log.d("$$", "회원가입 실행")
-            findNavController().navigate(com.example.mytableorder.R.id.action_loginFragment_to_signUpFragment)
+            findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
         }
         binding.forgotPasswordTv.setOnClickListener {
             Log.d("$$", "비밀번호수정 실행")
-            findNavController().navigate(com.example.mytableorder.R.id.action_loginFragment_to_resetPasswordFragment)
+            findNavController().navigate(R.id.action_loginFragment_to_resetPasswordFragment)
         }
 
         binding.btnLogin.setOnClickListener {

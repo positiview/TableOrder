@@ -1,4 +1,4 @@
-package com.example.mytableorder.mypage
+package com.example.mytableorder.fragment.mypage
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,24 +8,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
+import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentMypageBinding
 import com.example.mytableorder.utils.CheckInternet
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.remote.ConnectivityMonitor
+import com.google.firebase.ktx.Firebase
+import android.content.SharedPreferences
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 
 class MypageFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MypageFragment()
-    }
 
-    lateinit var binding: FragmentMypageBinding
+    private lateinit var binding : FragmentMypageBinding
+    private lateinit var auth: FirebaseAuth
+
    /* private lateinit var viewModel : MypageViewModel
     private lateinit var viewModelFactory: MypageViewModelFactory*/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = FragmentMypageBinding.inflate(inflater, container, false)
+        val view = binding.root
        /* binding.lifecycleOwner = this
         viewModelFactory = MypageViewModelFactory(AuthRepository())
         viewModel = ViewModelProvider(this, viewModelFactory).get(MypageViewModel::class.java)
@@ -37,13 +47,12 @@ class MypageFragment : Fragment() {
 
 
         }else{
-            {
-                binding.connectedLayout.visibility = View.GONE
-                binding.disconnectedLayout.visibility = View.VISIBLE
+            binding.connectedLayout.visibility = View.GONE
+            binding.disconnectedLayout.visibility = View.VISIBLE
 
-            }
+
         }
-        return binding.root
+        return view
     }
 
     private val backPressedDispatcher = object : OnBackPressedCallback(true) {
@@ -72,24 +81,23 @@ class MypageFragment : Fragment() {
         }
     }*/
 
-    fun setButton() {
+    private fun setButton() {
         binding.apply {
-            btnMypageMypage.setOnClickListener {
-                val intent = Intent(it.context, UserInfoEditActivity::class.java)
-                it.context.startActivity(intent)
+            btnMypageMyInfo.setOnClickListener {
+                findNavController().navigate(R.id.action_mypageFragment_to_myInfoFragment)
+
             }
 
             btnMypageChangePassword.setOnClickListener {
-                val intent = Intent(it.context, PasswordEditActivity::class.java)
-                it.context.startActivity(intent)
+                findNavController().navigate(R.id.action_mypageFragment_to_resetPasswordFragment)
             }
 
-            btnMypageDeleteMember.setOnClickListener {
+         /*   btnMypageDeleteMember.setOnClickListener {
                 val intent = Intent(it.context, DeleteMemberActivity::class.java)
                 it.context.startActivity(intent)
-            }
+            }*/
 
-            btnMypageReservationHistory.setOnClickListener {
+           /* btnMypageReservationHistory.setOnClickListener {
                 val intent = Intent(it.context, ReservationHistoryActivity::class.java)
                 it.context.startActivity(intent)
             }
@@ -107,7 +115,7 @@ class MypageFragment : Fragment() {
             btnMypageSetting.setOnClickListener {
                 val intent = Intent(it.context, SettingActivity::class.java)
                 it.context.startActivity(intent)
-            }
+            }*/
 
             btnMypageLogout.setOnClickListener {
                 showLogoutDialog()
@@ -120,9 +128,21 @@ class MypageFragment : Fragment() {
             .setTitle("로그아웃")
             .setMessage("로그아웃하시겠습니까?")
             .setPositiveButton("확인") { _, _ ->
-                if(ConnectivityMonitor.NetworkStatus.status){
-                    binding.mypageProgressBar.show()
-                    viewModel.logout()
+                if(CheckInternet.isConnected(requireActivity())){
+                    auth = Firebase.auth
+                    auth.signOut()
+                    val navController = findNavController()
+                    val sharedPreference = requireContext().getSharedPreferences("userType",
+                        AppCompatActivity.MODE_PRIVATE
+                    )
+                    val editor = sharedPreference.edit()
+
+                    editor.remove("user_type")
+                    // 전체 삭제는 editor.clear()
+                    editor.commit()
+                    Toast.makeText(requireContext(), "로그아웃 완료", Toast.LENGTH_SHORT).show()
+                    navController.navigate(R.id.splashFragment)
+                    binding.mypageProgressBar.visibility = View.VISIBLE
                 }
                 else
                     Toast.makeText(activity, "네트워크 연결을 확인해 주세요.", Toast.LENGTH_SHORT).show()

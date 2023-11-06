@@ -164,9 +164,15 @@
     </fragment>
     <fragment
         android:id="@+id/mypageFragment"
-        android:name="com.example.mytableorder.fragment.mypage.mypageFragment"
+        android:name="com.example.mytableorder.fragment.mypage.MypageFragment"
         android:label="@string/my_page"
         tools:layout="@layout/fragment_mypage" >
+        <action
+            android:id="@+id/action_mypageFragment_to_myInfoFragment"
+            app:destination="@+id/myInfoFragment"/>
+        <action
+            android:id="@+id/action_mypageFragment_to_resetPasswordFragment"
+            app:destination="@+id/resetPasswordFragment"/>
 
     </fragment>
     <dialog

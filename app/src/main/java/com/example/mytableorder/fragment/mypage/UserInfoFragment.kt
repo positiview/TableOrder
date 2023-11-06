@@ -40,7 +40,7 @@ class UserInfoFragment : Fragment() {
     private var imageChanged = false
     private var nickNameChanged = false
 
-    /*private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
             toast("선택하신 이미지로 변경했습니다.")
             Glide.with(this).load(result.uriContent).into(binding.accountIvProfile)
@@ -48,7 +48,7 @@ class UserInfoFragment : Fragment() {
             binding.btnOk.isEnabled=true
             imageChanged = true
         }
-    }*/
+    }
 
     /*private fun startCrop() {
         // start picker to get image for cropping and then use the image in cropping activity
@@ -94,14 +94,14 @@ class UserInfoFragment : Fragment() {
 //            viewModel.getUserInfo()
         nickName = binding.userNicknameText.text.toString()
 
-        /*binding.apply {
+        binding.apply {
             btnOk.setOnClickListener {
-                *//*when(checkChanged()){
+                /*when(checkChanged()){
                     0 -> {}
                     1 -> {}
                     2 -> {}
                     else -> {}
-                }*//*
+                }*/
                 if (CheckInternet.isConnected(requireActivity())) {
                     if(nickNameChanged && imageChanged){
                         file = File(createCopyAndReturnRealPath(filePath))
@@ -152,14 +152,14 @@ class UserInfoFragment : Fragment() {
                     }
                 }
             })
-        }*/
+        }
         return view
     }
 
 
 
     // Uri -> absolutePath
-    /*fun createCopyAndReturnRealPath(uri: Uri) :String? {
+    fun createCopyAndReturnRealPath(uri: Uri) :String? {
         val context = applicationContext
         val contentResolver = context.contentResolver ?: return null
 
@@ -272,5 +272,5 @@ class UserInfoFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }*/
+    }
 }

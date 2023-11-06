@@ -119,8 +119,7 @@ class MainActivity : AppCompatActivity(){
                 R.id.homeFragment,
                 R.id.adminHomeFragment,
                 R.id.BoardFragment,
-                R.id.InfoFragment,
-                R.id.mypageFragment
+                R.id.InfoFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -91,11 +91,9 @@
         <action
             android:id="@+id/action_loginFragment_to_resetPasswordFragment"
             app:destination="@id/resetPasswordFragment" />
-         <action
-             android:id="@+id/action_loginFragment_to_adminHomeFragment"
-             app:destination="@id/adminHomeFragment"
-             app:popUpTo="@id/loginFragment"
-             app:popUpToInclusive="true"/>
+        <!-- <action
+             android:id="@+id/action_loginFragment_to_donorsHomeFragment"
+             app:destination="@id/donorsHomeFragment" />-->
          <action
              android:id="@+id/action_loginFragment_to_rregiFragment"
              app:destination="@id/rregiFragment" />

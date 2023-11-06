@@ -4,5 +4,8 @@ data class User(
     var email: String? = "",
     var name: String? = "",
     var phone: String? = "",
-    var user_type: String? = ""
+    var user_type: String? = "",
+    val level : String? = "",
+    val imagePath : String? = ""
+
 )

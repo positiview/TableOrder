@@ -11,16 +11,24 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentUserInfoBinding
+import com.example.mytableorder.loginSignUp.viewmodel.LoginViewModel
 import com.example.mytableorder.repository.AuthRepository
+import com.example.mytableorder.repository.AuthRepositoryImpl
 import com.example.mytableorder.utils.CheckInternet
+import com.example.mytableorder.viewmodelFactory.AuthViewModelFactory
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageView
+import com.canhub.cropper.options
+import com.example.mytableorder.utils.Resource
 
 
 class UserInfoFragment : Fragment() {
@@ -50,7 +58,7 @@ class UserInfoFragment : Fragment() {
         }
     }
 
-    /*private fun startCrop() {
+    private fun startCrop() {
         // start picker to get image for cropping and then use the image in cropping activity
         cropImage.launch(
             options {
@@ -60,14 +68,14 @@ class UserInfoFragment : Fragment() {
                 setCropMenuCropButtonIcon(0)
             }
         )
-    }*/
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-       /* binding = DataBindingUtil.setContentView(this, R.layout.activity_user_info_edit)
+
         initViewModel()
-        setToolbar()*/
+
         binding = FragmentUserInfoBinding.inflate(inflater, container,false)
         val view = binding.root
        /* val connection = NetworkConnection(applicationContext)
@@ -92,16 +100,16 @@ class UserInfoFragment : Fragment() {
 
 //        if(NetworkStatus.status)
 //            viewModel.getUserInfo()
-        nickName = binding.userNicknameText.text.toString()
+       /* nickName = binding.userNicknameText.text.toString()
 
         binding.apply {
             btnOk.setOnClickListener {
-                /*when(checkChanged()){
+                *//*when(checkChanged()){
                     0 -> {}
                     1 -> {}
                     2 -> {}
                     else -> {}
-                }*/
+                }*//*
                 if (CheckInternet.isConnected(requireActivity())) {
                     if(nickNameChanged && imageChanged){
                         file = File(createCopyAndReturnRealPath(filePath))
@@ -152,14 +160,14 @@ class UserInfoFragment : Fragment() {
                     }
                 }
             })
-        }
+        }*/
         return view
     }
 
 
 
     // Uri -> absolutePath
-    fun createCopyAndReturnRealPath(uri: Uri) :String? {
+   /* fun createCopyAndReturnRealPath(uri: Uri) :String? {
         val context = applicationContext
         val contentResolver = context.contentResolver ?: return null
 
@@ -176,11 +184,13 @@ class UserInfoFragment : Fragment() {
             inputStream.close()
         } catch (e: IOException) { e.printStackTrace() }
         return file.getAbsolutePath()
-    }
+    }*/
 
     private fun initViewModel(){
-        viewModelFactory = MypageViewModelFactory(AuthRepository())
-        viewModel = ViewModelProvider(this,viewModelFactory).get(MypageViewModel::class.java)
+        val authRepository: AuthRepository = AuthRepositoryImpl()
+        val authViewModelFactory = AuthViewModelFactory(authRepository)
+        val viewModel: LoginViewModel by viewModels { authViewModelFactory }
+
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
 
@@ -199,16 +209,22 @@ class UserInfoFragment : Fragment() {
         }
 
         // 유저 정보 setting
-        viewModel.getUserInfoResponse.observe(this){
-            if (it.success)
-            {
-                if (it.response.imagePath == null){ Glide.with(this).load(R.drawable.img_profile_default_image).into(binding.accountIvProfile) }
-                else{ Glide.with(this).load(it.response.imagePath).into(binding.accountIvProfile) }
-                binding.userEmailText.setText(it.response.email)
-                binding.userNameText.setText(it.response.username)
-                binding.userStudentidText.setText(it.response.studentId)
-                binding.userNicknameText.setText(it.response.nickname)
-                nickName = it.response.nickname
+        viewModel.loginRequest.observe(viewLifecycleOwner){
+            when(it){
+
+                is Resource.Success -> {
+                    val email = it.data?.get("email") as String?
+                    val username = it.data?.get("name") as String?
+                    val phone = it.data?.get("phone") as String?
+                    val level = "병아리"
+                    if (it.response.imagePath == null){ Glide.with(this).load(R.drawable.img_user).into(binding.accountIvProfile) }
+                    else{ Glide.with(this).load(it.response.imagePath).into(binding.accountIvProfile) }
+                    binding.userEmailText.setText(it.response.email)
+                    binding.userNameText.setText(it.response.username)
+                    binding.userPhoneNumber.setText(it.response.studentId)
+                    binding.userLevel.setText(it.response.nickname)
+                    nickName = it.response.nickname
+                }
             }
             else
                 toast(it.error.message)
@@ -236,7 +252,7 @@ class UserInfoFragment : Fragment() {
     }
 
     private fun showDialog(){
-        val builder = AlertDialog.Builder(this).create()
+        val builder = AlertDialog.Builder(requireContext()).create()
         val dialogView = layoutInflater.inflate(R.layout.profile_edit_dialog,null)
         val tv_changeProfile = dialogView.findViewById<TextView>(R.id.change_profile)
         val tv_removeProfile = dialogView.findViewById<TextView>(R.id.remove_profile)
@@ -257,13 +273,8 @@ class UserInfoFragment : Fragment() {
         builder.show()
     }
 
-    private fun setToolbar(){
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+  /*  override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         when (id) {
             android.R.id.home -> {
@@ -271,6 +282,37 @@ class UserInfoFragment : Fragment() {
                 return true
             }
         }
-        return super.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(item)*/
     }
+
+    /*private fun updateProfile() {
+        // [START update_profile]
+        val user = Firebase.auth.currentUser
+
+        val profileUpdates = userProfileChangeRequest {
+            displayName = "Jane Q. User"
+            photoUri = Uri.parse("https://example.com/jane-q-user/profile.jpg")
+        }
+
+        user!!.updateProfile(profileUpdates)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "User profile updated.")
+                }
+            }
+        // [END update_profile]
+    }
+
+    private fun updateEmail() {
+        // [START update_email]
+        val user = Firebase.auth.currentUser
+
+        user!!.updateEmail("user@example.com")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "User email address updated.")
+                }
+            }
+        // [END update_email]
+    }*/
 }

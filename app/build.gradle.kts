@@ -89,5 +89,9 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
 
+    // 이미지 크롭
+    implementation("com.vanniktech:android-image-cropper:4.3.3")
+
+
 
 }

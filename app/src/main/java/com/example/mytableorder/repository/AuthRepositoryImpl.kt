@@ -1,5 +1,6 @@
 package com.example.mytableorder.repository
 
+import com.example.mytableorder.Db.db
 import com.example.mytableorder.model.User
 import com.example.mytableorder.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
@@ -12,13 +13,13 @@ import javax.inject.Inject
 class AuthRepositoryImpl : AuthRepository {
 
 
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+//    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val auth: FirebaseAuth = Firebase.auth
 
     override suspend fun login(
         email: String,
         password: String,
-        result: (Resource<String>) -> Unit
+        result: (Resource<Map<String, Any>?>) -> Unit
     ) {
 
         auth.signInWithEmailAndPassword(email, password)
@@ -29,17 +30,10 @@ class AuthRepositoryImpl : AuthRepository {
                         .document(currentUser.uid)
                         .get()
                         .addOnSuccessListener {
-                            val userType = it.get("user_type") as String
+                            val user = it.data
+//                            val userType = it.get("user_type") as String
+                            result.invoke(Resource.Success(user))
 
-                            when (userType) {
-                                "Admin" -> {
-                                    result.invoke(Resource.Success("admin"))
-                                }
-
-                                else -> {
-                                    result.invoke(Resource.Success("user"))
-                                }
-                            }
                         }
                 }else{
                     result.invoke(Resource.Error("Email not verified"))

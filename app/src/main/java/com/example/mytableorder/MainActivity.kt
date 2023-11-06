@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(){
                     }
 //                    2 -> navController.navigate(R.id.InfoFragment)
                     3 -> navController.navigate(R.id.BoardFragment)
-                    //4 -> navController.navigate(R.id.mypageFragment)
+                    4 -> navController.navigate(R.id.mypageFragment)
                     // 다른 탭에 대한 액션을 추가합니다.
                 }
             }
@@ -113,13 +113,14 @@ class MainActivity : AppCompatActivity(){
         // 이 대상들은 '뒤로' 버튼을 눌렀을 때 앱을 종료하도록 설정됩니다.
         // 두 번째 매개변수인 drawerLayout는 NavigationView가 포함된 DrawerLayout을 지정합니다.
         // 이를 통해 '뒤로' 버튼이나 홈버튼을 눌렀을 때 드로어가 열리도록 설정할 수 있습니다. < GPT설명 >
-        // 뒤로가기 눌렀을때 상위 레벨대상으로 돌아가고 홈버튼 눌렀을때 드로어가 열리고 setof것들에서는 뒤로가기 눌렀을때 종료가 되는건가???
+        // drawer 버튼이 setof()안의 fragment일때 나타남
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.homeFragment,
                 R.id.adminHomeFragment,
                 R.id.BoardFragment,
-                R.id.InfoFragment
+                R.id.InfoFragment,
+                R.id.mypageFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

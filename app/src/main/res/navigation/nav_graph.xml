@@ -91,9 +91,7 @@
         <action
             android:id="@+id/action_loginFragment_to_resetPasswordFragment"
             app:destination="@id/resetPasswordFragment" />
-        <!-- <action
-             android:id="@+id/action_loginFragment_to_donorsHomeFragment"
-             app:destination="@id/donorsHomeFragment" />-->
+
          <action
              android:id="@+id/action_loginFragment_to_rregiFragment"
              app:destination="@id/rregiFragment" />
@@ -166,19 +164,19 @@
              app:destination="@id/adminHomeFragment" />
 
     </fragment>
-<!--    <fragment-->
-<!--        android:id="@+id/mypageFragment"-->
-<!--        android:name="com.example.mytableorder.fragment.mypage.MypageFragment"-->
-<!--        android:label="@string/my_page"-->
-<!--        tools:layout="@layout/fragment_mypage" >-->
-<!--        <action-->
-<!--            android:id="@+id/action_mypageFragment_to_myInfoFragment"-->
-<!--            app:destination="@+id/myInfoFragment"/>-->
-<!--        <action-->
-<!--            android:id="@+id/action_mypageFragment_to_resetPasswordFragment"-->
-<!--            app:destination="@+id/resetPasswordFragment"/>-->
+    <fragment
+        android:id="@+id/mypageFragment"
+        android:name="com.example.mytableorder.fragment.mypage.MypageFragment"
+        android:label="@string/my_page"
+        tools:layout="@layout/fragment_mypage" >
+        <action
+            android:id="@+id/action_mypageFragment_to_myInfoFragment"
+            app:destination="@+id/myInfoFragment"/>
+        <action
+            android:id="@+id/action_mypageFragment_to_resetPasswordFragment"
+            app:destination="@+id/resetPasswordFragment"/>
 
-<!--    </fragment>-->
+    </fragment>
     <dialog
         android:id="@+id/resetPasswordFragment"
         android:name="com.example.mytableorder.loginSignUp.ResetPasswordFragment"
@@ -187,15 +185,15 @@
         android:id="@+id/confirmLayout"
         android:name="com.example.mytableorder.fragment.ConfirmLayoutFragment"
         android:label="ConfirmLayout" />
-    <!--<fragment
-        android:id="@+id/donorLocationFragment"
-        android:name="edu.puo.foodonus.fragments.donate.DonorLocationFragment"
-        android:label="Donor Location"
-        tools:layout="@layout/fragment_donor_location" >
-        <argument
+    <fragment
+        android:id="@+id/myInfoFragment"
+        android:name="com.example.mytableorder.fragment.mypage.UserInfoFragment"
+        android:label="myInfomation"
+        tools:layout="@layout/fragment_user_info" >
+        <!--<argument
             android:name="donation"
-            app:argType="edu.puo.foodonus.model.Donation" />
-    </fragment>-->
+            app:argType="edu.puo.foodonus.model.Donation" />-->
+    </fragment>
     <!--<fragment
         android:id="@+id/contactUsFragment"
         android:name="com.example.tableorder.fragments.contact.ContactUsFragment"

@@ -15,12 +15,14 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.mytableorder.Db.db
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentLoginBinding
 import com.example.mytableorder.loginSignUp.viewmodel.LoginViewModel
+import com.example.mytableorder.repository.AuthRepository
+import com.example.mytableorder.repository.AuthRepositoryImpl
 import com.example.mytableorder.utils.CheckInternet
 import com.example.mytableorder.utils.Resource
+import com.example.mytableorder.viewmodelFactory.AuthViewModelFactory
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -39,7 +41,9 @@ class LoginFragment : Fragment() {
     private val RC_SIGN_IN = 100
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
-    private val viewModel: LoginViewModel by viewModels()
+    private val authRepository: AuthRepository = AuthRepositoryImpl()
+    private val authViewModelFactory: AuthViewModelFactory = AuthViewModelFactory(authRepository)
+    private val viewModel: LoginViewModel by viewModels { authViewModelFactory }
 
 
 
@@ -110,11 +114,7 @@ class LoginFragment : Fragment() {
                         binding.btnLogin.isEnabled = false
                         binding.btnLogin.text = "Loading..."
 
-                        /*val sharedPref = requireActivity().getSharedPreferences("userType", Context.MODE_PRIVATE)
-                        val editor = sharedPref.edit()
-                        editor.putString("user_type", result)
-                        editor.apply()*/
-                        /*viewModel.login(email, password)
+                        viewModel.login(email, password)
                         viewModel.loginRequest.observe(viewLifecycleOwner){
                             when(it){
                                 is Resource.Loading -> {
@@ -128,23 +128,27 @@ class LoginFragment : Fragment() {
                                 }
                                 is Resource.Success -> {
                                     binding.progressCircular.isVisible = false
-                                    val result = it.data
+                                    val result = it.data?.get("user_type") as String?
                                     //UserType(result)
                                     val sharedPref = requireActivity().getSharedPreferences("userType", Context.MODE_PRIVATE)
                                     val editor = sharedPref.edit()
                                     editor.putString("user_type", result)
                                     editor.apply()
 
-                                    if (result == "Admin"){
-//                                        findNavController().navigate(R.id.action_loginFragment_to_adminHomeFragment)
-                                        Toast.makeText(requireContext(), "Logged in as Organization", Toast.LENGTH_SHORT).show()
+                                    if (result == "user"){
+                                        moveFragment()
+                                        Toast.makeText(requireContext(), "로그인에 성공했습니다. ", Toast.LENGTH_SHORT).show()
+                                    }else if(result == "admin"){
+                                        moveAdmin()
+
+                                        Toast.makeText(requireContext(), "관리자 로그인에 성공햇씁니다.", Toast.LENGTH_SHORT).show()
                                     }else{
                                         Toast.makeText(requireContext(), "You are not registered yet or an error occurred", Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             }
-                        }*/
-                        auth.signInWithEmailAndPassword(email, password)
+                        }
+                        /*auth.signInWithEmailAndPassword(email, password)
                             .addOnSuccessListener {
                                 val currentUser = auth.currentUser
                                 if(currentUser!!.isEmailVerified){
@@ -168,12 +172,13 @@ class LoginFragment : Fragment() {
                                                 }
                                             }
                                         }
+
                                 }else{
                                     Resource.Error("Email not verified")
                                 }
                             }.addOnFailureListener {
                                 Resource.Error(it.message.toString())
-                            }
+                            }*/
 
                         // 아래는 realtime database를 이용한 회원로그인
                         /*auth.signInWithEmailAndPassword(email, password)
@@ -324,7 +329,7 @@ class LoginFragment : Fragment() {
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
-            .addOnCompleteListener(activity!!) { task ->
+            .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser

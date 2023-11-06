@@ -46,9 +46,10 @@ dependencies {
 
     //파이어베이스
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
-    //파이어베이스 디비
+    //파이어베이스 디비,스토리지
     implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
     implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     //파이어베이스 Auth
     implementation ("com.google.firebase:firebase-auth-ktx:22.2.0")
     implementation ("androidx.multidex:multidex:2.0.1")

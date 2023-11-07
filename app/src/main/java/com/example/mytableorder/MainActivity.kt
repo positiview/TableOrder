@@ -12,12 +12,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -30,10 +27,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.mytableorder.Db.db
-import com.example.mytableorder.Db.storage
 import com.example.mytableorder.adapter.MyFragmentStateAdapter
 import com.example.mytableorder.databinding.ActivityMainBinding
-import com.example.mytableorder.loginSignUp.viewmodel.LoginViewModel
+import com.example.mytableorder.loginSignUp.viewmodel.UserViewModel
 import com.example.mytableorder.model.User
 import com.example.mytableorder.repository.AuthRepository
 import com.example.mytableorder.repository.AuthRepositoryImpl
@@ -54,7 +50,7 @@ class MainActivity : AppCompatActivity(){
 //    private var authStateListener: FirebaseAuth.AuthStateListener? = null
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory = AuthViewModelFactory(authRepository)
-    private val viewModel: LoginViewModel by viewModels { authViewModelFactory }
+    private val viewModel: UserViewModel by viewModels { authViewModelFactory }
     private val TAG = "userInfo"
 
    /* private lateinit var firebaseDatabase: FirebaseDatabase

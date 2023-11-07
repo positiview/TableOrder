@@ -5,34 +5,32 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentUserInfoBinding
-import com.example.mytableorder.loginSignUp.viewmodel.LoginViewModel
+import com.example.mytableorder.loginSignUp.viewmodel.UserViewModel
 import com.example.mytableorder.repository.AuthRepository
 import com.example.mytableorder.repository.AuthRepositoryImpl
 import com.example.mytableorder.utils.CheckInternet
 import com.example.mytableorder.viewmodelFactory.AuthViewModelFactory
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
+import com.example.mytableorder.model.updateUser
 import com.example.mytableorder.utils.Resource
-
+import com.google.android.material.button.MaterialButton
+import com.google.firebase.auth.auth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class UserInfoFragment : Fragment() {
@@ -46,12 +44,14 @@ class UserInfoFragment : Fragment() {
     private lateinit var imgPath: Uri
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory = AuthViewModelFactory(authRepository)
-    private val viewModel: LoginViewModel by viewModels { authViewModelFactory }
+    private val viewModel: UserViewModel by viewModels { authViewModelFactory }
+
 
 
     // 프로필 or 닉네임 변경 여부
     private var imageChanged = false
     private var nickNameChanged = false
+    private var userCancelled = false
 
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
@@ -106,30 +106,70 @@ class UserInfoFragment : Fragment() {
         // 완료 버튼 눌렀을때 처리
         binding.apply {
             btnOk.setOnClickListener {
-
+                Log.d("$$","btnOk 누름")
                 if (CheckInternet.isConnected(requireActivity())) {
                     // 모두변경
                     if (nickNameChanged && imageChanged) {
-                        /*file = File(createCopyAndReturnRealPath(filePath))
-                        requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                        bodyFile = MultipartBody.Part.createFormData("image",file.name+"_profile.jpg",requestFile)
-                        bodyNickname  = MultipartBody.Part.createFormData("nickName",binding.userNicknameEdit.text.toString())
-                        viewmodel?.editUserImage(imagePath)*/
-                    }
-                    // 사용자 정보 변경
-                    else if (nickNameChanged && !imageChanged) {
-                        /*if(binding.userNicknameEdit.text.toString().isNotEmpty()){
-                            bodyNickname  = MultipartBody.Part.createFormData("nickName",binding.userNicknameEdit.text.toString())
-                            viewmodel?.editUserInfo(null,bodyNickname)
+                        if(binding.userEmailEditText.text.toString().isNotEmpty()){
+                            if(binding.userEmailTextView.text.toString() == binding.userEmailEditText.toString()){
+                                val email = binding.userEmailEditText.text.toString()
+                                val name= binding.userNameEditText.text.toString()
+                                val phone =  binding.userPhoneNumberEdit.text.toString()
+                                val user = updateUser(email,name,phone)
+
+                                viewModel?.editUserInfo(user)
+                            }else{
+
+                                val email = binding.userEmailEditText.text.toString()
+                                val name= binding.userNameEditText.text.toString()
+                                val phone =  binding.userPhoneNumberEdit.text.toString()
+                                val user = updateUser(email,name,phone)
+                                showDialog2(email)
+                                if (!userCancelled) {
+                                    viewModel?.editUserInfo(user)
+                                }
+
+                            }
+
+
                         }
-                        else toast("닉네임을 입력해주세요.")*/
+                        else {Toast.makeText(requireContext(), "이메일은 반드시 입력해야 합니다.", Toast.LENGTH_SHORT).show()}
+
+                        viewmodel?.editUserImage(filePath)
 
                     }
-                    // 이미지 변경
+                    // 사용자 정보만 변경
+                    else if (nickNameChanged && !imageChanged) {
+
+                        if(binding.userEmailEditText.text.toString().isNotEmpty()){
+                            if(binding.userEmailTextView.text == binding.userEmailEditText){
+                                val email = binding.userEmailEditText.text.toString()
+                                val name= binding.userNameEditText.text.toString()
+                                val phone =  binding.userPhoneNumberEdit.text.toString()
+                                val user = updateUser(email,name,phone)
+
+                                viewModel?.editUserInfo(user)
+                            }else{
+
+                                val email = binding.userEmailEditText.text.toString()
+                                val name= binding.userNameEditText.text.toString()
+                                val phone =  binding.userPhoneNumberEdit.text.toString()
+                                val user = updateUser(email,name,phone)
+                                showDialog2(email)
+                                if (!userCancelled) {
+                                    viewModel?.editUserInfo(user)
+                                }
+
+                            }
+
+
+                        }
+                        else Toast.makeText(requireContext(), "이메일은 반드시 입력해야 합니다.", Toast.LENGTH_SHORT).show()
+
+                    }
+                    // 이미지만 변경
                     else if (!nickNameChanged && imageChanged) {
-                        /*file = File(filePath)
-                        requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                        bodyFile = MultipartBody.Part.createFormData("image",file.name+"_profile.jpg",requestFile)*/
+
                         viewmodel?.editUserImage(filePath)
 
                     }
@@ -137,7 +177,13 @@ class UserInfoFragment : Fragment() {
 
                     Toast.makeText(requireContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
                 }
-
+                btnEdit.text = getString(R.string.edit)
+                binding.userEmailTextView.visibility = View.VISIBLE
+                binding.userNameTextView.visibility = View.VISIBLE
+                binding.userPhoneNumberView.visibility = View.VISIBLE
+                binding.userEmailEditText.visibility = View.GONE
+                binding.userNameEditText.visibility = View.GONE
+                binding.userPhoneNumberEdit.visibility = View.GONE
             }
             // 카메라 버튼 이미지 수정
             accountIvProfileCamera.setOnClickListener {
@@ -145,30 +191,46 @@ class UserInfoFragment : Fragment() {
             }
 
             // 수정 버튼 클릭시
-            /*btnEditNickname.setOnClickListener {
-                binding.userNicknameText.visibility = View.GONE
-                binding.userNicknameEdit.visibility = View.VISIBLE
-                binding.userNicknameEdit.setText(binding.userNicknameText.text)
+            btnEdit.setOnCheckedChangeListener{ _, isChecked ->
+
+               if(isChecked){
+
+                   binding.userEmailTextView.visibility = View.GONE
+                   binding.userNameTextView.visibility = View.GONE
+                   binding.userPhoneNumberView.visibility = View.GONE
+                   binding.userEmailEditText.visibility = View.VISIBLE
+                   binding.userNameEditText.visibility = View.VISIBLE
+                   binding.userPhoneNumberEdit.visibility = View.VISIBLE
+                   btnOk.setTextColor(Color.WHITE)
+                   binding.btnOk.isEnabled = true
+                   nickNameChanged = true
+               }else{
+                   btnEdit.text = getString(R.string.edit)
+                   binding.userEmailTextView.visibility = View.VISIBLE
+                   binding.userNameTextView.visibility = View.VISIBLE
+                   binding.userPhoneNumberView.visibility = View.VISIBLE
+                   binding.userEmailEditText.visibility = View.GONE
+                   binding.userNameEditText.visibility = View.GONE
+                   binding.userPhoneNumberEdit.visibility = View.GONE
+                   btnOk.setTextColor(Color.parseColor("#FF9674"))
+                   binding.btnOk.isEnabled = false
+                   nickNameChanged = false
+               }
             }
-            userNicknameEdit.addTextChangedListener(object : TextWatcher{
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-                }
-                override fun afterTextChanged(s: Editable?) {
-                    if (!binding.userNicknameEdit.text.toString().equals(nickName)){
-                        binding.btnOk.isEnabled = true
-                        nickNameChanged = true
-                    }else{
-                        binding.btnOk.isEnabled = false
-                    }
-                }
-            })*/
         }
         return view
+    }
+
+    private fun editAuthEmail(email: String) {
+        val user = Firebase.auth.currentUser
+        user!!.updateEmail(binding.userEmailEditText.text.toString())
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("$$", "User email address updated.")
+                    Toast.makeText(requireContext(), "사용자 이메일이 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 
 
@@ -197,11 +259,13 @@ class UserInfoFragment : Fragment() {
                     val username = it.data?.get("name") as String?
                     val phone = it.data?.get("phone") as String?
                     val level = it.data?.get("level") as String?
-                    binding.userEmailText.text = email
-                    binding.userNameText.text = username
-                    binding.userPhoneNumber.text = phone
+                    binding.userEmailTextView.text = email
+                    binding.userNameTextView.text = username
+                    binding.userPhoneNumberView.text = phone
                     binding.userLevel.text = level
-
+                    binding.userEmailEditText.setText(email)
+                    binding.userNameEditText.setText(username)
+                    binding.userPhoneNumberEdit.setText(phone)
 
 
                 }
@@ -255,7 +319,7 @@ class UserInfoFragment : Fragment() {
     }
 
 
-    fun showDialog(){
+    private fun showDialog(){
         val builder = AlertDialog.Builder(requireContext()).create()
         val dialogView = layoutInflater.inflate(R.layout.profile_edit_dialog,null)
         val changeProfile = dialogView.findViewById<TextView>(R.id.change_profile)
@@ -278,4 +342,22 @@ class UserInfoFragment : Fragment() {
         builder.show()
     }
 
+    private fun showDialog2(email: String){
+        val builder = AlertDialog.Builder(requireContext()).create()
+        val dialogView = layoutInflater.inflate(R.layout.confirm_dialog,null)
+        val confirmBtn = dialogView.findViewById<MaterialButton>(R.id.dialogConfirm)
+        val cancelBtn = dialogView.findViewById<MaterialButton>(R.id.dialogCancel)
+
+        confirmBtn.setOnClickListener{
+            userCancelled = false
+            editAuthEmail(email)
+            builder.dismiss()
+        }
+        cancelBtn.setOnClickListener {
+            userCancelled = true
+            builder.dismiss()
+        }
+        builder.setView(dialogView)
+        builder.show()
+    }
 }

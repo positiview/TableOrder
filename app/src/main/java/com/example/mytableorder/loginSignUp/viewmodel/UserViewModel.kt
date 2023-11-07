@@ -4,18 +4,14 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.mytableorder.model.updateUser
 import com.example.mytableorder.repository.AuthRepository
 import com.example.mytableorder.utils.Resource
-import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
-
-
-class LoginViewModel (
+class UserViewModel (
     private val repository: AuthRepository
 ): ViewModel() {
     private val _loginRequest = MutableLiveData<Resource<Map<String, Any>?>>()
@@ -30,6 +26,9 @@ class LoginViewModel (
 
     private val _getUserImgResponse : MutableLiveData<Resource<Uri>> = MutableLiveData()
     val getUserImgResponse : LiveData<Resource<Uri>> get() = _getUserImgResponse
+
+    private val _updateUserResponse : MutableLiveData<Resource<String>> = MutableLiveData()
+    val updateUserResponse : LiveData<Resource<String>> get() = _updateUserResponse
 
     fun login(email: String, password: String){
         viewModelScope.launch {
@@ -83,4 +82,19 @@ class LoginViewModel (
             }
         }
     }
+
+    fun editUserInfo(user: updateUser) {
+        viewModelScope.launch {
+            _updateUserResponse.value = Resource.Loading
+            try{
+                repository.updateUserInfo(user){
+                    _updateUserResponse.value = it
+                }
+            }catch (e:Exception){
+                _updateUserResponse.value = Resource.Error(e.message.toString())
+            }
+        }
+    }
+
+
 }

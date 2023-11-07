@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.mytableorder.loginSignUp.viewmodel.LoginViewModel" />
+            type="com.example.mytableorder.loginSignUp.viewmodel.UserViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -140,14 +140,22 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/name_linear_layout"
                         app:layout_constraintTop_toTopOf="parent">
-
                         <TextView
-                            android:id="@+id/user_email_text"
+                            android:id="@+id/user_email_textView"
                             style="@style/user_info_textstyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="@string/prompt_email" />
+                            android:text="@string/prompt_email"
+                            android:visibility="visible"/>
+                        <EditText
+                            android:id="@+id/user_email_editText"
+                            style="@style/user_info_textstyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/prompt_email"
+                            android:visibility="gone"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -181,14 +189,22 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/name_linear_layout"
                         app:layout_constraintTop_toTopOf="parent">
-
                         <TextView
-                            android:id="@+id/user_name_text"
+                            android:id="@+id/user_name_textView"
                             style="@style/user_info_textstyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="@string/name" />
+                            android:text="@string/name"
+                            android:visibility="visible" />
+                        <EditText
+                            android:id="@+id/user_name_editText"
+                            style="@style/user_info_textstyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/name"
+                            android:visibility="gone"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -222,14 +238,22 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/name_linear_layout"
                         app:layout_constraintTop_toTopOf="parent">
-
                         <TextView
-                            android:id="@+id/user_phone_number"
+                            android:id="@+id/user_phone_number_view"
                             style="@style/user_info_textstyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="@string/phone_number" />
+                            android:text="@string/phone_number"
+                            android:visibility="visible"/>
+                        <EditText
+                            android:id="@+id/user_phone_number_edit"
+                            style="@style/user_info_textstyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/phone_number"
+                            android:visibility="gone"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -297,15 +321,16 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1">
 
-                            <androidx.appcompat.widget.AppCompatButton
-                                android:id="@+id/btn_edit_nickname"
-                                android:layout_width="50dp"
+                            <androidx.appcompat.widget.AppCompatToggleButton
+                                android:id="@+id/btn_edit"
+                                android:layout_width="70dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="center"
                                 android:background="@drawable/userinfo_edit_button_shape"
                                 android:gravity="center"
                                 android:stateListAnimator="@null"
-                                android:text="@string/edit"
+                                android:textOn="수정 취소"
+                                android:textOff="수정 모드"
                                 android:textSize="13sp" />
                         </LinearLayout>
 

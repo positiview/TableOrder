@@ -5,10 +5,12 @@ import android.util.Log
 import com.example.mytableorder.Db.db
 import com.example.mytableorder.Db.storage
 import com.example.mytableorder.model.User
+import com.example.mytableorder.model.updateUser
 import com.example.mytableorder.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import java.io.File
@@ -142,5 +144,24 @@ class AuthRepositoryImpl : AuthRepository {
     override suspend fun logout(result: () -> Unit) {
         auth.signOut()
         result.invoke()
+    }
+
+    override suspend fun updateUserInfo(user: updateUser, result: (Resource<String>) -> Unit) {
+        if (uid != null) {
+            db.collection("users")
+                .document(uid)
+                .set(user, SetOptions.merge())
+                .addOnSuccessListener {
+                    result.invoke(Resource.Success("사용자 정보가 업데이트 되었습니다."))
+                }.addOnFailureListener {
+                    result.invoke(Resource.Error("사용자 정보 업데이트에 실패했습니다."))
+                }
+        }else{
+            result.invoke(Resource.Error("회원정보를 찾을 수가 없습니다."))
+        }
+    }
+
+    override suspend fun updateAuthEmail(email: String) {
+        TODO("Not yet implemented")
     }
 }

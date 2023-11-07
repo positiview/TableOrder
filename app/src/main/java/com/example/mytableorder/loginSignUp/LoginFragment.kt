@@ -17,7 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentLoginBinding
-import com.example.mytableorder.loginSignUp.viewmodel.LoginViewModel
+import com.example.mytableorder.loginSignUp.viewmodel.UserViewModel
 import com.example.mytableorder.repository.AuthRepository
 import com.example.mytableorder.repository.AuthRepositoryImpl
 import com.example.mytableorder.utils.CheckInternet
@@ -43,7 +43,7 @@ class LoginFragment : Fragment() {
 
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory: AuthViewModelFactory = AuthViewModelFactory(authRepository)
-    private val viewModel: LoginViewModel by viewModels { authViewModelFactory }
+    private val viewModel: UserViewModel by viewModels { authViewModelFactory }
 
 
 

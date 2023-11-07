@@ -30,15 +30,52 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
+                android:text="Name :"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/Name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="15"
+                android:paddingLeft="10dp"
+                android:layout_marginRight="15dp"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/Time_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="15"
+                android:paddingLeft="10dp"
+                android:layout_marginRight="15dp"
+                android:gravity="end"
+                android:textSize="15dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
                 android:text="Title"
                 android:textSize="25sp" />
 
             <TextView
-                android:id="@+id/edTitle"
-                android:layout_width="wrap_content"
+                android:id="@+id/Title_tv"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="15"
+                android:layout_weight="8"
+                android:background="#eeeeee"
                 android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:paddingLeft="10dp"
                 android:textSize="24dp" />
         </LinearLayout>
 
@@ -57,12 +94,15 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/content_tv"
+            android:id="@+id/Content_tv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#eeeeee"
-            android:padding="16dp" />
+            android:textSize="20sp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:padding="10dp"
+            android:background="#eeeeee" />
 
         <LinearLayout
             android:layout_width="match_parent"

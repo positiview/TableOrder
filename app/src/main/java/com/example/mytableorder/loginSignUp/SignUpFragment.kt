@@ -47,8 +47,7 @@ class SignUpFragment : Fragment() {
 
         /*var firebaseDatabase = FirebaseDatabase.getInstance()
         var databaseReference = firebaseDatabase.getReference("Users")*/
-       /* var db = FirebaseDatabase.getInstance()
-        databaseReference = db.getReference("User")*/
+
 
         auth = Firebase.auth
 

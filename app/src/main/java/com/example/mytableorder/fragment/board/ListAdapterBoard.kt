@@ -9,9 +9,6 @@ import com.example.mytableorder.R
 
 
 // 1. 클릭 리스너 인터페이스 정의
-interface OnItemClickListener {
-    fun onItemClick(position: Int)
-}
 
 
 class ListAdapterBoard(private val onItemClickListener: OnItemClickListener):  RecyclerView.Adapter<ListAdapterBoard.ListAdapter>() {

@@ -1,6 +1,5 @@
 package com.example.mytableorder.loginSignUp
 
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,36 +9,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.mytableorder.Db.db
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentLoginBinding
 import com.example.mytableorder.loginSignUp.viewmodel.LoginViewModel
-import com.example.mytableorder.model.User
+import com.example.mytableorder.repository.AuthRepository
+import com.example.mytableorder.repository.AuthRepositoryImpl
 import com.example.mytableorder.utils.CheckInternet
 import com.example.mytableorder.utils.Resource
+import com.example.mytableorder.viewmodelFactory.AuthViewModelFactory
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 
 
@@ -50,24 +41,12 @@ class LoginFragment : Fragment() {
     private val RC_SIGN_IN = 100
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
-    private val viewModel: LoginViewModel by viewModels()
-    private fun moveFragment() {
-        Toast.makeText(
-            requireContext(),
-            "로그인 성공!!",
-            Toast.LENGTH_SHORT
-        ).show()
-        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-    }
+    private val authRepository: AuthRepository = AuthRepositoryImpl()
+    private val authViewModelFactory: AuthViewModelFactory = AuthViewModelFactory(authRepository)
+    private val viewModel: LoginViewModel by viewModels { authViewModelFactory }
 
-    /* private fun moveSignUpActivity() {
-         requireActivity().run {
-             startActivity(Intent(requireContext(), SignUpActivity::class.java))
-             finish()
-         }
-     }*/
 
-    //    private val viewModel : LoginViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -94,11 +73,11 @@ class LoginFragment : Fragment() {
 
         binding.registerTv.setOnClickListener {
             Log.d("$$", "회원가입 실행")
-            findNavController().navigate(com.example.mytableorder.R.id.action_loginFragment_to_signUpFragment)
+            findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
         }
         binding.forgotPasswordTv.setOnClickListener {
             Log.d("$$", "비밀번호수정 실행")
-            findNavController().navigate(com.example.mytableorder.R.id.action_loginFragment_to_resetPasswordFragment)
+            findNavController().navigate(R.id.action_loginFragment_to_resetPasswordFragment)
         }
 
         binding.btnLogin.setOnClickListener {
@@ -135,11 +114,7 @@ class LoginFragment : Fragment() {
                         binding.btnLogin.isEnabled = false
                         binding.btnLogin.text = "Loading..."
 
-                        /*val sharedPref = requireActivity().getSharedPreferences("userType", Context.MODE_PRIVATE)
-                        val editor = sharedPref.edit()
-                        editor.putString("user_type", result)
-                        editor.apply()*/
-                        /*viewModel.login(email, password)
+                        viewModel.login(email, password)
                         viewModel.loginRequest.observe(viewLifecycleOwner){
                             when(it){
                                 is Resource.Loading -> {
@@ -153,23 +128,27 @@ class LoginFragment : Fragment() {
                                 }
                                 is Resource.Success -> {
                                     binding.progressCircular.isVisible = false
-                                    val result = it.data
+                                    val result = it.data?.get("user_type") as String?
                                     //UserType(result)
                                     val sharedPref = requireActivity().getSharedPreferences("userType", Context.MODE_PRIVATE)
                                     val editor = sharedPref.edit()
                                     editor.putString("user_type", result)
                                     editor.apply()
 
-                                    if (result == "Admin"){
-//                                        findNavController().navigate(R.id.action_loginFragment_to_adminHomeFragment)
-                                        Toast.makeText(requireContext(), "Logged in as Organization", Toast.LENGTH_SHORT).show()
+                                    if (result == "user"){
+                                        moveFragment()
+                                        Toast.makeText(requireContext(), "로그인에 성공했습니다. ", Toast.LENGTH_SHORT).show()
+                                    }else if(result == "admin"){
+                                        moveAdmin()
+
+                                        Toast.makeText(requireContext(), "관리자 로그인에 성공햇씁니다.", Toast.LENGTH_SHORT).show()
                                     }else{
                                         Toast.makeText(requireContext(), "You are not registered yet or an error occurred", Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             }
-                        }*/
-                        auth.signInWithEmailAndPassword(email, password)
+                        }
+                        /*auth.signInWithEmailAndPassword(email, password)
                             .addOnSuccessListener {
                                 val currentUser = auth.currentUser
                                 if(currentUser!!.isEmailVerified){
@@ -181,6 +160,10 @@ class LoginFragment : Fragment() {
 
                                             when (userType) {
                                                 "admin" -> {
+                                                    val sharedPref = requireActivity().getSharedPreferences("userType", Context.MODE_PRIVATE)
+                                                    val editor = sharedPref.edit()
+                                                    editor.putString("user_type", userType)
+                                                    editor.commit()
                                                     moveAdmin()
                                                 }
 
@@ -189,13 +172,15 @@ class LoginFragment : Fragment() {
                                                 }
                                             }
                                         }
+
                                 }else{
                                     Resource.Error("Email not verified")
                                 }
                             }.addOnFailureListener {
                                 Resource.Error(it.message.toString())
-                            }
+                            }*/
 
+                        // 아래는 realtime database를 이용한 회원로그인
                         /*auth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(requireActivity()) { task ->
                                 val currentUser = auth.currentUser
@@ -294,7 +279,14 @@ class LoginFragment : Fragment() {
         }
         return view
     }
-
+    private fun moveFragment() {
+        Toast.makeText(
+            requireContext(),
+            "로그인 성공!!",
+            Toast.LENGTH_SHORT
+        ).show()
+        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+    }
     private fun moveAdmin() {
         Toast.makeText(
             requireContext(),
@@ -337,7 +329,7 @@ class LoginFragment : Fragment() {
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
-            .addOnCompleteListener(activity!!) { task ->
+            .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser

@@ -104,6 +104,7 @@ class SignUpFragment : Fragment() {
                     /*val selectedItemId = binding.radioGroup.checkedRadioButtonId
                     val selectedItem = binding.radioGroup.findViewById<RadioButton>(selectedItemId)*/
                     val userType = "user"
+                    val level = "병아리"
 
                     if (CheckInternet.isConnected(requireContext())) {
                         //Toast.makeText(activity, "Internet is available", Toast.LENGTH_SHORT).show()
@@ -115,7 +116,8 @@ class SignUpFragment : Fragment() {
                             email,
                             name,
                             phone,
-                            userType
+                            userType,
+                            level
                         )
 
                         /*viewModel.register(email, password, user)

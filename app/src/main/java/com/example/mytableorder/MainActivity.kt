@@ -1,36 +1,34 @@
 package com.example.mytableorder
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenCreated
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.example.mytableorder.R
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.example.mytableorder.Db.db
 import com.example.mytableorder.adapter.MyFragmentStateAdapter
 import com.example.mytableorder.databinding.ActivityMainBinding
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInResult
-import com.google.android.gms.tasks.Task
+import com.example.mytableorder.model.User
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -42,6 +40,9 @@ class MainActivity : AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var auth: FirebaseAuth
+    private var authStateListener: FirebaseAuth.AuthStateListener? = null
+
+    private val TAG = "userInfo"
    /* private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference*/
 
@@ -87,7 +88,7 @@ class MainActivity : AppCompatActivity(){
                     }
 //                    2 -> navController.navigate(R.id.InfoFragment)
                     3 -> navController.navigate(R.id.BoardFragment)
-//                    4 -> navController.navigate(R.id.InfoFragment)
+                    4 -> navController.navigate(R.id.mypageFragment)
                     // 다른 탭에 대한 액션을 추가합니다.
                 }
             }
@@ -105,15 +106,26 @@ class MainActivity : AppCompatActivity(){
 //--------------------------------------------------------------------------
 
         navView.setupWithNavController(navController)
+
+
+        //"AppBarConfiguration"은 앱 바의 동작을 설정하는 데 사용됩니다.
+        // 첫 번째 매개변수인 setOf(R.id.homeFragment, R.id.InfoFragment)는 상위 레벨 대상의 ID 세트를 나타내며,
+        // 이 대상들은 '뒤로' 버튼을 눌렀을 때 앱을 종료하도록 설정됩니다.
+        // 두 번째 매개변수인 drawerLayout는 NavigationView가 포함된 DrawerLayout을 지정합니다.
+        // 이를 통해 '뒤로' 버튼이나 홈버튼을 눌렀을 때 드로어가 열리도록 설정할 수 있습니다. < GPT설명 >
+        // drawer 버튼이 setof()안의 fragment일때 나타남
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.homeFragment,
-//                R.id.adminHomeFragment,
-//                R.id.donorsHomeFragment
-                R.id.InfoFragment
+                R.id.adminHomeFragment,
+                R.id.BoardFragment,
+                R.id.InfoFragment,
+                R.id.mypageFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment, R.id.signUpFragment)) {
                 supportActionBar?.hide()
@@ -123,39 +135,64 @@ class MainActivity : AppCompatActivity(){
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 tabLayout.visibility = View.VISIBLE
             }
-//            if (destination.id in listOf(
-////                    R.id.donateFragment,
-////                    R.id.receiveFragment,
-////                    R.id.donationsFragment,
-//                    R.id.foodMapFragment,
-////                    R.id.historyFragment,
-//                    R.id.aboutUsFragment,
-//                )
-//            ) {
-//
-//                supportActionBar?.show()
-//                supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true)
-//            }
+            /*if (destination.id in listOf(
+//                    R.id.donateFragment,
+//                    R.id.receiveFragment,
+//                    R.id.donationsFragment,
+                    R.id.foodMapFragment,
+//                    R.id.historyFragment,
+                    R.id.aboutUsFragment,
+                )
+            ) {
+
+                supportActionBar?.show()
+                supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true) //위로 버튼 활성화
+            }*/
         }
         val header = binding.navigationView.getHeaderView(0)
         val imageView = header.findViewById<ImageView>(R.id.imageView)
-        /*val userImage = auth.currentUser?.photoUrl
+        val userImage = auth.currentUser?.photoUrl
+
         lifecycleScope.launch {
-            whenCreated {
-                RepositoryImpl.getInstance().getCurrentUserEmail {
-                    val userEmailText = header.findViewById<android.widget.TextView>(R.id.useremail)
-                    userEmailText.text = it
+            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                val user = auth.currentUser
+                val userEmailText = header.findViewById<TextView>(R.id.useremail)
+
+                user?.let {
+                    db.collection("users")
+                        .document(it.uid)
+                        .get()
+                        .addOnSuccessListener { snapshot ->
+                            val user = snapshot.toObject(User::class.java)
+                            if (user != null) {
+                                val userEmail = user.email ?: ""
+                                Log.d("$$", "user email : "+ userEmail)
+                                userEmailText.text = userEmail
+                            }
+                        }
+                        .addOnFailureListener {
+                            Log.e(TAG, "Error: ${it.message}")
+                        }
                 }
             }
-        }*/
+        }
 
-        /*Glide
-            .with(this)
+
+        Glide.with(this)
             .load(userImage)
             .apply(RequestOptions().override(150, 150))
             .placeholder(R.drawable.ic_person)
-            .into(imageView)*/
+            .error(R.drawable.ic_person)
+            .into(imageView)
 
+        val sharedPref = this.getSharedPreferences("userType", Context.MODE_PRIVATE)
+        val userType = sharedPref.getString("user_type", "user")
+
+
+        val navAdminhome = navView.menu.findItem(R.id.adminHome)
+        val navRegiRestautrant = navView.menu.findItem(R.id.regiRestaurant)
+        navAdminhome.isVisible = userType == "admin"
+        navRegiRestautrant.isVisible = userType == "admin"
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 /*R.id.action_help -> {
@@ -184,8 +221,39 @@ class MainActivity : AppCompatActivity(){
                     }
                     true
                 }
+                R.id.adminHome -> {
+                    if (userType == "admin") {
+                        navController.navigate(R.id.adminHomeFragment)
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    } else {
+
+                        false
+                    }
+                }
+
+                R.id.regiRestaurant ->{
+                    if (userType == "admin") {
+                        navController.navigate(R.id.rregiFragment)
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    } else {
+                        false
+                    }
+                }
+
+                /*R.id.myPage->{
+
+                }*/
+
                 R.id.logout -> {
                     auth.signOut()
+                    val sharedPreference = getSharedPreferences("userType", MODE_PRIVATE)
+                    val editor = sharedPreference.edit()
+
+                    editor.remove("user_type")
+                    // 전체 삭제는 editor.clear()
+                    editor.commit()
                     Toast.makeText(this, "로그아웃 완료", Toast.LENGTH_SHORT).show()
                     navController.navigate(R.id.splashFragment)
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -201,23 +269,42 @@ class MainActivity : AppCompatActivity(){
 
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        when(event?.action){
-            MotionEvent.ACTION_DOWN->{
-                Log.d("status", "Touch Down Event")
-            }
-
-            MotionEvent.ACTION_UP->{
-                Log.d("status", "Touch Up Event")
-            }
-        }
-        return super.onTouchEvent(event)
-    }
 
     override fun onResume() {
         super.onResume()
         setSupportActionBar(binding.toolbar)
         binding.drawerLayout.closeDrawer(GravityCompat.START)
+
+        val header = binding.navigationView.getHeaderView(0)
+        val imageView = header.findViewById<ImageView>(R.id.imageView)
+        val userImage = auth.currentUser?.photoUrl
+
+        val user = auth.currentUser
+        val userEmailText = header.findViewById<TextView>(R.id.useremail)
+
+        user?.let {
+            db.collection("users")
+                .document(it.uid)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    val user = snapshot.toObject(User::class.java)
+                    if (user != null) {
+                        val userEmail = user.email ?: ""
+                        Log.d("$$", "user email : "+ userEmail)
+                        userEmailText.text = userEmail
+                    }
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, "Error: ${it.message}")
+                }
+        }
+        Glide.with(this)
+            .load(userImage)
+            .apply(RequestOptions().override(150, 150))
+            .placeholder(R.drawable.ic_person)
+            .error(R.drawable.ic_person)
+            .into(imageView)
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

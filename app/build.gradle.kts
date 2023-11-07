@@ -39,6 +39,8 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        dataBinding = true
+
     }
 }
 
@@ -46,9 +48,10 @@ dependencies {
 
     //파이어베이스
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
-    //파이어베이스 디비
+    //파이어베이스 디비,스토리지
     implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
     implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     //파이어베이스 Auth
     implementation ("com.google.firebase:firebase-auth-ktx:22.2.0")
     implementation ("androidx.multidex:multidex:2.0.1")
@@ -68,6 +71,11 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:19.0.1")
 
 
+    //Glide
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
+
     implementation("androidx.cardview:cardview:1.0.0")
 
 
@@ -81,6 +89,10 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+
+    // 이미지 크롭
+    implementation("com.vanniktech:android-image-cropper:4.3.3")
 
 
 

@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
@@ -28,7 +29,12 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.mytableorder.Db.db
 import com.example.mytableorder.adapter.MyFragmentStateAdapter
 import com.example.mytableorder.databinding.ActivityMainBinding
+import com.example.mytableorder.loginSignUp.viewmodel.UserViewModel
 import com.example.mytableorder.model.User
+import com.example.mytableorder.repository.AuthRepository
+import com.example.mytableorder.repository.AuthRepositoryImpl
+import com.example.mytableorder.utils.Resource
+import com.example.mytableorder.viewmodelFactory.AuthViewModelFactory
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -40,9 +46,13 @@ class MainActivity : AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var auth: FirebaseAuth
-    private var authStateListener: FirebaseAuth.AuthStateListener? = null
-
+    private lateinit var imgUri: Uri
+//    private var authStateListener: FirebaseAuth.AuthStateListener? = null
+    private val authRepository: AuthRepository = AuthRepositoryImpl()
+    private val authViewModelFactory = AuthViewModelFactory(authRepository)
+    private val viewModel: UserViewModel by viewModels { authViewModelFactory }
     private val TAG = "userInfo"
+
    /* private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference*/
 
@@ -151,10 +161,12 @@ class MainActivity : AppCompatActivity(){
         }
         val header = binding.navigationView.getHeaderView(0)
         val imageView = header.findViewById<ImageView>(R.id.imageView)
-        val userImage = auth.currentUser?.photoUrl
+        viewModel.getUserImage()
+
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+
                 val user = auth.currentUser
                 val userEmailText = header.findViewById<TextView>(R.id.useremail)
 
@@ -176,14 +188,26 @@ class MainActivity : AppCompatActivity(){
                 }
             }
         }
+        viewModel.getUserImgResponse.observe(this){
+            when(it){
+                is Resource.Loading -> {
+                }
+                is Resource.Error -> {
+                    Toast.makeText(this, it.string, Toast.LENGTH_SHORT).show()
+                }
+                is Resource.Success -> {
+                    imgUri = it.data
+                    Glide.with(this)
+                        .load(imgUri)
+                        .apply(RequestOptions().override(150, 150))
+                        .placeholder(R.drawable.ic_person)
+                        .error(R.drawable.ic_person)
+                        .into(imageView)
+                }
+            }
+        }
+        // userImage가 null일때 처리해야하는가???
 
-
-        Glide.with(this)
-            .load(userImage)
-            .apply(RequestOptions().override(150, 150))
-            .placeholder(R.drawable.ic_person)
-            .error(R.drawable.ic_person)
-            .into(imageView)
 
         val sharedPref = this.getSharedPreferences("userType", Context.MODE_PRIVATE)
         val userType = sharedPref.getString("user_type", "user")
@@ -275,35 +299,7 @@ class MainActivity : AppCompatActivity(){
         setSupportActionBar(binding.toolbar)
         binding.drawerLayout.closeDrawer(GravityCompat.START)
 
-        val header = binding.navigationView.getHeaderView(0)
-        val imageView = header.findViewById<ImageView>(R.id.imageView)
-        val userImage = auth.currentUser?.photoUrl
 
-        val user = auth.currentUser
-        val userEmailText = header.findViewById<TextView>(R.id.useremail)
-
-        user?.let {
-            db.collection("users")
-                .document(it.uid)
-                .get()
-                .addOnSuccessListener { snapshot ->
-                    val user = snapshot.toObject(User::class.java)
-                    if (user != null) {
-                        val userEmail = user.email ?: ""
-                        Log.d("$$", "user email : "+ userEmail)
-                        userEmailText.text = userEmail
-                    }
-                }
-                .addOnFailureListener {
-                    Log.e(TAG, "Error: ${it.message}")
-                }
-        }
-        Glide.with(this)
-            .load(userImage)
-            .apply(RequestOptions().override(150, 150))
-            .placeholder(R.drawable.ic_person)
-            .error(R.drawable.ic_person)
-            .into(imageView)
 
     }
 

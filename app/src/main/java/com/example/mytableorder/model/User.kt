@@ -6,6 +6,7 @@ data class User(
     var phone: String? = "",
     var user_type: String? = "",
     val level : String? = "",
-    val imagePath : String? = ""
 
 )
+
+

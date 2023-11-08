@@ -216,15 +216,15 @@
         android:id="@+id/confirmLayout"
         android:name="com.example.mytableorder.fragment.ConfirmLayoutFragment"
         android:label="ConfirmLayout" />
-    <!--<fragment
+    <fragment
         android:id="@+id/myInfoFragment"
         android:name="com.example.mytableorder.fragment.mypage.UserInfoFragment"
-        android:label="myInfomation"
+        android:label="내 정보 관리"
         tools:layout="@layout/fragment_user_info" >
-        &lt;!&ndash;<argument
+        <!--<argument
             android:name="donation"
-            app:argType="edu.puo.foodonus.model.Donation" />&ndash;&gt;
-    </fragment>-->
+            app:argType="edu.puo.foodonus.model.Donation" />-->
+    </fragment>
     <!--<fragment
         android:id="@+id/contactUsFragment"
         android:name="com.example.tableorder.fragments.contact.ContactUsFragment"

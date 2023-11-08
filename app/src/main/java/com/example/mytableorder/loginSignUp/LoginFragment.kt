@@ -17,7 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentLoginBinding
-import com.example.mytableorder.loginSignUp.viewmodel.LoginViewModel
+import com.example.mytableorder.loginSignUp.viewmodel.UserViewModel
 import com.example.mytableorder.repository.AuthRepository
 import com.example.mytableorder.repository.AuthRepositoryImpl
 import com.example.mytableorder.utils.CheckInternet
@@ -43,7 +43,7 @@ class LoginFragment : Fragment() {
 
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory: AuthViewModelFactory = AuthViewModelFactory(authRepository)
-    private val viewModel: LoginViewModel by viewModels { authViewModelFactory }
+    private val viewModel: UserViewModel by viewModels { authViewModelFactory }
 
 
 
@@ -115,6 +115,7 @@ class LoginFragment : Fragment() {
                         binding.btnLogin.text = "Loading..."
 
                         viewModel.login(email, password)
+                        viewModel.getUserImage()
                         viewModel.loginRequest.observe(viewLifecycleOwner){
                             when(it){
                                 is Resource.Loading -> {
@@ -148,117 +149,7 @@ class LoginFragment : Fragment() {
                                 }
                             }
                         }
-                        /*auth.signInWithEmailAndPassword(email, password)
-                            .addOnSuccessListener {
-                                val currentUser = auth.currentUser
-                                if(currentUser!!.isEmailVerified){
-                                    db.collection("users")
-                                        .document(currentUser.uid)
-                                        .get()
-                                        .addOnSuccessListener {
-                                            val userType = it.get("user_type") as String
 
-                                            when (userType) {
-                                                "admin" -> {
-                                                    val sharedPref = requireActivity().getSharedPreferences("userType", Context.MODE_PRIVATE)
-                                                    val editor = sharedPref.edit()
-                                                    editor.putString("user_type", userType)
-                                                    editor.commit()
-                                                    moveAdmin()
-                                                }
-
-                                                else -> {
-                                                    moveFragment()
-                                                }
-                                            }
-                                        }
-
-                                }else{
-                                    Resource.Error("Email not verified")
-                                }
-                            }.addOnFailureListener {
-                                Resource.Error(it.message.toString())
-                            }*/
-
-                        // 아래는 realtime database를 이용한 회원로그인
-                        /*auth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(requireActivity()) { task ->
-                                val currentUser = auth.currentUser
-                                Log.d("$$", "로그인 실행")
-                                if (task.isSuccessful) {
-                                       if (currentUser!!.isEmailVerified) {
-                                           var databaseReference =
-                                               FirebaseDatabase.getInstance().getReference("User")
-                                        val firebaseUser: FirebaseUser? =
-                                            FirebaseAuth.getInstance().currentUser
-                                        val uid: String? = firebaseUser?.uid
-                                        uid?.let { id ->
-                                            databaseReference.child(id)
-                                                .addValueEventListener(object : ValueEventListener {
-                                                    override fun onDataChange(snapshot: DataSnapshot) {
-                                                        val user =
-                                                            snapshot.getValue(User::class.java)
-                                                        val userType = user?.user_type
-
-                                                        if (user != null) {
-
-                                                            binding.progressCircular.isVisible =
-                                                                false
-                                                            binding.btnLogin.isEnabled = true
-                                                            binding.btnLogin.text = "Login"
-                                                            if(userType == "admin"){
-                                                                moveAdmin()
-                                                            }else{
-                                                                moveFragment()
-                                                            }
-                                                        }
-                                                    }
-
-                                                    override fun onCancelled(error: DatabaseError) {
-                                                        binding.progressCircular.isVisible = false
-                                                        binding.btnLogin.isEnabled = true
-                                                        binding.btnLogin.text = "Login"
-                                                        binding.emailTinputLayout.editText?.text?.clear()
-                                                        binding.passwordInputLayout.editText?.text?.clear()
-                                                        binding.emailTinputLayout.isEnabled = true
-                                                        binding.passwordInputLayout.isEnabled = true
-                                                        Toast.makeText(
-                                                            activity,
-                                                            "Error: ${error.message}",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                    }
-                                                })
-                                        }
-
-                                    } else {
-                                        binding.progressCircular.isVisible = false
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "Please verify your email",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                        binding.emailTinputLayout.editText?.text?.clear()
-                                        binding.passwordInputLayout.editText?.text?.clear()
-                                        binding.emailTinputLayout.isEnabled = true
-                                        binding.passwordInputLayout.isEnabled = true
-                                    }
-                                } else {
-                                    binding.progressCircular.isVisible = false
-                                    binding.btnLogin.isEnabled = true
-                                    binding.emailTinputLayout.editText?.text?.clear()
-                                    binding.passwordInputLayout.editText?.text?.clear()
-                                    binding.emailTinputLayout.isEnabled = true
-                                    binding.passwordInputLayout.isEnabled = true
-                                    binding.btnLogin.isEnabled = true
-                                    binding.btnLogin.text = "Login"
-                                    Toast.makeText(
-                                        activity,
-                                        "Error: ${task.exception?.message}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }*/
 
                     } else {
                         Toast.makeText(activity, "No internet connection", Toast.LENGTH_SHORT)

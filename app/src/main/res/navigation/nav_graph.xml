@@ -16,21 +16,25 @@
     <fragment
         android:id="@+id/BoardFragment"
         android:name="com.example.mytableorder.fragment.board.BoardFragment"
-        android:label="Board"
+        android:label="자유게시판"
+        android:icon="@drawable/board"
         tools:layout="@layout/fragment_board">
+
+
         <action
             android:id="@+id/action_boardFragment_to_boardDetailsFragment"
             app:destination="@id/BoardDetailsFragment" />
         <action
             android:id="@+id/action_boardFragment_to_WriteFragment"
             app:destination="@id/WriteFragment" />
+
     </fragment>
 
 
     <fragment
         android:id="@+id/BoardDetailsFragment"
         android:name="com.example.mytableorder.fragment.board.BoardDetailsFragment"
-        android:label="Board Details"
+        android:label="자유게시판"
         tools:layout="@layout/fragment_board_details" >
         <action
             android:id="@+id/action_BoardDetailsFragment_to_ModifyFragment"
@@ -49,7 +53,7 @@
     <fragment
         android:id="@+id/WriteFragment"
         android:name="com.example.mytableorder.fragment.board.WriteFragment"
-        android:label="Board Write"
+        android:label="자유게시판 작성"
         tools:layout="@layout/fragment_board_write" >
         <action
             android:id="@+id/action_writeFragment_to_BoardDetailsFragment"
@@ -62,7 +66,7 @@
     <fragment
         android:id="@+id/ModifyFragment"
         android:name="com.example.mytableorder.fragment.board.ModifyFragment"
-        android:label="Modify"
+        android:label="자유게시판 수정"
         tools:layout="@layout/fragment_board_modify" >
         <action
             android:id="@+id/action_ModifyFragment_to_BoardFragment"

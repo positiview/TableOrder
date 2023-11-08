@@ -61,42 +61,54 @@ class WriteFragment : Fragment() {
   }
 
   private fun saveDataToFirebase(title: String, content: String) {
-    // 현재 로그인된 사용자를 가져옵니다.
     val currentUser = auth.currentUser
 
     if (currentUser != null) {
       val userId = currentUser.uid
       val databaseReference: DatabaseReference = Firebase.database.reference
 
-      // 한국 시간대 설정
       val koreaTimeZone = TimeZone.getTimeZone("Asia/Seoul")
       val koreaTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").apply {
         timeZone = koreaTimeZone
       }.format(Date())
 
-      // 데이터를 저장할 데이터 맵을 만듭니다.
-      val postData = mapOf(
-        "title" to title,
-        "content" to content,
-        "userId" to userId,
-        "timestamp" to koreaTime // 한국 시간으로 설정
-      )
-
-      // "boards"라는 자식 노드에 데이터를 저장합니다.
       val postId = databaseReference.child("boards").push().key
 
       if (postId != null) {
-        // postId가 null이 아닐 때 데이터를 저장합니다.
-        databaseReference.child("boards").child(postId).setValue(postData)
-        // postId를 Bundle에 추가
-        val bundle = Bundle()
-        bundle.putString("postId", postId)
-        findNavController().navigate(R.id.action_writeFragment_to_BoardFragment, bundle)
+        // 게시글 데이터 생성
+        val postData = mapOf(
+          "title" to title,
+          "content" to content,
+          "userId" to userId,
+          "timestamp" to koreaTime,
+          "likesCount" to 0
+        )
+
+        // 게시글 좋아요 데이터 생성
+        val likesData = mapOf(
+          "users" to mapOf<String, Boolean>()
+        )
+
+        // 게시글과 좋아요 데이터를 함께 저장
+        val updates = mapOf<String, Any>(
+          "/boards/$postId" to postData,
+          "/likes/$postId" to likesData
+        )
+
+        databaseReference.updateChildren(updates)
+          .addOnSuccessListener {
+            val bundle = Bundle()
+            bundle.putString("postId", postId)
+            findNavController().navigate(R.id.action_writeFragment_to_BoardFragment, bundle)
+          }
+          .addOnFailureListener { e ->
+            Log.e("WriteFragment", "Failed to save post data: $e")
+          }
       } else {
-        // postId가 null인 경우에 대한 오류 처리 또는 로깅을 수행합니다.
         Log.e("WriteFragment", "Failed to generate postId")
       }
     }
   }
+
 
 }

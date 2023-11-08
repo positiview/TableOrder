@@ -15,7 +15,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.example.mytableorder.fragment.board.OnItemClickListener
+import androidx.appcompat.widget.SearchView
+
 
 
 class BoardFragment : Fragment() {
@@ -23,7 +24,8 @@ class BoardFragment : Fragment() {
     private val timestampList: MutableList<String> = mutableListOf() // contentList를 초기화합니다.
     private val adapter: BoardListAdapter = BoardListAdapter(boardList, timestampList)
     private val postIdList: MutableList<String> = mutableListOf()
-
+    private var originalBoardList: MutableList<String> = mutableListOf() // 원본 게시글 리스트 초기화
+    private var searchQuery: String = "" // 검색어 쿼리 변수 추가
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +40,6 @@ class BoardFragment : Fragment() {
         boardRecyclerView.layoutManager = layoutManager
         boardRecyclerView.adapter = adapter
 
-        // Firebase Realtime Database에서 데이터를 읽어와서 boardList에 추가합니다.
         readDataFromFirebase()
 
         val button = view.findViewById<Button>(R.id.button)
@@ -46,6 +47,36 @@ class BoardFragment : Fragment() {
             // 버튼을 클릭하면 "fragment_write" 프래그먼트로 이동
             findNavController().navigate(R.id.action_boardFragment_to_WriteFragment)
         }
+
+        //검색
+        val searchView = view.findViewById<SearchView>(R.id.search_view)
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                // 검색어를 제출할 때 호출되는 메서드
+                searchByTitle(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                // 검색어가 변경될 때 호출되는 메서드
+                searchQuery = newText // 검색어 업데이트
+                searchByTitle(searchQuery) // 검색어로 필터링된 결과 표시
+                return true
+            }
+        })
+
+
+        searchView.setOnCloseListener {
+            // 모든 리스트를 표시하는 기능을 구현합니다.
+            searchQuery = "" // 검색어 초기화
+            boardList.clear()
+            boardList.addAll(originalBoardList)
+
+            adapter.notifyDataSetChanged()
+            false
+        }
+
 
         return view
     }
@@ -57,6 +88,7 @@ class BoardFragment : Fragment() {
 
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+
                 val newBoardList: MutableList<String> = mutableListOf()
                 val newTimestampList: MutableList<String> = mutableListOf()
                 val newPostIdList: MutableList<String> = mutableListOf()
@@ -86,6 +118,8 @@ class BoardFragment : Fragment() {
 
                 postIdList.clear()
                 postIdList.addAll(newPostIdList)
+
+                originalBoardList = newBoardList // 원본 게시글 리스트 업데이트
 
                 adapter.notifyDataSetChanged()
             }
@@ -209,6 +243,54 @@ class BoardFragment : Fragment() {
         })
     }
 
+    //검색
+    private fun searchByTitle(query: String) {
+        val databaseReference = FirebaseDatabase.getInstance().reference.child("boards")
+
+        val searchQuery = if (query.isEmpty()) {
+            databaseReference // 검색어가 없는 경우 모든 리스트를 가져옴
+        } else {
+            databaseReference.orderByChild("title").startAt(query).endAt(query + "\uf8ff")
+        }
+
+        searchQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val newBoardList: MutableList<String> = mutableListOf()
+                val newTimestampList: MutableList<String> = mutableListOf()
+                val newPostIdList: MutableList<String> = mutableListOf()
+
+                for (dataSnapshot in snapshot.children) {
+                    val title = dataSnapshot.child("title").getValue(String::class.java)
+                    val timestamp = dataSnapshot.child("timestamp").getValue(String::class.java)
+                    val postId = dataSnapshot.key
+
+                    if (title != null) {
+                        newBoardList.add(title)
+                        newTimestampList.add(timestamp ?: "")
+
+                        if (postId != null) {
+                            newPostIdList.add(postId)
+                        }
+                    }
+                }
+
+                boardList.clear()
+                boardList.addAll(newBoardList)
+
+                timestampList.clear()
+                timestampList.addAll(newTimestampList)
+
+                postIdList.clear()
+                postIdList.addAll(newPostIdList)
+
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("BoardFragment", "Firebase에서 데이터 읽기 실패: ${error.message}")
+            }
+        })
+    }
 
 
 }

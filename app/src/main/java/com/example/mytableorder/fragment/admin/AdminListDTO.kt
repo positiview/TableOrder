@@ -2,21 +2,24 @@ package com.example.mytableorder.fragment.admin
 
 data class AdminListDTO(
     //레스트랑번호
-    var raNum: Int,
+    var raNum: Int=0 ,
     //레스토랑 이름
-    var raName: String,
+    var raName: String= "" ,
     //레스토랑 이미지 url
-    var raImg: String,
+    var raImg: String= "",
     //가게 정보
-    var raInfo: String,
+    var raInfo: String = "",
     //레스토랑 메뉴
-    var raMenu: String,
+    var raMenu: String = "",
     //위도
-    var raLatitude: Double,
+    var raLatitude: Double=0.0,
     //경도
-    var raLongitude: Double
-
+    var raLongitude: Double=0.0
 )
+{
+    constructor() : this(0, "", "", "", "", 0.0, 0.0)
+}
+
 
 
 

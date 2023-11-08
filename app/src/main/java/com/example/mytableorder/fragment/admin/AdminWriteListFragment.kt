@@ -12,9 +12,15 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.mytableorder.R
+import com.example.mytableorder.adapter.AdminListAdapter
 import com.example.mytableorder.databinding.FragmentAdminWriteListBinding
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 
 
@@ -86,6 +92,10 @@ class AdminWriteListFragment : Fragment() {
         addRaLatitude = binding.raLatitude
         addRaLongitude = binding.raLongitude
 
+
+
+
+
         // '이미지 추가' 버튼에 클릭 리스너를 설정합니다.
         binding.btnAddImage.setOnClickListener {
             openImagePicker()
@@ -113,18 +123,19 @@ class AdminWriteListFragment : Fragment() {
                 raLongitude = raLongitude
             )
 
-            // Firebase Realtime Database에 데이터 쓰기
-            val databaseReference = FirebaseDatabase.getInstance().getReference("Restaurants")
-            databaseReference.child(raNum.toString()).setValue(adminListDTO)
-                .addOnSuccessListener {
-                    // 데이터베이스 쓰기 성공 하면 콜백 함수
-                    navigateBackToHome() // 여기서 성공적으로 돌아가는 메소드를 호출.
-                }
-                .addOnFailureListener {exception->
-                    // 데이터베이스 쓰기 실패
-                    Log.e("FirebaseError", "Data write failed", exception)
-                    Toast.makeText(context, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
-                }
+                //중복됐었구나;;;일단 대기
+//            // Firebase Realtime Database에 데이터 쓰기
+//            val databaseReference = FirebaseDatabase.getInstance().getReference("Restaurants")
+//            databaseReference.child(raNum.toString()).setValue(adminListDTO)
+//                .addOnSuccessListener {
+//                    // 데이터베이스 쓰기 성공 하면 콜백 함수
+//                    navigateBackToHome() // 여기서 성공적으로 돌아가는 메소드를 호출.
+//                }
+//                .addOnFailureListener {exception->
+//                    // 데이터베이스 쓰기 실패
+//                    Log.e("FirebaseError", "Data write failed", exception)
+//                    Toast.makeText(context, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+//                }
         }
     }
 
@@ -143,8 +154,51 @@ class AdminWriteListFragment : Fragment() {
     private fun openImagePicker() {
         putImage.launch("image/*")
     }
+
+    class AdminListFragment : Fragment() {
+
+        private lateinit var recyclerView: RecyclerView
+        private lateinit var listAdapter: AdminListAdapter
+
+        override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
+            // fragment_admin_list.xml에서 리사이클러뷰를 인플레이트
+            val view = inflater.inflate(R.layout.fragment_admin_recyclerview_list, container, false)
+            recyclerView = view.findViewById(R.id.recycler_view)
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            listAdapter = AdminListAdapter()
+            recyclerView.adapter = listAdapter
+
+            recyclerView.adapter = listAdapter
+            fetchRestaurantList() // Firebase Realtime Database에서 데이터 가져오기
+            return view
+        }
+
+
+        private fun fetchRestaurantList() {
+            val databaseReference = FirebaseDatabase.getInstance().getReference("Restaurants")
+            databaseReference.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val restaurantList = mutableListOf<AdminListDTO>()
+                    for (restaurantSnapshot in snapshot.children) {
+                        val restaurant = restaurantSnapshot.getValue(AdminListDTO::class.java)
+                        restaurant?.let { restaurantList.add(it) }
+                    }
+                    listAdapter.setRestaurants(restaurantList)
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
+
+
+    }
+
     // 이미지를 Firebase Storage에 업로드하고 URL을 가져오는 함수
-    private fun uploadImageToFirebaseStorage(fileUri: Uri) {
+   /* private fun uploadImageToFirebaseStorage(fileUri: Uri) {
         // 파일명을 현재 시간을 기준으로 설정
         val fileName = "images/${System.currentTimeMillis()}-${fileUri.lastPathSegment}"
         // Firebase Storage에 파일을 업로드하기 위한 참조
@@ -156,15 +210,66 @@ class AdminWriteListFragment : Fragment() {
                 taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUri ->
                     val imageUrl = downloadUri.toString()
                     // 이미지 URL을 가져왔으므로 이제 Realtime Database에 저장할 수 있음
-                    // 이 예제에서는 이미지 URL을 AdminListDTO 객체에 저장
-                    // adminListDTO.raImg = imageUrl
-                    // updateRestaurantWithImageUrl(imageUrl)
+                    // 이 예제에서는 이미지 URL을 AdminListDTO 객체에 저장하고 데이터베이스에 업데이트
+                    updateRestaurantWithImageUrl(imageUrl)
                 }
             }
             // 업로드 실패 시 토스트 메시지 표시
             .addOnFailureListener {
                 Toast.makeText(context, "이미지 업로드 실패: ${it.message}", Toast.LENGTH_LONG).show()
             }
+    }*/
+    private fun uploadImageToFirebaseStorage(fileUri: Uri) {
+        val fileName = "images/${System.currentTimeMillis()}-${fileUri.lastPathSegment}"
+        val imageRef = storage.reference.child(fileName)
+
+        imageRef.putFile(fileUri)
+            .addOnSuccessListener { taskSnapshot ->
+                Log.e("download","${taskSnapshot.storage.downloadUrl}")
+                taskSnapshot.storage.downloadUrl?.addOnSuccessListener { downloadUri ->
+
+                    val imageUrl = downloadUri.toString()
+                    // 업로드된 이미지 URL로 데이터베이스 업데이트
+                    updateRestaurantWithImageUrl(imageUrl)
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(context, "이미지 업로드 실패: ${it.message}", Toast.LENGTH_LONG).show()
+            }
     }
+    private fun updateRestaurantWithImageUrl(imageUrl: String) {
+        val raNum = addRaNum.text.toString().toInt()
+        val raName = addRaName.text.toString()
+        val raInfo = addRaInfo.text.toString()
+        val raMenu = addRaMenu.text.toString()
+        val raLatitude = addRaLatitude.text.toString().toDouble()
+        val raLongitude = addRaLongitude.text.toString().toDouble()
+
+        // 사용자가 입력한 데이터를 기반으로 AdminListDTO 객체를 생성합니다.
+        val adminListDTO = AdminListDTO(
+            raNum = raNum,
+            raName = raName,
+            raImg = imageUrl, // 이미지 URL 저장
+            raInfo = raInfo,
+            raMenu = raMenu,
+            raLatitude = raLatitude,
+            raLongitude = raLongitude
+        )
+
+        // Firebase Realtime Database에 데이터 쓰기
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Restaurants")
+        databaseReference.child(raNum.toString()).setValue(adminListDTO)
+            .addOnSuccessListener {
+                // 데이터베이스 쓰기 성공 시 동작할 로직 추가
+                navigateBackToHome()
+            }
+            .addOnFailureListener { exception ->
+                // 데이터베이스 쓰기 실패 시 동작할 로직 추가
+                Log.e("FirebaseError", "Data write failed", exception)
+                Toast.makeText(context, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+
 
 }

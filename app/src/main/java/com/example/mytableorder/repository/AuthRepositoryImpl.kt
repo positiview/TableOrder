@@ -102,7 +102,19 @@ class AuthRepositoryImpl : AuthRepository {
 
         }
     }
+    override suspend fun deleteUserImage(result: (Resource<String>) -> Unit) {
+        if(uid != null){
+            val desertRef : StorageReference = storageRef.child("user/$uid")
 
+            desertRef.delete().addOnSuccessListener{
+                result.invoke(Resource.Success("이미지가 삭제되었습니다."))
+            }.addOnFailureListener {
+                result.invoke(Resource.Error("이미지 삭제에 실패했습니다."))
+            }
+        }else{
+            result.invoke(Resource.Error("회원정보를 찾을 수가 없습니다."))
+        }
+    }
     override suspend fun getUserInfo(result: (Resource<Map<String, Any>?>) -> Unit) {
         val currentUser = auth.currentUser
         if (currentUser != null) {

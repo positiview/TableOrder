@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentUserInfoBinding
@@ -177,13 +178,14 @@ class UserInfoFragment : Fragment() {
 
                     Toast.makeText(requireContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
                 }
-                btnEdit.text = getString(R.string.edit)
-                binding.userEmailTextView.visibility = View.VISIBLE
-                binding.userNameTextView.visibility = View.VISIBLE
-                binding.userPhoneNumberView.visibility = View.VISIBLE
-                binding.userEmailEditText.visibility = View.GONE
-                binding.userNameEditText.visibility = View.GONE
-                binding.userPhoneNumberEdit.visibility = View.GONE
+
+                // 버튼 누른후에...
+                Toast.makeText(requireContext(), "회원 정보 수정 완료!!", Toast.LENGTH_SHORT).show()
+                btnEdit.isChecked = false
+                binding.btnOk.isEnabled = false
+                imageChanged = false
+                nickNameChanged = false
+                userCancelled = false
             }
             // 카메라 버튼 이미지 수정
             accountIvProfileCamera.setOnClickListener {
@@ -235,10 +237,6 @@ class UserInfoFragment : Fragment() {
 
 
     private fun initViewModel() {
-
-
-       /* binding.viewmodel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner*/
 
 
         // 유저 정보 setting
@@ -332,9 +330,16 @@ class UserInfoFragment : Fragment() {
         removeProfile.setOnClickListener {
             Glide.with(requireContext()).load(R.drawable.img_user).into(binding.accountIvProfile)
             if (CheckInternet.isConnected(requireActivity())) {
-//                viewModel.deleteProfileImage()
+                viewModel.deleteUserImage()
+                viewModel.deleteUserImgResponse.observe(viewLifecycleOwner){
+                    if(it is Resource.Success){
+                        Toast.makeText(requireContext(), it.data, Toast.LENGTH_SHORT).show()
+                    }else if(it is Resource.Error){
+                        Toast.makeText(requireContext(), it.string ,Toast.LENGTH_SHORT).show()
+                    }
+                }
             }else{
-//                    toast("네트워크 연결을 확인해 주세요.")
+                    Toast.makeText(requireContext(), "인터넷 연결을 확인해주세요" ,Toast.LENGTH_SHORT).show()
                 builder.dismiss()
             }
         }

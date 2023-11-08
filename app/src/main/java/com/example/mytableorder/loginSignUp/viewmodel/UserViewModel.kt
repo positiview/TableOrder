@@ -30,6 +30,9 @@ class UserViewModel (
     private val _updateUserResponse : MutableLiveData<Resource<String>> = MutableLiveData()
     val updateUserResponse : LiveData<Resource<String>> get() = _updateUserResponse
 
+    private val _deleteUserImgResponse : MutableLiveData<Resource<String>> = MutableLiveData()
+    val deleteUserImgResponse : LiveData<Resource<String>> get() = _deleteUserImgResponse
+
     fun login(email: String, password: String){
         viewModelScope.launch {
             _loginRequest.value = Resource.Loading
@@ -63,6 +66,18 @@ class UserViewModel (
             try {
                 repository.getUserImage() {
                     _getUserImgResponse.value = it
+                }
+            }catch (e:Exception){
+                _getUserImgResponse.value = Resource.Error(e.message.toString())
+            }
+        }
+    }
+
+    fun deleteUserImage(){
+        viewModelScope.launch {
+            try{
+                repository.deleteUserImage(){
+                    _deleteUserImgResponse.value = it
                 }
             }catch (e:Exception){
                 _getUserImgResponse.value = Resource.Error(e.message.toString())

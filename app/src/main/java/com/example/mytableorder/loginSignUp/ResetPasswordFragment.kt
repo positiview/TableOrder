@@ -4,11 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
+import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentResetPasswordBinding
 import com.example.mytableorder.utils.CheckInternet
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.FirebaseAuth
 
 class ResetPasswordFragment : DialogFragment() {
@@ -22,6 +27,15 @@ class ResetPasswordFragment : DialogFragment() {
         binding = FragmentResetPasswordBinding.inflate(inflater, container, false)
         val view = binding.root
         auth = FirebaseAuth.getInstance()
+        val str = arguments?.getString("pwTitle")
+        val userEmail = arguments?.getString("putText")
+        if(str != null){
+
+            val textView: MaterialTextView = binding.resetTextView
+            textView.text = str
+            val userEmailTextView: TextInputEditText = binding.emailEditText
+            userEmailTextView.setText(userEmail)
+        }
 
         binding.dialogConfirm.setOnClickListener {
             val email = binding.userEmil.editText?.text.toString().trim()

@@ -8,11 +8,15 @@
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot password?</string>
+    <string name="reset_password">비밀번호 변경</string>
     <string name="dont_have_an_account">Dont have an account?</string>
     <string name="register">Register</string>
+    <string name="cancel">취소</string>
     <string name="confirm">확인</string>
+    <string name="confirm_email">이메일을 변경하면 로그인 정보도 변경됩니다.</string>
     <string name="confirm_password">Confirm password</string>
-    <string name="confirm_logout">정말 로그아웃 하시겠습니까?</string>
+    <string name="admin_out">관리자 모드를 나가시겠습니까?</string>
+    <string name="admin_in">관리자 모드로 들어가시겠습니까?</string>
     <string name="phone_number">Phone number</string>
     <string name="name">Name</string>
     <string name="already_having_an_account">Already having an account?</string>
@@ -34,8 +38,8 @@
     <string name="food_item">Food item</string>
     <string name="lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et_dolore_magna_aliqua">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
     <string name="donated_food_item">Donated Food Item</string>
-    <string name="forexample_gmail_com">forexample@gmail.com</string>
-    <string name="reset">Reset</string>
+    <string name="forexample_gmail_com">메일주소를 입력하세요</string>
+    <string name="reset">변경 요청</string>
     <string name="home">Home</string>
     <string name="resturant_donor">Resturant</string>
     <string name="organization_receiver">Organization</string>
@@ -75,5 +79,10 @@
     <string name="disconnected2">연결 시도 후 잠시만 기다려 주세요.</string>
     <string name="nickname">닉네임</string>
     <string name="edit">수정</string>
-    <string name="complete">완료</string>
+    <string name="edit_cancel">수정 취소</string>
+    <string name="complete">수정 완료</string>
+    <string name="level">등급</string>
+    <string name="tel">Tel</string>
+    <string name="navigation_drawer_open">drawer 열림</string>
+    <string name="navigation_drawer_close">drawer 닫힘</string>
 </resources>

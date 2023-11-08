@@ -11,25 +11,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="@string/admin_out"
-        android:textSize="20sp"
+        android:text="@string/confirm_email"
+        android:textSize="18sp"
         android:textColor="?android:attr/textColorPrimary" />
 
 
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/dialogConfirm"
+    <LinearLayout
+        android:id="@+id/dialogLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/confirm"
+        android:orientation="horizontal"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:padding="16dp"
-        android:text="@string/confirm"
-        android:textAllCaps="false"
-        app:cornerRadius="20dp" />
+        android:layout_marginTop="40dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dialogConfirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:text="@string/confirm"
+            android:textAllCaps="false"
+            app:cornerRadius="20dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dialogCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="20dp"
+            android:padding="16dp"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            app:cornerRadius="20dp" />
+    </LinearLayout>
+
 
     <ProgressBar
         android:id="@+id/progressBar6"
@@ -38,7 +55,7 @@
         android:indeterminateDrawable="@drawable/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/dialogConfirm"
+        android:layout_below="@id/dialogLayout"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

@@ -9,6 +9,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
@@ -28,7 +30,12 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.mytableorder.Db.db
 import com.example.mytableorder.adapter.MyFragmentStateAdapter
 import com.example.mytableorder.databinding.ActivityMainBinding
+import com.example.mytableorder.loginSignUp.viewmodel.UserViewModel
 import com.example.mytableorder.model.User
+import com.example.mytableorder.repository.AuthRepository
+import com.example.mytableorder.repository.AuthRepositoryImpl
+import com.example.mytableorder.utils.Resource
+import com.example.mytableorder.viewmodelFactory.AuthViewModelFactory
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -40,9 +47,13 @@ class MainActivity : AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var auth: FirebaseAuth
-    private var authStateListener: FirebaseAuth.AuthStateListener? = null
-
+    private lateinit var imgUri: Uri
+//    private var authStateListener: FirebaseAuth.AuthStateListener? = null
+    private val authRepository: AuthRepository = AuthRepositoryImpl()
+    private val authViewModelFactory = AuthViewModelFactory(authRepository)
+    private val viewModel: UserViewModel by viewModels { authViewModelFactory }
     private val TAG = "userInfo"
+
    /* private lateinit var firebaseDatabase: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference*/
 
@@ -89,7 +100,7 @@ class MainActivity : AppCompatActivity(){
 
                     2 -> navController.navigate(R.id.userListFragment)
                     3 -> navController.navigate(R.id.BoardFragment)
-                    //4 -> navController.navigate(R.id.mypageFragment)
+                    4 -> navController.navigate(R.id.mypageFragment)
                     // 다른 탭에 대한 액션을 추가합니다.
                 }
             }
@@ -100,6 +111,17 @@ class MainActivity : AppCompatActivity(){
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // 같은 탭을 다시 선택한 경우에 대한 처리 (옵션)
+                when (tab?.position) {
+                    0 -> navController.navigate(R.id.homeFragment)
+                    1 -> {
+                        // 스와이프 동작을 위한 리사이클러뷰가 있는 Fragment로 이동
+                        navController.navigate(R.id.InfoFragment)
+                    }
+//                    2 -> navController.navigate(R.id.InfoFragment)
+                    3 -> navController.navigate(R.id.BoardFragment)
+                    4 -> navController.navigate(R.id.mypageFragment)
+                    // 다른 탭에 대한 액션을 추가합니다.
+                }
             }
         })
 
@@ -114,21 +136,27 @@ class MainActivity : AppCompatActivity(){
         // 이 대상들은 '뒤로' 버튼을 눌렀을 때 앱을 종료하도록 설정됩니다.
         // 두 번째 매개변수인 drawerLayout는 NavigationView가 포함된 DrawerLayout을 지정합니다.
         // 이를 통해 '뒤로' 버튼이나 홈버튼을 눌렀을 때 드로어가 열리도록 설정할 수 있습니다. < GPT설명 >
-        // 뒤로가기 눌렀을때 상위 레벨대상으로 돌아가고 홈버튼 눌렀을때 드로어가 열리고 setof것들에서는 뒤로가기 눌렀을때 종료가 되는건가???
+        // drawer 버튼이 setof()안의 fragment일때 나타남
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.homeFragment,
                 R.id.adminHomeFragment,
                 R.id.userListFragment,
                 R.id.BoardFragment,
+
                 R.id.infoFragment
+
+                
+                R.id.mypageFragment
+
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
 
 
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment, R.id.signUpFragment)) {
+            if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment, R.id.signUpFragment )) {
                 supportActionBar?.hide()
                 tabLayout.visibility = View.GONE
             }else {
@@ -136,6 +164,12 @@ class MainActivity : AppCompatActivity(){
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 tabLayout.visibility = View.VISIBLE
             }
+            if (destination.id in listOf(R.id.adminHomeFragment, R.id.adminListFragment, R.id.adminWriteFragment)) {
+                tabLayout.visibility = View.GONE
+            } else {
+                tabLayout.visibility = View.VISIBLE
+            }
+
             /*if (destination.id in listOf(
 //                    R.id.donateFragment,
 //                    R.id.receiveFragment,
@@ -152,10 +186,12 @@ class MainActivity : AppCompatActivity(){
         }
         val header = binding.navigationView.getHeaderView(0)
         val imageView = header.findViewById<ImageView>(R.id.imageView)
-        val userImage = auth.currentUser?.photoUrl
+        viewModel.getUserImage()
+
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+
                 val user = auth.currentUser
                 val userEmailText = header.findViewById<TextView>(R.id.useremail)
 
@@ -177,14 +213,26 @@ class MainActivity : AppCompatActivity(){
                 }
             }
         }
+        viewModel.getUserImgResponse.observe(this){
+            when(it){
+                is Resource.Loading -> {
+                }
+                is Resource.Error -> {
+                    Toast.makeText(this, it.string, Toast.LENGTH_SHORT).show()
+                }
+                is Resource.Success -> {
+                    imgUri = it.data
+                    Glide.with(this)
+                        .load(imgUri)
+                        .apply(RequestOptions().override(150, 150))
+                        .placeholder(R.drawable.ic_person)
+                        .error(R.drawable.ic_person)
+                        .into(imageView)
+                }
+            }
+        }
+        // userImage가 null일때 처리해야하는가???
 
-
-        Glide.with(this)
-            .load(userImage)
-            .apply(RequestOptions().override(150, 150))
-            .placeholder(R.drawable.ic_person)
-            .error(R.drawable.ic_person)
-            .into(imageView)
 
         val sharedPref = this.getSharedPreferences("userType", Context.MODE_PRIVATE)
         val userType = sharedPref.getString("user_type", "user")
@@ -233,19 +281,21 @@ class MainActivity : AppCompatActivity(){
                     }
                 }
 
-//                R.id.regiRestaurant ->{
-//                    if (userType == "admin") {
-//                        navController.navigate(R.id.rregiFragment)
-//                        binding.drawerLayout.closeDrawer(GravityCompat.START)
-//                        true
-//                    } else {
-//                        false
-//                    }
-//                }
+                R.id.regiRestaurant ->{
+                    if (userType == "admin") {
+                        navController.navigate(R.id.adminWriteFragment)
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    } else {
+                        false
+                    }
+                }
 
-                /*R.id.myPage->{
-
-                }*/
+                R.id.myPage->{
+                    val myPageTab = tabLayout.getTabAt(4)
+                    myPageTab?.select()
+                    true
+                }
 
                 R.id.logout -> {
                     auth.signOut()
@@ -276,35 +326,7 @@ class MainActivity : AppCompatActivity(){
         setSupportActionBar(binding.toolbar)
         binding.drawerLayout.closeDrawer(GravityCompat.START)
 
-        val header = binding.navigationView.getHeaderView(0)
-        val imageView = header.findViewById<ImageView>(R.id.imageView)
-        val userImage = auth.currentUser?.photoUrl
 
-        val user = auth.currentUser
-        val userEmailText = header.findViewById<TextView>(R.id.useremail)
-
-        user?.let {
-            db.collection("users")
-                .document(it.uid)
-                .get()
-                .addOnSuccessListener { snapshot ->
-                    val user = snapshot.toObject(User::class.java)
-                    if (user != null) {
-                        val userEmail = user.email ?: ""
-                        Log.d("$$", "user email : "+ userEmail)
-                        userEmailText.text = userEmail
-                    }
-                }
-                .addOnFailureListener {
-                    Log.e(TAG, "Error: ${it.message}")
-                }
-        }
-        Glide.with(this)
-            .load(userImage)
-            .apply(RequestOptions().override(150, 150))
-            .placeholder(R.drawable.ic_person)
-            .error(R.drawable.ic_person)
-            .into(imageView)
 
     }
 

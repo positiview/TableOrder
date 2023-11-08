@@ -147,9 +147,9 @@
             android:id="@+id/action_loginFragment_to_resetPasswordFragment"
             app:destination="@id/resetPasswordFragment" />
 
-         <action
-             android:id="@+id/action_loginFragment_to_rregiFragment"
-             app:destination="@id/rregiFragment" />
+<!--         <action-->
+<!--             android:id="@+id/action_loginFragment_to_rregiFragment"-->
+<!--             app:destination="@id/rregiFragment" />-->
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"

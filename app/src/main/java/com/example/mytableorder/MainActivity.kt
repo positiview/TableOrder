@@ -97,7 +97,6 @@ class MainActivity : AppCompatActivity(){
                         // 스와이프 동작을 위한 리사이클러뷰가 있는 Fragment로 이동
                         navController.navigate(R.id.infoFragment)
                     }
-
                     2 -> navController.navigate(R.id.userListFragment)
                     3 -> navController.navigate(R.id.BoardFragment)
                     4 -> navController.navigate(R.id.mypageFragment)
@@ -115,7 +114,7 @@ class MainActivity : AppCompatActivity(){
                     0 -> navController.navigate(R.id.homeFragment)
                     1 -> {
                         // 스와이프 동작을 위한 리사이클러뷰가 있는 Fragment로 이동
-                        navController.navigate(R.id.InfoFragment)
+                        navController.navigate(R.id.infoFragment)
                     }
 //                    2 -> navController.navigate(R.id.InfoFragment)
                     3 -> navController.navigate(R.id.BoardFragment)
@@ -143,10 +142,7 @@ class MainActivity : AppCompatActivity(){
                 R.id.adminHomeFragment,
                 R.id.userListFragment,
                 R.id.BoardFragment,
-
-                R.id.infoFragment
-
-                
+                R.id.infoFragment,
                 R.id.mypageFragment
 
             ), drawerLayout

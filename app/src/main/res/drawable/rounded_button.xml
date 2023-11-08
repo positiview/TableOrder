@@ -1,0 +1,4 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FF5733" /> <!-- 버튼의 배경색을 설정 -->
+    <corners android:radius="100dp" /> <!-- 이 값으로 버튼을 원 모양으로 만듦 -->
+</shape>

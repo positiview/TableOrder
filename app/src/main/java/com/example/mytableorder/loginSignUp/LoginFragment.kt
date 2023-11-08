@@ -152,7 +152,7 @@ class LoginFragment : Fragment() {
 
 
                     } else {
-                        Toast.makeText(activity, "No internet connection", Toast.LENGTH_SHORT)
+                        Toast.makeText(activity, "인터넷 연결을 확인해주세요", Toast.LENGTH_SHORT)
                             .show()
                         binding.progressCircular.isVisible = false
                         binding.btnLogin.isEnabled = true

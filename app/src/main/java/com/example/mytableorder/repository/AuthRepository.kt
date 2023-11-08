@@ -18,4 +18,6 @@ interface AuthRepository {
     suspend fun getUserInfo(result: (Resource<Map<String, Any>?>) -> Unit)
     suspend fun updateUserInfo(user: updateUser, result: (Resource<String>) -> Unit)
     suspend fun updateAuthEmail(email: String)
+
+    suspend fun deleteUserImage(result: (Resource<String>) -> Unit)
 }

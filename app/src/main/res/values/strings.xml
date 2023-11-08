@@ -83,4 +83,6 @@
     <string name="complete">수정 완료</string>
     <string name="level">등급</string>
     <string name="tel">Tel</string>
+    <string name="navigation_drawer_open">drawer 열림</string>
+    <string name="navigation_drawer_close">drawer 닫힘</string>
 </resources>

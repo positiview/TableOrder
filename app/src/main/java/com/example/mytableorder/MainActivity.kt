@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
@@ -109,6 +110,17 @@ class MainActivity : AppCompatActivity(){
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // 같은 탭을 다시 선택한 경우에 대한 처리 (옵션)
+                when (tab?.position) {
+                    0 -> navController.navigate(R.id.homeFragment)
+                    1 -> {
+                        // 스와이프 동작을 위한 리사이클러뷰가 있는 Fragment로 이동
+                        navController.navigate(R.id.InfoFragment)
+                    }
+//                    2 -> navController.navigate(R.id.InfoFragment)
+                    3 -> navController.navigate(R.id.BoardFragment)
+                    4 -> navController.navigate(R.id.mypageFragment)
+                    // 다른 탭에 대한 액션을 추가합니다.
+                }
             }
         })
 
@@ -136,8 +148,9 @@ class MainActivity : AppCompatActivity(){
         setupActionBarWithNavController(navController, appBarConfiguration)
 
 
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment, R.id.signUpFragment)) {
+            if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment, R.id.signUpFragment )) {
                 supportActionBar?.hide()
                 tabLayout.visibility = View.GONE
             }else {
@@ -145,6 +158,12 @@ class MainActivity : AppCompatActivity(){
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 tabLayout.visibility = View.VISIBLE
             }
+            if (destination.id in listOf(R.id.adminHomeFragment, R.id.adminListFragment, R.id.adminWriteFragment)) {
+                tabLayout.visibility = View.GONE
+            } else {
+                tabLayout.visibility = View.VISIBLE
+            }
+
             /*if (destination.id in listOf(
 //                    R.id.donateFragment,
 //                    R.id.receiveFragment,
@@ -258,7 +277,7 @@ class MainActivity : AppCompatActivity(){
 
                 R.id.regiRestaurant ->{
                     if (userType == "admin") {
-                        navController.navigate(R.id.rregiFragment)
+                        navController.navigate(R.id.adminWriteFragment)
                         binding.drawerLayout.closeDrawer(GravityCompat.START)
                         true
                     } else {
@@ -266,9 +285,11 @@ class MainActivity : AppCompatActivity(){
                     }
                 }
 
-                /*R.id.myPage->{
-
-                }*/
+                R.id.myPage->{
+                    val myPageTab = tabLayout.getTabAt(4)
+                    myPageTab?.select()
+                    true
+                }
 
                 R.id.logout -> {
                     auth.signOut()

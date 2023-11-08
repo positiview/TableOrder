@@ -2,6 +2,7 @@ package com.example.mytableorder.fragment.admin
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
@@ -9,6 +10,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentAdminHomeBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
@@ -52,8 +54,8 @@ class AdminHomeFragment : Fragment(), MenuProvider {
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.admin_menu, menu)
         menu.findItem(R.id.action_logout).setOnMenuItemClickListener {
-            auth.signOut()
-
+            findNavController().navigate(R.id.homeFragment)
+            Toast.makeText(requireContext(),"관리자 모드를 나갑니다.",Toast.LENGTH_SHORT).show()
             true
         }
     }
@@ -61,8 +63,8 @@ class AdminHomeFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when(menuItem.itemId){
             R.id.action_logout -> {
-                auth.signOut()
-
+                Toast.makeText(requireContext(),"관리자 모드를 나갑니다.",Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.homeFragment)
             }
         }
         return true

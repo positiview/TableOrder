@@ -101,8 +101,8 @@ class MypageFragment : Fragment() {
                 var userEmail = ""
                 user?.let{
                     db.collection("users").document(it.uid).get()
-                        .addOnSuccessListener {
-                            val user = it.toObject(User::class.java)
+                        .addOnSuccessListener { snapshot ->
+                            val user = snapshot.toObject(User::class.java)
                             if(user != null){
                                 userEmail = user.email ?: ""
                                 var str = "비밀번호 변경"

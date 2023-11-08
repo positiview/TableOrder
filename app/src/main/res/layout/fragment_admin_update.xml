@@ -96,12 +96,7 @@
                             android:textSize="35dp" />
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/shopImg"
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:layout_weight="1"
-                        android:scaleType="centerCrop" />
+                    <!-- 이미지 추가 버튼 -->
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -144,34 +139,55 @@
                             android:layout_weight="2"
                             android:textSize="35dp" />
                     </LinearLayout>
-
-
-                    <fragment
-                        android:id="@+id/shopMapView"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginTop="20dp"
-                        app:uiZoomControls="true"
-                        tools:ignore="FragmentTagUsage" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="위도"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/shopLatitude"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textSize="35dp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="경도"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/shopLongitude"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textSize="35dp" />
+                    </LinearLayout>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
                         android:orientation="vertical">
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/buttonDelete"
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:layout_marginTop="10dp"
-                            android:backgroundTint="@color/orange"
-                            android:text="삭제"
-                            android:textAllCaps="false"
-                            android:textColor="@color/black"
-                            android:textSize="20sp"
-                            app:cornerRadius="20dp"
-                            tools:ignore="UnusedAttribute" />
+
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/buttonUpdate"
@@ -185,17 +201,6 @@
                             app:cornerRadius="20dp"
                             tools:ignore="UnusedAttribute" />
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/buttonBack"
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:backgroundTint="@color/orange"
-                            android:text="관리자모드화면"
-                            android:textAllCaps="false"
-                            android:textColor="@color/black"
-                            android:textSize="20sp"
-                            app:cornerRadius="20dp"
-                            tools:ignore="UnusedAttribute" />
 
                     </LinearLayout>
 

@@ -46,6 +46,11 @@ android {
 
 dependencies {
 
+    // 그림나오게 글라이드 추가
+    annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
+    implementation("com.github.bumptech.glide:glide:4.11.0")
+
+
     //파이어베이스
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
     //파이어베이스 디비,스토리지

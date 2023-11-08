@@ -97,9 +97,10 @@ class MainActivity : AppCompatActivity(){
                     0 -> navController.navigate(R.id.homeFragment)
                     1 -> {
                         // 스와이프 동작을 위한 리사이클러뷰가 있는 Fragment로 이동
-                        navController.navigate(R.id.InfoFragment)
+                        navController.navigate(R.id.infoFragment)
                     }
-//                    2 -> navController.navigate(R.id.InfoFragment)
+
+                    2 -> navController.navigate(R.id.userListFragment)
                     3 -> navController.navigate(R.id.BoardFragment)
                     4 -> navController.navigate(R.id.mypageFragment)
                     // 다른 탭에 대한 액션을 추가합니다.
@@ -142,9 +143,14 @@ class MainActivity : AppCompatActivity(){
             setOf(
                 R.id.homeFragment,
                 R.id.adminHomeFragment,
+                R.id.userListFragment,
                 R.id.BoardFragment,
-                R.id.InfoFragment,
+
+                R.id.infoFragment
+
+                
                 R.id.mypageFragment
+
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

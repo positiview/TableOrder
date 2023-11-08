@@ -17,6 +17,7 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity(){
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var auth: FirebaseAuth
     private lateinit var imgUri: Uri
+    private lateinit var userType: String
 //    private var authStateListener: FirebaseAuth.AuthStateListener? = null
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory = AuthViewModelFactory(authRepository)
@@ -155,16 +157,14 @@ class MainActivity : AppCompatActivity(){
             if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment, R.id.signUpFragment )) {
                 supportActionBar?.hide()
                 tabLayout.visibility = View.GONE
+            }else if(destination.id in listOf(R.id.adminHomeFragment, R.id.adminListFragment, R.id.adminWriteFragment)){
+                tabLayout.visibility = View.GONE
             }else {
                 supportActionBar?.show()
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 tabLayout.visibility = View.VISIBLE
             }
-            if (destination.id in listOf(R.id.adminHomeFragment, R.id.adminListFragment, R.id.adminWriteFragment)) {
-                tabLayout.visibility = View.GONE
-            } else {
-                tabLayout.visibility = View.VISIBLE
-            }
+
 
             /*if (destination.id in listOf(
 //                    R.id.donateFragment,
@@ -227,11 +227,15 @@ class MainActivity : AppCompatActivity(){
                 }
             }
         }
-        // userImage가 null일때 처리해야하는가???
 
-
+        viewModel.getUserInfo()
+        viewModel.getUserInfoResponse.observe(this){
+            if(it is Resource.Success){
+                userType = it.data?.get("user_type") as String
+            }
+        }
         val sharedPref = this.getSharedPreferences("userType", Context.MODE_PRIVATE)
-        val userType = sharedPref.getString("user_type", "user")
+        userType = sharedPref.getString("user_type", "user").toString()
 
 
         val navAdminhome = navView.menu.findItem(R.id.adminHome)

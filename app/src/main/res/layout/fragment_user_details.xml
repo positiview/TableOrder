@@ -88,8 +88,8 @@
                             android:text="가게이름"
                             android:textSize="20sp" />
 
-                        <EditText
-                            android:id="@+id/shopName"
+                        <TextView
+                            android:id="@+id/userShopName"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
@@ -97,7 +97,7 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:id="@+id/shopImg"
+                        android:id="@+id/userShopImg"
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
                         android:layout_weight="1"
@@ -116,8 +116,8 @@
                             android:text="가게메뉴"
                             android:textSize="20sp" />
 
-                        <EditText
-                            android:id="@+id/shopMenu"
+                        <TextView
+                            android:id="@+id/userShopMenu"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
@@ -137,8 +137,8 @@
                             android:text="가게정보"
                             android:textSize="20sp" />
 
-                        <EditText
-                            android:id="@+id/shopInfo"
+                        <TextView
+                            android:id="@+id/userShopInfo"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
@@ -147,7 +147,7 @@
 
 
                     <fragment
-                        android:id="@+id/shopMapView"
+                        android:id="@+id/userMapView"
                         android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
@@ -161,12 +161,12 @@
                         android:orientation="vertical">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/buttonDelete"
+                            android:id="@+id/buttonBooking"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             android:layout_marginTop="10dp"
                             android:backgroundTint="@color/orange"
-                            android:text="삭제"
+                            android:text="예약하기"
                             android:textAllCaps="false"
                             android:textColor="@color/black"
                             android:textSize="20sp"
@@ -174,11 +174,11 @@
                             tools:ignore="UnusedAttribute" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/buttonUpdate"
+                            android:id="@+id/buttonHome"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             android:backgroundTint="@color/orange"
-                            android:text="수정"
+                            android:text="메인"
                             android:textAllCaps="false"
                             android:textColor="@color/black"
                             android:textSize="20sp"
@@ -186,11 +186,11 @@
                             tools:ignore="UnusedAttribute" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/buttonBack"
+                            android:id="@+id/buttonList"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             android:backgroundTint="@color/orange"
-                            android:text="관리자모드화면"
+                            android:text="리스트"
                             android:textAllCaps="false"
                             android:textColor="@color/black"
                             android:textSize="20sp"

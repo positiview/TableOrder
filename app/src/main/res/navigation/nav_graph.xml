@@ -5,18 +5,70 @@
     android:id="@+id/nav_graph.xml"
     app:startDestination="@id/splashFragment">
     <fragment
-        android:id="@+id/InfoFragment"
+        android:id="@+id/infoFragment"
         android:name="com.example.mytableorder.fragment.InfoFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" >
+    </fragment>
+    <fragment
+        android:id="@+id/userListFragment"
+        android:name="com.example.mytableorder.fragment.home.user.UserListFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_user_list" >
+        <action
+            android:id="@+id/action_userListFragment_to_userDetailsFragment"
+            app:destination="@id/userDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userDetailsFragment"
+        android:name="com.example.mytableorder.fragment.home.user.UserDetailsFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_user_details" >
+        <action
+            android:id="@+id/action_userDetailsFragment_to_userListFragment"
+            app:destination="@id/userListFragment" />
+        <action
+            android:id="@+id/action_userDetailsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminUpdateFragment"
+        android:name="com.example.mytableorder.fragment.admin.AdminUpdateFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_admin_update" >
+        <action
+            android:id="@+id/action_adminUpdateFragment_to_adminHomeFragment"
+            app:destination="@id/adminHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminListViewFragment"
+        android:name="com.example.mytableorder.fragment.admin.AdminListViewFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_admin_list_view" >
+        <action
+            android:id="@+id/action_adminListViewFragment_to_adminUpdateFragment"
+            app:destination="@id/adminUpdateFragment" />
+        <action
+            android:id="@+id/action_adminListViewFragment_to_adminHomeFragment"
+            app:destination="@id/adminHomeFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/adminListFragment"
+        android:name="com.example.mytableorder.fragment.admin.AdminListFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_admin_card_list" >
+        <action
+            android:id="@+id/action_adminListFragment_to_adminListViewFragment"
+            app:destination="@id/adminListViewFragment" />
     </fragment>
 
     <!--프레그먼트 디테일즈 추가-->
     <fragment
         android:id="@+id/detailsFragment"
-        android:name="com.example.mytableorder.fragment.DetailsFragment"
+        android:name="com.example.mytableorder.fragment.home.user.UserDetailsFragment"
         android:label="Details"
-        tools:layout="@layout/fragment_details" />
+        tools:layout="@layout/fragment_user_details" />
 
 <!--자유게시판-->
     <fragment
@@ -54,6 +106,9 @@
         android:name="com.example.mytableorder.fragment.home.HomeFragment"
         android:label="Dashboard"
         tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homFragment_to_user_details_fragment"
+            app:destination="@id/userDetailsFragment"/>
         <action
             android:id="@+id/action_homeFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />

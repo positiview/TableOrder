@@ -1,6 +1,7 @@
 package com.example.mytableorder.loginSignUp.viewmodel
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,14 +15,14 @@ import kotlinx.coroutines.launch
 class UserViewModel (
     private val repository: AuthRepository
 ): ViewModel() {
+
     private val _loginRequest = MutableLiveData<Resource<Map<String, Any>?>>()
     val loginRequest = _loginRequest as LiveData<Resource<Map<String, Any>?>>
-
     private val _getUserInfoResponse : MutableLiveData<Resource<Map<String, Any>?>> = MutableLiveData()
     val getUserInfoResponse : LiveData<Resource<Map<String, Any>?>> get() = _getUserInfoResponse
 
-    private val _getPutProfileResponse : MutableLiveData<Resource<Uri>> = MutableLiveData()
-    val getPutProfileResponse : LiveData<Resource<Uri>> get() = _getPutProfileResponse
+    private val _getUpdateImgResponse : MutableLiveData<Resource<Uri>> = MutableLiveData()
+    val getUpdateImgResponse : LiveData<Resource<Uri>> get() = _getUpdateImgResponse
 
 
     private val _getUserImgResponse : MutableLiveData<Resource<Uri>> = MutableLiveData()
@@ -32,6 +33,7 @@ class UserViewModel (
 
     private val _deleteUserImgResponse : MutableLiveData<Resource<String>> = MutableLiveData()
     val deleteUserImgResponse : LiveData<Resource<String>> get() = _deleteUserImgResponse
+
 
     fun login(email: String, password: String){
         viewModelScope.launch {
@@ -49,13 +51,15 @@ class UserViewModel (
 
     fun editUserImage(imagePath: Uri){
         viewModelScope.launch{
-            _getPutProfileResponse.value = Resource.Loading
+            _getUpdateImgResponse.value = Resource.Loading
             try{
                 repository.setUserImage(imagePath){
-                    _getPutProfileResponse.value = it
+                    Log.d("$$","setUserImage")
+                    _getUpdateImgResponse.value = it
+
                 }
             }catch (e:Exception){
-                _getPutProfileResponse.value = Resource.Error(e.message.toString())
+                _getUpdateImgResponse.value = Resource.Error(e.message.toString())
             }
         }
     }
@@ -66,6 +70,7 @@ class UserViewModel (
             try {
                 repository.getUserImage() {
                     _getUserImgResponse.value = it
+                    Log.d("$$","img Uri : $it")
                 }
             }catch (e:Exception){
                 _getUserImgResponse.value = Resource.Error(e.message.toString())

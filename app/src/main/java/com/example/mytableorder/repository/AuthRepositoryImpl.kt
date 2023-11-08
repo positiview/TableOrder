@@ -46,10 +46,10 @@ class AuthRepositoryImpl : AuthRepository {
 
                         }
                 }else{
-                    result.invoke(Resource.Error("Email not verified"))
+                    result.invoke(Resource.Error("이메일 인증을 먼저해주세요"))
                 }
             }.addOnFailureListener {
-                result.invoke(Resource.Error(it.message.toString()))
+                result.invoke(Resource.Error("회원 정보를 찾지 못했습니다."))
             }
 
     }
@@ -63,7 +63,7 @@ class AuthRepositoryImpl : AuthRepository {
                 result.invoke(Resource.Success(it))
             }
         }else{
-            result.invoke(Resource.Error("회원 가입을 먼저 해주세요"))
+            result.invoke(Resource.Error("회원 이미지를 찾올 수 없습니다"))
 
         }
     }
@@ -71,6 +71,7 @@ class AuthRepositoryImpl : AuthRepository {
     override suspend fun setUserImage(imagePath: Uri, result: (Resource<Uri>) -> Unit) {
 
         if(uid != null){
+            Log.d("$$", "uid : $uid")
             val imgRef: StorageReference = storageRef.child("user/$uid")
             val uploadTask = imgRef.putFile(imagePath)
             uploadTask.addOnFailureListener{
@@ -98,7 +99,7 @@ class AuthRepositoryImpl : AuthRepository {
                 }
             }
         }else{
-            result.invoke(Resource.Error("회원 가입을 먼저 해주세요"))
+            result.invoke(Resource.Error("회원 정보를 찾을 수 없습니다"))
 
         }
     }

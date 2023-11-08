@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
@@ -45,7 +46,7 @@ class UserInfoFragment : Fragment() {
     private lateinit var imgPath: Uri
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory = AuthViewModelFactory(authRepository)
-    private val viewModel: UserViewModel by viewModels { authViewModelFactory }
+    private val viewModel: UserViewModel by activityViewModels() { authViewModelFactory }
 
 
 
@@ -53,6 +54,7 @@ class UserInfoFragment : Fragment() {
     private var imageChanged = false
     private var nickNameChanged = false
     private var userCancelled = false
+    private var removeImgOrder = false
 
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
@@ -129,14 +131,11 @@ class UserInfoFragment : Fragment() {
                                 if (!userCancelled) {
                                     viewModel?.editUserInfo(user)
                                 }
-
                             }
-
-
                         }
                         else {Toast.makeText(requireContext(), "이메일은 반드시 입력해야 합니다.", Toast.LENGTH_SHORT).show()}
 
-                        viewmodel?.editUserImage(filePath)
+                        viewModel?.editUserImage(filePath)
 
                     }
                     // 사용자 정보만 변경
@@ -171,14 +170,17 @@ class UserInfoFragment : Fragment() {
                     // 이미지만 변경
                     else if (!nickNameChanged && imageChanged) {
 
-                        viewmodel?.editUserImage(filePath)
+                        viewModel?.editUserImage(filePath)
 
                     }
                 } else{
 
                     Toast.makeText(requireContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show()
                 }
-
+                // 유저 이미지 삭제
+                if(removeImgOrder){
+                    deleteUserImage()
+                }
                 // 버튼 누른후에...
                 Toast.makeText(requireContext(), "회원 정보 수정 완료!!", Toast.LENGTH_SHORT).show()
                 btnEdit.isChecked = false
@@ -186,6 +188,7 @@ class UserInfoFragment : Fragment() {
                 imageChanged = false
                 nickNameChanged = false
                 userCancelled = false
+                removeImgOrder = false
             }
             // 카메라 버튼 이미지 수정
             accountIvProfileCamera.setOnClickListener {
@@ -315,7 +318,16 @@ class UserInfoFragment : Fragment() {
             }
         }
     }
-
+    private fun deleteUserImage(){
+        viewModel.deleteUserImage()
+        viewModel.deleteUserImgResponse.observe(viewLifecycleOwner){
+            if(it is Resource.Success){
+                Toast.makeText(requireContext(), it.data, Toast.LENGTH_SHORT).show()
+            }else if(it is Resource.Error){
+                Toast.makeText(requireContext(), it.string ,Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     private fun showDialog(){
         val builder = AlertDialog.Builder(requireContext()).create()
@@ -330,14 +342,11 @@ class UserInfoFragment : Fragment() {
         removeProfile.setOnClickListener {
             Glide.with(requireContext()).load(R.drawable.img_user).into(binding.accountIvProfile)
             if (CheckInternet.isConnected(requireActivity())) {
-                viewModel.deleteUserImage()
-                viewModel.deleteUserImgResponse.observe(viewLifecycleOwner){
-                    if(it is Resource.Success){
-                        Toast.makeText(requireContext(), it.data, Toast.LENGTH_SHORT).show()
-                    }else if(it is Resource.Error){
-                        Toast.makeText(requireContext(), it.string ,Toast.LENGTH_SHORT).show()
-                    }
-                }
+                removeImgOrder = true
+                binding.btnOk.isEnabled = true
+                binding.btnOk.setTextColor(Color.WHITE)
+                imageChanged = false
+                builder.dismiss()
             }else{
                     Toast.makeText(requireContext(), "인터넷 연결을 확인해주세요" ,Toast.LENGTH_SHORT).show()
                 builder.dismiss()

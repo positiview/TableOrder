@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
@@ -43,7 +44,7 @@ class LoginFragment : Fragment() {
 
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory: AuthViewModelFactory = AuthViewModelFactory(authRepository)
-    private val viewModel: UserViewModel by viewModels { authViewModelFactory }
+    private val viewModel: UserViewModel by activityViewModels() { authViewModelFactory }
 
 
 
@@ -116,6 +117,7 @@ class LoginFragment : Fragment() {
 
                         viewModel.login(email, password)
                         viewModel.getUserImage()
+                        viewModel.getUserInfo()
                         viewModel.loginRequest.observe(viewLifecycleOwner){
                             when(it){
                                 is Resource.Loading -> {
@@ -125,6 +127,8 @@ class LoginFragment : Fragment() {
                                     binding.progressCircular.isVisible = false
                                     binding.emailTinputLayout.isEnabled = true
                                     binding.passwordInputLayout.isEnabled = true
+                                    binding.btnLogin.isEnabled = true
+                                    binding.btnLogin.text = "Login"
                                     Toast.makeText(requireContext(), it.string, Toast.LENGTH_SHORT).show()
                                 }
                                 is Resource.Success -> {

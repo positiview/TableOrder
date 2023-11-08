@@ -147,9 +147,7 @@
             android:id="@+id/action_loginFragment_to_resetPasswordFragment"
             app:destination="@id/resetPasswordFragment" />
 
-         <action
-             android:id="@+id/action_loginFragment_to_rregiFragment"
-             app:destination="@id/rregiFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -211,9 +209,9 @@
             app:destination="@id/homeFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
-        <!--<action
-            android:id="@+id/action_splashFragment_to_donorsHomeFragment"
-            app:destination="@id/donorsHomeFragment" />-->
+        <action
+            android:id="@+id/action_splashFragment_to_restaurantHomeFragment"
+            app:destination="@id/restaurantHomeFragment" />
          <action
              android:id="@+id/action_splashFragment_to_adminHomeFragment"
              app:destination="@id/adminHomeFragment" />
@@ -253,12 +251,12 @@
         android:id="@+id/contactUsFragment"
         android:name="com.example.tableorder.fragments.contact.ContactUsFragment"
         android:label="Contact Us" />-->
-    <!--<fragment
-        android:id="@+id/donorsHomeFragment"
-        android:name="edu.puo.foodonus.fragments.home.DonorsHomeFragment"
+    <fragment
+        android:id="@+id/restaurantHomeFragment"
+        android:name="com.example.mytableorder.fragment.restaurant.RestaurantHomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_donors_home" >
-        <action
+        tools:layout="@layout/fragment_restaurant_home" >
+        <!--<action
             android:id="@+id/action_donorsHomeFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/donorsHomeFragment"
@@ -274,8 +272,8 @@
             app:destination="@id/aboutUsFragment" />
         <action
             android:id="@+id/action_donorsHomeFragment_to_contactUsFragment"
-            app:destination="@id/contactUsFragment" />
-    </fragment>-->
+            app:destination="@id/contactUsFragment" />-->
+    </fragment>
     <fragment
         android:id="@+id/adminHomeFragment"
         android:name="com.example.mytableorder.fragment.admin.AdminHomeFragment"

@@ -13,7 +13,7 @@
         android:layout_gravity="left"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="17dp"
-        android:text="프로필 사진 변경"/>
+        android:text="프로필 사진 등록/변경"/>
 
     <TextView
         android:id="@+id/remove_profile"

@@ -10,14 +10,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
@@ -53,7 +51,7 @@ class MainActivity : AppCompatActivity(){
 //    private var authStateListener: FirebaseAuth.AuthStateListener? = null
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory = AuthViewModelFactory(authRepository)
-    private val viewModel: UserViewModel by viewModels { authViewModelFactory }
+    private val viewModel: UserViewModel by viewModels() { authViewModelFactory }
     private val TAG = "userInfo"
 
    /* private lateinit var firebaseDatabase: FirebaseDatabase
@@ -117,7 +115,7 @@ class MainActivity : AppCompatActivity(){
                     0 -> navController.navigate(R.id.homeFragment)
                     1 -> {
                         // 스와이프 동작을 위한 리사이클러뷰가 있는 Fragment로 이동
-                        navController.navigate(R.id.InfoFragment)
+                        navController.navigate(R.id.infoFragment)
                     }
 //                    2 -> navController.navigate(R.id.InfoFragment)
                     3 -> navController.navigate(R.id.BoardFragment)
@@ -146,8 +144,8 @@ class MainActivity : AppCompatActivity(){
                 R.id.userListFragment,
                 R.id.BoardFragment,
 
-                R.id.infoFragment
-
+                R.id.infoFragment,
+                R.id.restaurantHomeFragment,
                 
                 R.id.mypageFragment
 
@@ -161,7 +159,7 @@ class MainActivity : AppCompatActivity(){
             if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment, R.id.signUpFragment )) {
                 supportActionBar?.hide()
                 tabLayout.visibility = View.GONE
-            }else if(destination.id in listOf(R.id.adminHomeFragment, R.id.adminListFragment, R.id.adminWriteFragment)){
+            }else if(destination.id in listOf(R.id.adminHomeFragment, R.id.adminListFragment, R.id.adminWriteFragment, R.id.restaurantHomeFragment)){
                 tabLayout.visibility = View.GONE
             }else {
                 supportActionBar?.show()
@@ -186,33 +184,36 @@ class MainActivity : AppCompatActivity(){
         }
         val header = binding.navigationView.getHeaderView(0)
         val imageView = header.findViewById<ImageView>(R.id.imageView)
-        viewModel.getUserImage()
+        var userEmailText = header.findViewById<TextView>(R.id.useremail)
+        // lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) 엑티비티가 시작할때마다 활성화
 
 
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+        /*lifecycleScope.launch {
 
-                val user = auth.currentUser
-                val userEmailText = header.findViewById<TextView>(R.id.useremail)
 
-                user?.let {
-                    db.collection("users")
-                        .document(it.uid)
-                        .get()
-                        .addOnSuccessListener { snapshot ->
-                            val user = snapshot.toObject(User::class.java)
-                            if (user != null) {
-                                val userEmail = user.email ?: ""
-                                Log.d("$$", "user email : "+ userEmail)
-                                userEmailText.text = userEmail
-                            }
+            val user = auth.currentUser
+
+
+            if (user != null) {
+                db.collection("users")
+                    .document(user.uid)
+                    .get()
+                    .addOnSuccessListener { snapshot ->
+                        val user = snapshot.toObject(User::class.java)
+                        if (user != null) {
+                            val userEmail = user.email ?: ""
+                            Log.d("$$", "user email : $userEmail")
+                            userEmailText.text = userEmail
                         }
-                        .addOnFailureListener {
-                            Log.e(TAG, "Error: ${it.message}")
-                        }
-                }
+                    }
+                    .addOnFailureListener {
+                        Log.e(TAG, "Error: ${it.message}")
+                    }
             }
-        }
+
+        }*/
+        viewModel.getUserImage()
+        // 이미지 초기화
         viewModel.getUserImgResponse.observe(this){
             when(it){
                 is Resource.Loading -> {
@@ -231,13 +232,33 @@ class MainActivity : AppCompatActivity(){
                 }
             }
         }
-
+        // 이미지 업데이트
+        viewModel.getUpdateImgResponse.observe(this){
+            when(it){
+                is Resource.Loading -> {
+                }
+                is Resource.Error -> {
+                    Toast.makeText(this, it.string, Toast.LENGTH_SHORT).show()
+                }
+                is Resource.Success -> {
+                    imgUri = it.data
+                    Glide.with(this)
+                        .load(imgUri)
+                        .apply(RequestOptions().override(150, 150))
+                        .placeholder(R.drawable.ic_person)
+                        .error(R.drawable.ic_person)
+                        .into(imageView)
+                }
+            }
+        }
         viewModel.getUserInfo()
         viewModel.getUserInfoResponse.observe(this){
             if(it is Resource.Success){
                 userType = it.data?.get("user_type") as String
+                userEmailText.text = it.data?.get("email") as String
             }
         }
+
         val sharedPref = this.getSharedPreferences("userType", Context.MODE_PRIVATE)
         userType = sharedPref.getString("user_type", "user").toString()
 
@@ -279,8 +300,11 @@ class MainActivity : AppCompatActivity(){
                         navController.navigate(R.id.adminHomeFragment)
                         binding.drawerLayout.closeDrawer(GravityCompat.START)
                         true
-                    } else {
-
+                    } else if (userType == "shop"){
+                        navController.navigate(R.id.restaurantHomeFragment)
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    }else{
                         false
                     }
                 }
@@ -310,8 +334,12 @@ class MainActivity : AppCompatActivity(){
                     // 전체 삭제는 editor.clear()
                     editor.commit()
                     Toast.makeText(this, "로그아웃 완료", Toast.LENGTH_SHORT).show()
-                    navController.navigate(R.id.splashFragment)
+//                    navController.navigate(R.id.splashFragment)
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
                     true
                 }
                 else -> {

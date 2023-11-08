@@ -13,7 +13,6 @@ import com.example.mytableorder.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -30,7 +29,7 @@ class WriteFragment : Fragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    val view = inflater.inflate(R.layout.fragment_write, container, false)
+    val view = inflater.inflate(R.layout.fragment_board_write, container, false)
     val btnReg = view.findViewById<Button>(R.id.btnReg)
     val btnRegBack = view.findViewById<Button>(R.id.btnRegBack)
 
@@ -47,8 +46,8 @@ class WriteFragment : Fragment() {
 
     // Firebase Realtime Database에 데이터를 저장하려면 여기에 저장 로직을 추가합니다.
     btnReg.setOnClickListener {
-      val title = view.findViewById<EditText>(R.id.titleEditText).text.toString()
-      val content = view.findViewById<EditText>(R.id.contentEditText).text.toString()
+      val title = view.findViewById<EditText>(R.id.titleWriteText).text.toString()
+      val content = view.findViewById<EditText>(R.id.contentWriteText).text.toString()
 
       if (title.isNotEmpty() && content.isNotEmpty()) {
         // Firebase Realtime Database에 데이터를 저장하는 함수를 호출합니다.

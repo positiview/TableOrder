@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("com.google.gms.google-services")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -48,6 +49,7 @@ dependencies {
 
     //파이어베이스
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
+
     //파이어베이스 디비,스토리지
     implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
     implementation("com.google.firebase:firebase-database:20.3.0")

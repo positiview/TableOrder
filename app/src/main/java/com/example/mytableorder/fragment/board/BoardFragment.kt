@@ -21,8 +21,8 @@ import com.example.mytableorder.fragment.board.OnItemClickListener
 class BoardFragment : Fragment() {
     private val boardList: MutableList<String> = mutableListOf()
     private val timestampList: MutableList<String> = mutableListOf() // contentList를 초기화합니다.
-
     private val adapter: BoardListAdapter = BoardListAdapter(boardList, timestampList)
+    private val postIdList: MutableList<String> = mutableListOf()
 
 
     override fun onCreateView(
@@ -52,29 +52,40 @@ class BoardFragment : Fragment() {
 
     private fun readDataFromFirebase() {
         val databaseReference = FirebaseDatabase.getInstance().reference.child("boards")
-        val query = databaseReference.orderByChild("timestamp").limitToLast(10) // 정렬 및 가져올 데이터 개수 설정
+
+        val query = databaseReference.orderByChild("timestamp").limitToLast(10)
 
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                boardList.clear()
-                timestampList.clear()
+                val newBoardList: MutableList<String> = mutableListOf()
+                val newTimestampList: MutableList<String> = mutableListOf()
+                val newPostIdList: MutableList<String> = mutableListOf()
 
-                val reversedBoardList = mutableListOf<String>()
-                val reversedTimestampList = mutableListOf<String>()
-
-                for (dataSnapshot in snapshot.children) {
+                for (dataSnapshot in snapshot.children.reversed()) { // 역순으로 순회하여 최신 데이터부터 가져옴
                     val title = dataSnapshot.child("title").getValue(String::class.java)
                     val timestamp = dataSnapshot.child("timestamp").getValue(String::class.java)
+                    val postId = dataSnapshot.key
 
                     if (title != null) {
-                        reversedBoardList.add(title)
-                        reversedTimestampList.add(timestamp ?: "")
+                        newBoardList.add(title)
+                        newTimestampList.add(timestamp ?: "")
+
+                        if (postId != null) {
+                            newPostIdList.add(postId)
+                        }
                     }
                 }
 
-                // 리스트를 뒤집어 원하는 순서로 표시
-                boardList.addAll(reversedBoardList.reversed())
-                timestampList.addAll(reversedTimestampList.reversed())
+
+
+                boardList.clear()
+                boardList.addAll(newBoardList)
+
+                timestampList.clear()
+                timestampList.addAll(newTimestampList)
+
+                postIdList.clear()
+                postIdList.addAll(newPostIdList)
 
                 adapter.notifyDataSetChanged()
             }
@@ -87,57 +98,71 @@ class BoardFragment : Fragment() {
 
 
 
+
     private fun getContentForPosition(position: Int, callback: (String?) -> Unit) {
         val databaseReference = FirebaseDatabase.getInstance().reference.child("boards")
-        val query = databaseReference.orderByChild("title").equalTo(boardList.getOrNull(position))
-        query.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    for (dataSnapshot in snapshot.children) {
-                        val content = dataSnapshot.child("content").getValue(String::class.java)
-                        if (content != null) {
-                            // 데이터가 올바르게 가져와진 경우 콜백을 사용하여 처리
-                            callback(content)
-                            return
+        val title = boardList.getOrNull(position)
+
+        if (title != null) {
+            val query = databaseReference.orderByChild("title").equalTo(title)
+            query.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (dataSnapshot in snapshot.children) {
+                            val content = dataSnapshot.child("content").getValue(String::class.java)
+                            if (content != null) {
+                                // 데이터가 올바르게 가져와진 경우 콜백을 사용하여 처리
+                                callback(content)
+                                return
+                            }
                         }
                     }
+                    callback(null) // 데이터를 찾지 못한 경우 null 처리
                 }
-                callback(null) // 데이터를 찾지 못한 경우 null 처리
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                // 데이터 읽기 실패 또는 오류가 발생했을 때 처리
-                Log.e("BoardFragment", "Failed to read data from Firebase: ${error.message}")
-                callback(null)
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    // 데이터 읽기 실패 또는 오류가 발생했을 때 처리
+                    Log.e("BoardFragment", "Failed to read data from Firebase: ${error.message}")
+                    callback(null)
+                }
+            })
+        } else {
+            callback(null) // title이 null인 경우 데이터를 찾지 못한 것으로 처리
+        }
     }
 
     private fun getUserIdForPosition(position: Int, callback: (String?) -> Unit) {
         val databaseReference = FirebaseDatabase.getInstance().reference.child("boards")
-        val query = databaseReference.orderByChild("title").equalTo(boardList.getOrNull(position))
-        query.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    for (dataSnapshot in snapshot.children) {
-                        val userId = dataSnapshot.child("userId").getValue(String::class.java)
-                        if (userId != null) {
-                            // 데이터가 올바르게 가져와진 경우 콜백을 사용하여 처리
-                            callback(userId)
-                            return
+        val title = boardList.getOrNull(position)
+
+        if (title != null) {
+            val query = databaseReference.orderByChild("title").equalTo(title)
+            query.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (dataSnapshot in snapshot.children) {
+                            val userId = dataSnapshot.child("userId").getValue(String::class.java)
+                            if (userId != null) {
+                                // 데이터가 올바르게 가져와진 경우 콜백을 사용하여 처리
+                                callback(userId)
+                                return
+                            }
                         }
                     }
+                    callback(null) // 데이터를 찾지 못한 경우 null 처리
                 }
-                callback(null) // 데이터를 찾지 못한 경우 null 처리
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                // 데이터 읽기 실패 또는 오류가 발생했을 때 처리
-                Log.e("BoardFragment", "Failed to read data from Firebase: ${error.message}")
-                callback(null)
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    // 데이터 읽기 실패 또는 오류가 발생했을 때 처리
+                    Log.e("BoardFragment", "Failed to read data from Firebase: ${error.message}")
+                    callback(null)
+                }
+            })
+        } else {
+            callback(null) // title이 null인 경우 데이터를 찾지 못한 것으로 처리
+        }
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -147,38 +172,43 @@ class BoardFragment : Fragment() {
 
         adapter.setOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(position: Int) {
-                val bundle = Bundle()
-                bundle.putInt("position", position)
-                Log.d("Firebase Realtime Database", "Position: $position")
+                val postId = postIdList.getOrNull(position)
+                if (postId != null) {
+                    // postId를 사용하여 Firebase에서 데이터를 동기적으로 읽어오기
+                    getContentForPosition(position) { content ->
+                        if (content != null) {
+                            getUserIdForPosition(position) { userId ->
+                                if (userId != null) {
+                                    val title = boardList.getOrNull(position)
+                                    val timestamp = timestampList.getOrNull(position)
 
-                val title = boardList.getOrNull(position)
-                val timestamp = timestampList.getOrNull(position) // 게시물의 timestamp 값 가져오기
-                getContentForPosition(position) { content ->
-                    if (content != null) {
-                        val userId = getUserIdForPosition(position) { userId ->
-                            if (userId != null) {
-                                bundle.putString("title", title)
-                                bundle.putString("content", content)
-                                bundle.putString("userId", userId)
+                                    val bundle = Bundle()
+                                    bundle.putString("postId", postId)
+                                    bundle.putString("title", title)
+                                    bundle.putString("content", content)
+                                    bundle.putString("userId", userId)
+                                    bundle.putString("timestamp", timestamp)
 
-                                // timestamp를 Bundle에 추가
-                                bundle.putString("timestamp", timestamp)
-
-                                findNavController().navigate(
-                                    R.id.action_boardFragment_to_boardDetailsFragment,
-                                    bundle
-                                )
-                            } else {
-                                Log.e("Firebase Realtime Database", "Failed to get userId")
+                                    // 페이지 이동은 데이터 읽기가 완료된 후에 수행
+                                    findNavController().navigate(
+                                        R.id.action_boardFragment_to_boardDetailsFragment,
+                                        bundle
+                                    )
+                                } else {
+                                    Log.e("Firebase Realtime Database", "Failed to get userId")
+                                }
                             }
+                        } else {
+                            Log.e("Firebase Realtime Database", "Failed to get content")
                         }
-                    } else {
-                        Log.e("Firebase Realtime Database", "Failed to get content")
                     }
+                } else {
+                    Log.e("Firebase Realtime Database", "Failed to get postId")
                 }
             }
         })
-
     }
+
+
 
 }

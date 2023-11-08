@@ -16,6 +16,8 @@ class BoardListAdapter(private val titleList: List<String>, private val timestam
     fun setOnItemClickListener(listener: OnItemClickListener) {
         onItemClickListener = listener
     }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_board, parent, false)
         return BoardViewHolder(view)

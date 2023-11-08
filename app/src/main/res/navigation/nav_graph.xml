@@ -11,19 +11,13 @@
         tools:layout="@layout/fragment_home" >
     </fragment>
 
-    <!--프레그먼트 디테일즈 추가-->
-    <fragment
-        android:id="@+id/detailsFragment"
-        android:name="com.example.mytableorder.fragment.DetailsFragment"
-        android:label="Details"
-        tools:layout="@layout/fragment_details" />
 
-<!--자유게시판-->
+    <!--자유게시판-->
     <fragment
         android:id="@+id/BoardFragment"
         android:name="com.example.mytableorder.fragment.board.BoardFragment"
         android:label="Board"
-        tools:layout="@layout/fragment_board" >
+        tools:layout="@layout/fragment_board">
         <action
             android:id="@+id/action_boardFragment_to_boardDetailsFragment"
             app:destination="@id/BoardDetailsFragment" />
@@ -31,24 +25,61 @@
             android:id="@+id/action_boardFragment_to_WriteFragment"
             app:destination="@id/WriteFragment" />
     </fragment>
+
+
     <fragment
         android:id="@+id/BoardDetailsFragment"
         android:name="com.example.mytableorder.fragment.board.BoardDetailsFragment"
         android:label="Board Details"
-        tools:layout="@layout/fragment_boarddetails" />
+        tools:layout="@layout/fragment_board_details" >
+        <action
+            android:id="@+id/action_BoardDetailsFragment_to_ModifyFragment"
+            app:destination="@id/ModifyFragment" >
+            <argument
+                android:name="postId"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/action_BoardDetailsFragment_to_BoardFragment"
+            app:destination="@id/BoardFragment" />
+    </fragment>
+
+
+
     <fragment
         android:id="@+id/WriteFragment"
         android:name="com.example.mytableorder.fragment.board.WriteFragment"
         android:label="Board Write"
-        tools:layout="@layout/fragment_write" />
-    <action
-        android:id="@+id/action_writeFragment_to_BoardDetailsFragment"
-        app:destination="@id/BoardDetailsFragment" />
-    <action
-        android:id="@+id/action_writeFragment_to_BoardFragment"
-        app:destination="@id/BoardFragment" />
+        tools:layout="@layout/fragment_board_write" >
+        <action
+            android:id="@+id/action_writeFragment_to_BoardDetailsFragment"
+            app:destination="@id/BoardDetailsFragment" />
+        <action
+            android:id="@+id/action_writeFragment_to_BoardFragment"
+            app:destination="@id/BoardFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ModifyFragment"
+        android:name="com.example.mytableorder.fragment.board.ModifyFragment"
+        android:label="Modify"
+        tools:layout="@layout/fragment_board_modify" >
+        <action
+            android:id="@+id/action_ModifyFragment_to_BoardFragment"
+            app:destination="@id/BoardFragment" />
+        <action
+            android:id="@+id/action_ModifyFragment_to_BoardDetailsFragment"
+            app:destination="@id/BoardDetailsFragment" >
+            <argument
+                android:name="postId"
+                app:argType="string" />
+        </action>
+    </fragment>
 
     <!--자유게시판-->
+
+
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.mytableorder.fragment.home.HomeFragment"
@@ -92,9 +123,9 @@
             android:id="@+id/action_loginFragment_to_resetPasswordFragment"
             app:destination="@id/resetPasswordFragment" />
 
-         <action
-             android:id="@+id/action_loginFragment_to_rregiFragment"
-             app:destination="@id/rregiFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_rregiFragment"
+            app:destination="@id/rregiFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -159,9 +190,9 @@
         <!--<action
             android:id="@+id/action_splashFragment_to_donorsHomeFragment"
             app:destination="@id/donorsHomeFragment" />-->
-         <action
-             android:id="@+id/action_splashFragment_to_adminHomeFragment"
-             app:destination="@id/adminHomeFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_adminHomeFragment"
+            app:destination="@id/adminHomeFragment" />
 
     </fragment>
     <fragment

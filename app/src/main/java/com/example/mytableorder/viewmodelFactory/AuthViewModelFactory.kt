@@ -2,7 +2,7 @@ package com.example.mytableorder.viewmodelFactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.mytableorder.loginSignUp.viewmodel.UserViewModel
+import com.example.mytableorder.viewModel.UserViewModel
 import com.example.mytableorder.repository.AuthRepository
 
 class AuthViewModelFactory(

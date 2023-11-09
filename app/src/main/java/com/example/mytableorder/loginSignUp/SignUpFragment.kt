@@ -13,7 +13,6 @@ import com.example.mytableorder.model.UserDTO
 import com.example.mytableorder.MainActivity
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentSignUpBinding
-import com.example.mytableorder.loginSignUp.viewmodel.SignUpViewModel
 
 import com.example.mytableorder.utils.CheckInternet
 import com.example.mytableorder.utils.Resource

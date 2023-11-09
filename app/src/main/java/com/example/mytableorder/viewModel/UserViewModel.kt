@@ -1,4 +1,4 @@
-package com.example.mytableorder.loginSignUp.viewmodel
+package com.example.mytableorder.viewModel
 
 import android.net.Uri
 import android.util.Log

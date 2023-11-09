@@ -42,8 +42,6 @@ class SignUpFragment : Fragment() {
 
         /*var firebaseDatabase = FirebaseDatabase.getInstance()
         var databaseReference = firebaseDatabase.getReference("Users")*/
-       /* var db = FirebaseDatabase.getInstance()
-        databaseReference = db.getReference("UserDTO")*/
 
         auth = Firebase.auth
 
@@ -106,7 +104,7 @@ class SignUpFragment : Fragment() {
                         //Toast.makeText(activity, "Internet is available", Toast.LENGTH_SHORT).show()
                         binding.progressCircular.isVisible = true
 
-
+                        Log.d("$$", "인터넷 연결 확인 in SingUpFragment")
 
                         val userDTO = UserDTO(
                             email,
@@ -139,6 +137,7 @@ class SignUpFragment : Fragment() {
                                             .document(auth.uid.toString())
                                             .set(userDTO)
                                             .addOnSuccessListener {
+                                                Log.d("$$", "회원 가인 완료")
                                                 val popupText =
                                                     Snackbar.make(view,"Account Created Successfully\n Check your email for verification Link", Snackbar.LENGTH_LONG)
                                                 popupText.show()
@@ -147,6 +146,7 @@ class SignUpFragment : Fragment() {
                                     }
                             }
                             .addOnFailureListener {
+<<<<<<< HEAD
                                Resource.Error(it.message.toString())
                             }
 
@@ -184,9 +184,16 @@ class SignUpFragment : Fragment() {
                             .addOnFailureListener {
                                 binding.progressCircular.isVisible = false
                                 binding.btnRegister.isEnabled = true
+=======
+>>>>>>> f8390cfc84dc3cff46018721c0563892eb44e205
                                 Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT)
                                     .show()
-                            }*/
+                                Log.d("$$","회원가입 실패")
+                                binding.progressCircular.isVisible = false
+                                binding.btnRegister.isEnabled = true
+                            }
+
+
                     }
                 }
             }

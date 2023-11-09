@@ -91,4 +91,5 @@
     <string name="call">호출</string>
     <string name="holding">보류</string>
     <string name="confirm_book">예약확인</string>
+    <string name="btn_open">Open/Close</string>
 </resources>

@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("com.google.gms.google-services")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -53,6 +54,7 @@ dependencies {
 
     //파이어베이스
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
+
     //파이어베이스 디비,스토리지
     implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
     implementation("com.google.firebase:firebase-database:20.3.0")
@@ -75,9 +77,11 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.0.1")
     implementation("com.google.android.gms:play-services-location:19.0.1")
 
+
     //Glide
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
 
     implementation("androidx.cardview:cardview:1.0.0")
 

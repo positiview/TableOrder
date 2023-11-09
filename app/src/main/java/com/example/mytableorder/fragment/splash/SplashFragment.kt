@@ -67,7 +67,8 @@ class SplashFragment : Fragment() {
 
                     }else if(userType == "shop"){
 
-
+                    val action = ActionOnlyNavDirections(R.id.action_splashFragment_to_restaurantHomeFragment);
+                    findNavController().navigate(action)
                     }else {
                     val action =
                         ActionOnlyNavDirections(R.id.action_splashFragment_to_homeFragment)

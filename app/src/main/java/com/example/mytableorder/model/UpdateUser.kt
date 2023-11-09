@@ -1,6 +1,6 @@
 package com.example.mytableorder.model
 
-data class UpdateUser (
+data class UpdateUser(
 
     var name: String? = "",
     var phone: String? = ""

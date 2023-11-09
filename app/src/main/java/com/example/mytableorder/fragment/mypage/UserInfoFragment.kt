@@ -3,8 +3,6 @@ package com.example.mytableorder.fragment.mypage
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +12,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentUserInfoBinding
-import com.example.mytableorder.loginSignUp.viewmodel.UserViewModel
+import com.example.mytableorder.viewModel.UserViewModel
 import com.example.mytableorder.repository.AuthRepository
 import com.example.mytableorder.repository.AuthRepositoryImpl
 import com.example.mytableorder.utils.CheckInternet
@@ -29,8 +25,6 @@ import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.example.mytableorder.model.UpdateUser
 import com.example.mytableorder.utils.Resource
-import com.google.android.material.button.MaterialButton
-import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 

@@ -28,7 +28,7 @@ class BookedUserListFragment : Fragment() {
 
         bookedUserListAdapter = BookedUserListAdapter()
 
-//        binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = bookedUserListAdapter
 
        /* viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.getDonations()

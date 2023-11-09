@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,10 +16,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.whenCreated
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -30,7 +28,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.mytableorder.Db.db
 import com.example.mytableorder.adapter.MyFragmentStateAdapter
 import com.example.mytableorder.databinding.ActivityMainBinding
-import com.example.mytableorder.loginSignUp.viewmodel.UserViewModel
+import com.example.mytableorder.viewModel.UserViewModel
 import com.example.mytableorder.model.UserDTO
 import com.example.mytableorder.repository.AuthRepository
 import com.example.mytableorder.repository.AuthRepositoryImpl
@@ -47,7 +45,7 @@ class MainActivity : AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var auth: FirebaseAuth
-
+    private lateinit var drawerLayout: DrawerLayout
     //    private var authStateListener: FirebaseAuth.AuthStateListener? = null
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory = AuthViewModelFactory(authRepository)
@@ -68,7 +66,7 @@ class MainActivity : AppCompatActivity(){
 
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        val drawerLayout: DrawerLayout = binding.drawerLayout
+        drawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navigationView
 
 //--------------------------------------------------------------------------
@@ -185,23 +183,23 @@ class MainActivity : AppCompatActivity(){
             val user = auth.currentUser
 
 
-                user?.let {
-                    db.collection("users")
-                        .document(it.uid)
-                        .get()
-                        .addOnSuccessListener { snapshot ->
-                            val user = snapshot.toObject(UserDTO::class.java)
-                            if (user != null) {
-                                val userEmail = user.email ?: ""
-                                Log.d("$$", "user email : "+ userEmail)
-                                userEmailText.text = userEmail
-                            }
+            if (user != null) {
+                db.collection("users")
+                    .document(user.uid)
+                    .get()
+                    .addOnSuccessListener { snapshot ->
+                        val user = snapshot.toObject(UserDTO::class.java)
+                        if (user != null) {
+                            val userEmail = user.email ?: ""
+                            Log.d("$$", "user email : $userEmail")
+                            userEmailText.text = userEmail
                         }
-                        .addOnFailureListener {
-                            Log.e(TAG, "Error: ${it.message}")
-                        }
-                }
+                    }
+                    .addOnFailureListener {
+                        Log.e(TAG, "Error: ${it.message}")
+                    }
             }
+
 
 
 
@@ -355,7 +353,16 @@ class MainActivity : AppCompatActivity(){
 
 
     }
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // 클릭된 메뉴 아이템의 아이디 마다 when 구절로 클릭시 동작을 설정한다.
+        when(item!!.itemId){
+            android.R.id.home->{ // 메뉴 버튼
+                Log.i("onOptionsItemSelected", "home selected")
+                drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)

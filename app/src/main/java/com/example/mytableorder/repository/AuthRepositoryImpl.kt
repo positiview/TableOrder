@@ -4,19 +4,14 @@ import android.net.Uri
 import android.util.Log
 import com.example.mytableorder.Db.db
 import com.example.mytableorder.Db.storage
-import com.example.mytableorder.model.User
+import com.example.mytableorder.model.UserDTO
 import com.example.mytableorder.model.updateUser
 import com.example.mytableorder.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
-import java.io.File
-import java.io.FileInputStream
-
-import javax.inject.Inject
 
 class AuthRepositoryImpl : AuthRepository {
 
@@ -133,7 +128,7 @@ class AuthRepositoryImpl : AuthRepository {
     override suspend fun register(
         email: String,
         password: String,
-        user: User,
+        userDTO: UserDTO,
         result: (Resource<String>) -> Unit
     ) {
         auth.createUserWithEmailAndPassword(email, password)
@@ -142,7 +137,7 @@ class AuthRepositoryImpl : AuthRepository {
                     ?.addOnSuccessListener {
                         db.collection("users")
                             .document(auth.uid.toString())
-                            .set(user)
+                            .set(userDTO)
                             .addOnSuccessListener {
                                 result.invoke(Resource.Success("인증링크가 성공적으로 생성되었습니다.\n 이메일을 확인해주세요"))
                             }

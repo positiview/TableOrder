@@ -1,18 +1,15 @@
 package com.example.mytableorder.loginSignUp
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.Db.db
-import com.example.mytableorder.model.User
+import com.example.mytableorder.model.UserDTO
 import com.example.mytableorder.MainActivity
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentSignUpBinding
@@ -24,8 +21,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 class SignUpFragment : Fragment() {
@@ -48,7 +43,7 @@ class SignUpFragment : Fragment() {
         /*var firebaseDatabase = FirebaseDatabase.getInstance()
         var databaseReference = firebaseDatabase.getReference("Users")*/
        /* var db = FirebaseDatabase.getInstance()
-        databaseReference = db.getReference("User")*/
+        databaseReference = db.getReference("UserDTO")*/
 
         auth = Firebase.auth
 
@@ -113,7 +108,7 @@ class SignUpFragment : Fragment() {
 
 
 
-                        val user = User(
+                        val userDTO = UserDTO(
                             email,
                             name,
                             phone,
@@ -142,7 +137,7 @@ class SignUpFragment : Fragment() {
                                     ?.addOnSuccessListener {
                                         db.collection("users")
                                             .document(auth.uid.toString())
-                                            .set(user)
+                                            .set(userDTO)
                                             .addOnSuccessListener {
                                                 val popupText =
                                                     Snackbar.make(view,"Account Created Successfully\n Check your email for verification Link", Snackbar.LENGTH_LONG)
@@ -169,8 +164,8 @@ class SignUpFragment : Fragment() {
                                     }
                                     val userId = currentUser?.uid
                                     val user =
-                                        userId?.let { id -> User(email, name, phone, userType) }
-                                    // 위 코드는 userId가 null이 아닐 때만 User 객체를 생성하고 해당 객체를 user 변수에 할당합니다.
+                                        userId?.let { id -> UserDTO(email, name, phone, userType) }
+                                    // 위 코드는 userId가 null이 아닐 때만 UserDTO 객체를 생성하고 해당 객체를 user 변수에 할당합니다.
 
                                     if (userId != null) {
                                         val popupText = Snackbar.make(view, "계정이 성공적으로 생성되었습니다.", Snackbar.LENGTH_SHORT)

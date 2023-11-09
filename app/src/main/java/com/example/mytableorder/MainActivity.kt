@@ -10,14 +10,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
@@ -32,7 +30,7 @@ import com.example.mytableorder.Db.db
 import com.example.mytableorder.adapter.MyFragmentStateAdapter
 import com.example.mytableorder.databinding.ActivityMainBinding
 import com.example.mytableorder.loginSignUp.viewmodel.UserViewModel
-import com.example.mytableorder.model.User
+import com.example.mytableorder.model.UserDTO
 import com.example.mytableorder.repository.AuthRepository
 import com.example.mytableorder.repository.AuthRepositoryImpl
 import com.example.mytableorder.utils.Resource
@@ -196,9 +194,9 @@ class MainActivity : AppCompatActivity(){
                         .document(it.uid)
                         .get()
                         .addOnSuccessListener { snapshot ->
-                            val user = snapshot.toObject(User::class.java)
-                            if (user != null) {
-                                val userEmail = user.email ?: ""
+                            val userDTO = snapshot.toObject(UserDTO::class.java)
+                            if (userDTO != null) {
+                                val userEmail = userDTO.email ?: ""
                                 Log.d("$$", "user email : "+ userEmail)
                                 userEmailText.text = userEmail
                             }

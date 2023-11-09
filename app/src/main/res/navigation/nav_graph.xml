@@ -11,6 +11,24 @@
         tools:layout="@layout/fragment_home" >
     </fragment>
     <fragment
+        android:id="@+id/bookignListFragment"
+        android:name="com.example.mytableorder.fragment.booking.BookingListFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_booking_list" >
+        <action
+            android:id="@+id/action_bookignListFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookWriteFragment"
+        android:name="com.example.mytableorder.fragment.booking.BookWriteFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_book_write" >
+        <action
+            android:id="@+id/action_bookWriteFragment_to_bookignListFragment"
+            app:destination="@id/bookignListFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/userListFragment"
         android:name="com.example.mytableorder.fragment.home.user.UserListFragment"
         android:label="Home"
@@ -30,6 +48,9 @@
         <action
             android:id="@+id/action_userDetailsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_userDetailsFragment_to_bookWriteFragment"
+            app:destination="@id/bookWriteFragment" />
     </fragment>
     <fragment
         android:id="@+id/adminUpdateFragment"

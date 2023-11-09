@@ -61,6 +61,7 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
             val raImg = bundle.getString("raImg")
             val raMenu = bundle.getString("raMenu")
             val raInfo = bundle.getString("raInfo")
+
             // 클래스 레벨 변수인 shopLocation에 값을 할당합니다.
             raLatitude = bundle.getDouble("raLatitude")
             raLongitude = bundle.getDouble("raLongitude")
@@ -91,6 +92,16 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
         }
         view.findViewById<MaterialButton>(R.id.buttonHome).setOnClickListener {
             findNavController().navigate(R.id.action_userDetailsFragment_to_homeFragment)
+        }
+        view.findViewById<MaterialButton>(R.id.buttonBooking).setOnClickListener {
+
+            //d예약하기버튼이 클릭되면 BookWriteFragment 로 데이터 넘김
+            val bundle = Bundle().apply {
+                putString("raName", raName)
+                putInt("raNum",raNum!!)
+            }
+
+            findNavController().navigate(R.id.action_userDetailsFragment_to_bookWriteFragment)
         }
 
     }

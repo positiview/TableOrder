@@ -229,7 +229,7 @@ class UserInfoFragment : Fragment() {
         user!!.updateEmail(binding.userEmailEditText.text.toString())
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Log.d("$$", "User email address updated.")
+                    Log.d("$$", "UserDTO email address updated.")
                     Toast.makeText(requireContext(), "사용자 이메일이 변경되었습니다.", Toast.LENGTH_SHORT).show()
                 }
             }

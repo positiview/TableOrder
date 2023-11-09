@@ -1,6 +1,5 @@
 package com.example.mytableorder.fragment.mypage
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,17 +14,10 @@ import com.example.mytableorder.databinding.FragmentMypageBinding
 import com.example.mytableorder.utils.CheckInternet
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.remote.ConnectivityMonitor
 import com.google.firebase.ktx.Firebase
-import android.content.SharedPreferences
-import android.provider.Settings.Global.putString
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.Db.db
-import com.example.mytableorder.model.User
+import com.example.mytableorder.model.UserDTO
 
 class MypageFragment : Fragment() {
 
@@ -102,9 +94,9 @@ class MypageFragment : Fragment() {
                 user?.let{
                     db.collection("users").document(it.uid).get()
                         .addOnSuccessListener { snapshot ->
-                            val user = snapshot.toObject(User::class.java)
-                            if(user != null){
-                                userEmail = user.email ?: ""
+                            val userDTO = snapshot.toObject(UserDTO::class.java)
+                            if(userDTO != null){
+                                userEmail = userDTO.email ?: ""
                                 var str = "비밀번호 변경"
                                 val bundle = Bundle().apply{
                                     putString("pwTitle", str)

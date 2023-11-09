@@ -13,11 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentLoginBinding
-import com.example.mytableorder.loginSignUp.viewmodel.UserViewModel
+import com.example.mytableorder.viewModel.UserViewModel
 import com.example.mytableorder.repository.AuthRepository
 import com.example.mytableorder.repository.AuthRepositoryImpl
 import com.example.mytableorder.utils.CheckInternet
@@ -43,7 +43,7 @@ class LoginFragment : Fragment() {
 
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory: AuthViewModelFactory = AuthViewModelFactory(authRepository)
-    private val viewModel: UserViewModel by viewModels { authViewModelFactory }
+    private val viewModel: UserViewModel by activityViewModels() { authViewModelFactory }
 
 
 
@@ -116,7 +116,8 @@ class LoginFragment : Fragment() {
 
                         viewModel.login(email, password)
                         viewModel.getUserImage()
-                        viewModel.loginRequest.observe(viewLifecycleOwner){
+
+                        viewModel.getUserInfoResponse.observe(viewLifecycleOwner){
                             when(it){
                                 is Resource.Loading -> {
                                     binding.progressCircular.isVisible = true
@@ -125,6 +126,8 @@ class LoginFragment : Fragment() {
                                     binding.progressCircular.isVisible = false
                                     binding.emailTinputLayout.isEnabled = true
                                     binding.passwordInputLayout.isEnabled = true
+                                    binding.btnLogin.isEnabled = true
+                                    binding.btnLogin.text = "Login"
                                     Toast.makeText(requireContext(), it.string, Toast.LENGTH_SHORT).show()
                                 }
                                 is Resource.Success -> {
@@ -161,6 +164,7 @@ class LoginFragment : Fragment() {
 
                 }
             }
+
         }
         binding.googleLogin.setOnClickListener {
 

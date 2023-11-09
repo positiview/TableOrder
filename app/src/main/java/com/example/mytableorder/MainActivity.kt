@@ -5,21 +5,18 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -31,8 +28,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.mytableorder.Db.db
 import com.example.mytableorder.adapter.MyFragmentStateAdapter
 import com.example.mytableorder.databinding.ActivityMainBinding
-import com.example.mytableorder.loginSignUp.viewmodel.UserViewModel
-import com.example.mytableorder.model.User
+import com.example.mytableorder.viewModel.UserViewModel
+import com.example.mytableorder.model.UserDTO
 import com.example.mytableorder.repository.AuthRepository
 import com.example.mytableorder.repository.AuthRepositoryImpl
 import com.example.mytableorder.utils.Resource
@@ -48,16 +45,15 @@ class MainActivity : AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var auth: FirebaseAuth
-    private lateinit var imgUri: Uri
-    private lateinit var userType: String
-//    private var authStateListener: FirebaseAuth.AuthStateListener? = null
+    private lateinit var drawerLayout: DrawerLayout
+    //    private var authStateListener: FirebaseAuth.AuthStateListener? = null
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory = AuthViewModelFactory(authRepository)
-    private val viewModel: UserViewModel by viewModels { authViewModelFactory }
+    private val viewModel: UserViewModel by viewModels() { authViewModelFactory }
     private val TAG = "userInfo"
 
-   /* private lateinit var firebaseDatabase: FirebaseDatabase
-    private lateinit var databaseReference: DatabaseReference*/
+    /* private lateinit var firebaseDatabase: FirebaseDatabase
+     private lateinit var databaseReference: DatabaseReference*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +66,7 @@ class MainActivity : AppCompatActivity(){
 
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        val drawerLayout: DrawerLayout = binding.drawerLayout
+        drawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navigationView
 
 //--------------------------------------------------------------------------
@@ -99,7 +95,6 @@ class MainActivity : AppCompatActivity(){
                         // 스와이프 동작을 위한 리사이클러뷰가 있는 Fragment로 이동
                         navController.navigate(R.id.infoFragment)
                     }
-
                     2 -> navController.navigate(R.id.userListFragment)
                     3 -> navController.navigate(R.id.BoardFragment)
                     4 -> navController.navigate(R.id.mypageFragment)
@@ -161,7 +156,7 @@ class MainActivity : AppCompatActivity(){
             if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment, R.id.signUpFragment )) {
                 supportActionBar?.hide()
                 tabLayout.visibility = View.GONE
-            }else if(destination.id in listOf(R.id.adminHomeFragment, R.id.adminListFragment, R.id.adminWriteFragment)){
+            }else if(destination.id in listOf(R.id.adminHomeFragment, R.id.adminListFragment, R.id.adminWriteFragment, R.id.restaurantHomeFragment)){
                 tabLayout.visibility = View.GONE
             }else {
                 supportActionBar?.show()
@@ -186,33 +181,57 @@ class MainActivity : AppCompatActivity(){
         }
         val header = binding.navigationView.getHeaderView(0)
         val imageView = header.findViewById<ImageView>(R.id.imageView)
-        viewModel.getUserImage()
-
+        var userEmailText = header.findViewById<TextView>(R.id.useremail)
+        // lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) 엑티비티가 시작할때마다 활성화
 
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
 
-                val user = auth.currentUser
-                val userEmailText = header.findViewById<TextView>(R.id.useremail)
 
-                user?.let {
-                    db.collection("users")
-                        .document(it.uid)
-                        .get()
-                        .addOnSuccessListener { snapshot ->
-                            val user = snapshot.toObject(User::class.java)
-                            if (user != null) {
-                                val userEmail = user.email ?: ""
-                                Log.d("$$", "user email : "+ userEmail)
-                                userEmailText.text = userEmail
-                            }
+            val user = auth.currentUser
+
+
+            if (user != null) {
+                db.collection("users")
+                    .document(user.uid)
+                    .get()
+                    .addOnSuccessListener { snapshot ->
+                        val user = snapshot.toObject(UserDTO::class.java)
+                        if (user != null) {
+                            val userEmail = user.email ?: ""
+                            Log.d("$$", "user email : $userEmail")
+                            userEmailText.text = userEmail
                         }
-                        .addOnFailureListener {
-                            Log.e(TAG, "Error: ${it.message}")
-                        }
-                }
+                    }
+                    .addOnFailureListener {
+                        Log.e(TAG, "Error: ${it.message}")
+                    }
             }
+
         }
+
+
+
+        /* // 이미지 초기화
+         viewModel.getUserImgResponse.observe(this){
+             when(it){
+                 is Resource.Loading -> {
+                 }
+                 is Resource.Error -> {
+                     Toast.makeText(this, it.string, Toast.LENGTH_SHORT).show()
+                 }
+                 is Resource.Success -> {
+                     imgUri = it.data
+                     Glide.with(this)
+                         .load(imgUri)
+                         .apply(RequestOptions().override(150, 150))
+                         .placeholder(R.drawable.ic_person)
+                         .error(R.drawable.ic_person)
+                         .into(imageView)
+                 }
+             }
+         }*/
+        // 이미지 가져오기
+
         viewModel.getUserImgResponse.observe(this){
             when(it){
                 is Resource.Loading -> {
@@ -221,7 +240,7 @@ class MainActivity : AppCompatActivity(){
                     Toast.makeText(this, it.string, Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Success -> {
-                    imgUri = it.data
+                    val imgUri: Uri? = it.data
                     Glide.with(this)
                         .load(imgUri)
                         .apply(RequestOptions().override(150, 150))
@@ -231,11 +250,13 @@ class MainActivity : AppCompatActivity(){
                 }
             }
         }
+        var userType: String? = null
+        // 유져 정보 가져오기
 
-        viewModel.getUserInfo()
         viewModel.getUserInfoResponse.observe(this){
             if(it is Resource.Success){
                 userType = it.data?.get("user_type") as String
+                userEmailText.text = it.data?.get("email") as String
             }
         }
         val sharedPref = this.getSharedPreferences("userType", Context.MODE_PRIVATE)
@@ -279,8 +300,11 @@ class MainActivity : AppCompatActivity(){
                         navController.navigate(R.id.adminHomeFragment)
                         binding.drawerLayout.closeDrawer(GravityCompat.START)
                         true
-                    } else {
-
+                    } else if (userType == "shop"){
+                        navController.navigate(R.id.restaurantHomeFragment)
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    }else{
                         false
                     }
                 }
@@ -310,8 +334,12 @@ class MainActivity : AppCompatActivity(){
                     // 전체 삭제는 editor.clear()
                     editor.commit()
                     Toast.makeText(this, "로그아웃 완료", Toast.LENGTH_SHORT).show()
-                    navController.navigate(R.id.splashFragment)
+//                    navController.navigate(R.id.splashFragment)
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
                     true
                 }
                 else -> {
@@ -333,7 +361,16 @@ class MainActivity : AppCompatActivity(){
 
 
     }
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // 클릭된 메뉴 아이템의 아이디 마다 when 구절로 클릭시 동작을 설정한다.
+        when(item!!.itemId){
+            android.R.id.home->{ // 메뉴 버튼
+                Log.i("onOptionsItemSelected", "home selected")
+                drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)

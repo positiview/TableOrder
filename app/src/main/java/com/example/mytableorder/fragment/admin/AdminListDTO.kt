@@ -2,6 +2,8 @@ package com.example.mytableorder.fragment.admin
 
 data class AdminListDTO(
     //레스트랑번호
+
+
     var raNum: Int=0 ,
     //레스토랑 이름
     var raName: String= "" ,

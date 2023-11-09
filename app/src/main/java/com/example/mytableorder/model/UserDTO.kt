@@ -1,6 +1,6 @@
 package com.example.mytableorder.model
 
-data class User(
+data class UserDTO(
     var email: String? = "",
     var name: String? = "",
     var phone: String? = "",

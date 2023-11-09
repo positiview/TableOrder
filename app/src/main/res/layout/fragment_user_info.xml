@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.example.mytableorder.loginSignUp.viewmodel.UserViewModel" />
+            type="com.example.mytableorder.viewModel.UserViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

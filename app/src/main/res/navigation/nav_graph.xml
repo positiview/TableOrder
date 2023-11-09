@@ -63,6 +63,7 @@
             app:destination="@id/adminListViewFragment" />
     </fragment>
 
+
     <!--프레그먼트 디테일즈 추가-->
     <fragment
         android:id="@+id/detailsFragment"
@@ -70,37 +71,79 @@
         android:label="Details"
         tools:layout="@layout/fragment_user_details" />
 
-<!--자유게시판-->
+
+    <!--자유게시판-->
     <fragment
         android:id="@+id/BoardFragment"
         android:name="com.example.mytableorder.fragment.board.BoardFragment"
-        android:label="Board"
-        tools:layout="@layout/fragment_board" >
+        android:label="자유게시판"
+        android:icon="@drawable/board"
+        tools:layout="@layout/fragment_board">
+
+
         <action
             android:id="@+id/action_boardFragment_to_boardDetailsFragment"
             app:destination="@id/BoardDetailsFragment" />
         <action
             android:id="@+id/action_boardFragment_to_WriteFragment"
             app:destination="@id/WriteFragment" />
+
     </fragment>
+
+
     <fragment
         android:id="@+id/BoardDetailsFragment"
         android:name="com.example.mytableorder.fragment.board.BoardDetailsFragment"
-        android:label="Board Details"
-        tools:layout="@layout/fragment_boarddetails" />
+        android:label="자유게시판"
+        tools:layout="@layout/fragment_board_details" >
+        <action
+            android:id="@+id/action_BoardDetailsFragment_to_ModifyFragment"
+            app:destination="@id/ModifyFragment" >
+            <argument
+                android:name="postId"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/action_BoardDetailsFragment_to_BoardFragment"
+            app:destination="@id/BoardFragment" />
+    </fragment>
+
+
+
     <fragment
         android:id="@+id/WriteFragment"
         android:name="com.example.mytableorder.fragment.board.WriteFragment"
-        android:label="Board Write"
-        tools:layout="@layout/fragment_write" />
-    <action
-        android:id="@+id/action_writeFragment_to_BoardDetailsFragment"
-        app:destination="@id/BoardDetailsFragment" />
-    <action
-        android:id="@+id/action_writeFragment_to_BoardFragment"
-        app:destination="@id/BoardFragment" />
+        android:label="자유게시판 작성"
+        tools:layout="@layout/fragment_board_write" >
+        <action
+            android:id="@+id/action_writeFragment_to_BoardDetailsFragment"
+            app:destination="@id/BoardDetailsFragment" />
+        <action
+            android:id="@+id/action_writeFragment_to_BoardFragment"
+            app:destination="@id/BoardFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ModifyFragment"
+        android:name="com.example.mytableorder.fragment.board.ModifyFragment"
+        android:label="자유게시판 수정"
+        tools:layout="@layout/fragment_board_modify" >
+        <action
+            android:id="@+id/action_ModifyFragment_to_BoardFragment"
+            app:destination="@id/BoardFragment" />
+        <action
+            android:id="@+id/action_ModifyFragment_to_BoardDetailsFragment"
+            app:destination="@id/BoardDetailsFragment" >
+            <argument
+                android:name="postId"
+                app:argType="string" />
+        </action>
+    </fragment>
 
     <!--자유게시판-->
+
+
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.mytableorder.fragment.home.HomeFragment"

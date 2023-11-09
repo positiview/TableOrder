@@ -92,6 +92,9 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
         view.findViewById<MaterialButton>(R.id.buttonHome).setOnClickListener {
             findNavController().navigate(R.id.action_userDetailsFragment_to_homeFragment)
         }
+        view.findViewById<MaterialButton>(R.id.buttonReview).setOnClickListener {
+            findNavController().navigate(R.id.action_userDetailsFragment_to_reviewListFragment)
+        }
 
     }
     override fun onMapReady(map: GoogleMap) {

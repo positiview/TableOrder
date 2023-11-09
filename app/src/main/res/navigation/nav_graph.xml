@@ -30,6 +30,24 @@
         <action
             android:id="@+id/action_userDetailsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_userDetailsFragment_to_reviewListFragment"
+            app:destination="@id/ReviewListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ReviewListFragment"
+        android:name="com.example.mytableorder.fragment.home.user.ReviewListFragment"
+        android:label="Review"
+        tools:layout="@layout/fragment_review" >
+        <action
+            android:id="@+id/action_ReviewListFragment_to_reviewWriteFragment"
+            app:destination="@id/ReviewWriteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ReviewWriteFragment"
+        android:name="com.example.mytableorder.fragment.home.user.ReviewWriteFragment"
+        android:label="Review"
+        tools:layout="@layout/fragment_review_write" >
     </fragment>
     <fragment
         android:id="@+id/adminUpdateFragment"

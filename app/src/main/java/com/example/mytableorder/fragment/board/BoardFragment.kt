@@ -16,7 +16,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import androidx.appcompat.widget.SearchView
-
+import com.google.firebase.database.ServerValue
 
 
 class BoardFragment : Fragment() {
@@ -83,11 +83,11 @@ class BoardFragment : Fragment() {
 
     private fun readDataFromFirebase() {
         val databaseReference = FirebaseDatabase.getInstance().reference.child("boards")
-
         val query = databaseReference.orderByChild("timestamp").limitToLast(10)
 
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+
 
                 val newBoardList: MutableList<String> = mutableListOf()
                 val newTimestampList: MutableList<String> = mutableListOf()
@@ -167,6 +167,7 @@ class BoardFragment : Fragment() {
 
     private fun getUserIdForPosition(position: Int, callback: (String?) -> Unit) {
         val databaseReference = FirebaseDatabase.getInstance().reference.child("boards")
+
         val title = boardList.getOrNull(position)
 
         if (title != null) {
@@ -241,6 +242,7 @@ class BoardFragment : Fragment() {
                 }
             }
         })
+        readDataFromFirebase()
     }
 
     //검색

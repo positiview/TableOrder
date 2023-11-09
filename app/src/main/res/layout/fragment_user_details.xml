@@ -197,6 +197,18 @@
                             app:cornerRadius="20dp"
                             tools:ignore="UnusedAttribute" />
 
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/buttonReview"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:backgroundTint="@color/orange"
+                            android:text="리뷰"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            app:cornerRadius="20dp"
+                            tools:ignore="UnusedAttribute" />
+
                     </LinearLayout>
 
 

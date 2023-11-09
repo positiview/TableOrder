@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
@@ -22,7 +23,6 @@ import java.util.TimeZone
 
 class WriteFragment : Fragment() {
   private val auth: FirebaseAuth = Firebase.auth
-  private val firestore = Firebase.firestore
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -44,7 +44,7 @@ class WriteFragment : Fragment() {
       findNavController().navigate(R.id.action_writeFragment_to_BoardFragment)
     }
 
-    // Firebase Realtime Database에 데이터를 저장하려면 여기에 저장 로직을 추가합니다.
+
     btnReg.setOnClickListener {
       val title = view.findViewById<EditText>(R.id.titleWriteText).text.toString()
       val content = view.findViewById<EditText>(R.id.contentWriteText).text.toString()
@@ -53,7 +53,7 @@ class WriteFragment : Fragment() {
         // Firebase Realtime Database에 데이터를 저장하는 함수를 호출합니다.
         saveDataToFirebase(title, content)
       } else {
-        // 제목 또는 내용이 비어있을 때 처리를 수행하세요.
+        Toast.makeText(requireContext(), "제목과 내용을 입력해주세요.", Toast.LENGTH_SHORT).show()
       }
     }
 

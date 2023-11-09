@@ -115,8 +115,9 @@ class LoginFragment : Fragment() {
                         binding.btnLogin.text = "Loading..."
 
                         viewModel.login(email, password)
-                        viewModel.getUserImage()
 
+
+//                        viewModel.getUserImage()
                         viewModel.getUserInfoResponse.observe(viewLifecycleOwner){
                             when(it){
                                 is Resource.Loading -> {

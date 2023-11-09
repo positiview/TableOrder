@@ -4,8 +4,8 @@ import android.net.Uri
 import android.util.Log
 import com.example.mytableorder.Db.db
 import com.example.mytableorder.Db.storage
+import com.example.mytableorder.model.UpdateUser
 import com.example.mytableorder.model.UserDTO
-import com.example.mytableorder.model.updateUser
 import com.example.mytableorder.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth

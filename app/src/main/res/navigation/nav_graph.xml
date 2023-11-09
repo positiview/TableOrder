@@ -11,7 +11,7 @@
         tools:layout="@layout/fragment_home" >
     </fragment>
     <fragment
-        android:id="@+id/bookignListFragment"
+        android:id="@+id/bookingListFragment"
         android:name="com.example.mytableorder.fragment.booking.BookingListFragment"
         android:label="Home"
         tools:layout="@layout/fragment_booking_list" >
@@ -26,7 +26,7 @@
         tools:layout="@layout/fragment_book_write" >
         <action
             android:id="@+id/action_bookWriteFragment_to_bookignListFragment"
-            app:destination="@id/bookignListFragment" />
+            app:destination="@id/bookingListFragment" />
     </fragment>
     <fragment
         android:id="@+id/userListFragment"

@@ -57,10 +57,12 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
 
         // 넘겨진 Bundle에서 데이터를 추출합니다.
         arguments?.let { bundle ->
-            val raName = bundle.getString("raName")
-            val raImg = bundle.getString("raImg")
-            val raMenu = bundle.getString("raMenu")
-            val raInfo = bundle.getString("raInfo")
+             raName = bundle.getString("raName")
+             raImg = bundle.getString("raImg")
+             raMenu = bundle.getString("raMenu")
+             raInfo = bundle.getString("raInfo")
+
+
 
             // 클래스 레벨 변수인 shopLocation에 값을 할당합니다.
             raLatitude = bundle.getDouble("raLatitude")
@@ -85,7 +87,10 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
 
             // 지도에 관련 처리를 합니다. 여기에 지도 설정 코드를 넣습니다.
             // 예를 들어, 지도에 마커를 추가하고 카메라 위치를 조정하는 등의 작업이 필요합니다.
+
+
         }
+
         // 리스너로 돌아가는 클릭 리스너
         view.findViewById<MaterialButton>(R.id.buttonList).setOnClickListener {
             findNavController().navigate(R.id.action_userDetailsFragment_to_userListFragment)
@@ -94,14 +99,14 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
             findNavController().navigate(R.id.action_userDetailsFragment_to_homeFragment)
         }
         view.findViewById<MaterialButton>(R.id.buttonBooking).setOnClickListener {
-
-            //d예약하기버튼이 클릭되면 BookWriteFragment 로 데이터 넘김
+            // 예약하기 버튼이 클릭되면 BookWriteFragment로 데이터를 넘깁니다.
             val bundle = Bundle().apply {
-                putString("raName", raName)
-                putInt("raNum",raNum!!)
+                putString("raName", raName) // 클래스 레벨 변수 raName 사용
+                putInt("raNum", raNum!!)
+                // 필요하다면 raImg, raMenu 등 다른 정보도 여기에 넣을 수 있습니다.
             }
+            findNavController().navigate(R.id.action_userDetailsFragment_to_bookWriteFragment,bundle)
 
-            findNavController().navigate(R.id.action_userDetailsFragment_to_bookWriteFragment)
         }
 
     }

@@ -1,8 +1,8 @@
 package com.example.mytableorder.repository
 
 import android.net.Uri
+import com.example.mytableorder.model.UpdateUser
 import com.example.mytableorder.model.UserDTO
-import com.example.mytableorder.model.updateUser
 import com.example.mytableorder.utils.Resource
 
 

@@ -27,7 +27,7 @@ import com.example.mytableorder.viewmodelFactory.AuthViewModelFactory
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
-import com.example.mytableorder.model.updateUser
+import com.example.mytableorder.model.UpdateUser
 import com.example.mytableorder.utils.Resource
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.auth
@@ -43,7 +43,7 @@ class UserInfoFragment : Fragment() {
     private lateinit var viewModelFactory: MypageViewModelFactory*/
     lateinit var nickName: String
     lateinit var filePath: Uri
-    private lateinit var imgPath: Uri
+
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory = AuthViewModelFactory(authRepository)
     private val viewModel: UserViewModel by activityViewModels() { authViewModelFactory }
@@ -91,16 +91,16 @@ class UserInfoFragment : Fragment() {
         val view = binding.root
         if (CheckInternet.isConnected(requireActivity())) {
 
-                binding.contentContraintlayout.visibility = View.VISIBLE
-                binding.disconnectedLayout.visibility = View.GONE
-                binding.btnOk.visibility = View.VISIBLE
-                /*if(!imageChanged)
-                    viewModel.getUserInfo()*/
-            } else{
+            binding.contentContraintlayout.visibility = View.VISIBLE
+            binding.disconnectedLayout.visibility = View.GONE
+            binding.btnOk.visibility = View.VISIBLE
+            /*if(!imageChanged)
+                viewModel.getUserInfo()*/
+        } else{
 
-                binding.contentContraintlayout.visibility = View.GONE
-                binding.disconnectedLayout.visibility = View.VISIBLE
-                binding.btnOk.visibility = View.GONE
+            binding.contentContraintlayout.visibility = View.GONE
+            binding.disconnectedLayout.visibility = View.VISIBLE
+            binding.btnOk.visibility = View.GONE
 
         }
 
@@ -114,23 +114,13 @@ class UserInfoFragment : Fragment() {
                     // 모두변경
                     if (nickNameChanged && imageChanged) {
                         if(binding.userEmailEditText.text.toString().isNotEmpty()){
-                            if(binding.userEmailTextView.text.toString() == binding.userEmailEditText.toString()){
-                                val email = binding.userEmailEditText.text.toString()
-                                val name= binding.userNameEditText.text.toString()
-                                val phone =  binding.userPhoneNumberEdit.text.toString()
-                                val user = updateUser(email,name,phone)
 
+                            val name= binding.userNameEditText.text.toString()
+                            val phone =  binding.userPhoneNumberEdit.text.toString()
+                            val user = UpdateUser(name,phone)
+
+                            if (!userCancelled) {
                                 viewModel?.editUserInfo(user)
-                            }else{
-
-                                val email = binding.userEmailEditText.text.toString()
-                                val name= binding.userNameEditText.text.toString()
-                                val phone =  binding.userPhoneNumberEdit.text.toString()
-                                val user = updateUser(email,name,phone)
-                                showDialog2(email)
-                                if (!userCancelled) {
-                                    viewModel?.editUserInfo(user)
-                                }
                             }
                         }
                         else {Toast.makeText(requireContext(), "이메일은 반드시 입력해야 합니다.", Toast.LENGTH_SHORT).show()}
@@ -142,24 +132,12 @@ class UserInfoFragment : Fragment() {
                     else if (nickNameChanged && !imageChanged) {
 
                         if(binding.userEmailEditText.text.toString().isNotEmpty()){
-                            if(binding.userEmailTextView.text == binding.userEmailEditText){
-                                val email = binding.userEmailEditText.text.toString()
-                                val name= binding.userNameEditText.text.toString()
-                                val phone =  binding.userPhoneNumberEdit.text.toString()
-                                val user = updateUser(email,name,phone)
+                            val name= binding.userNameEditText.text.toString()
+                            val phone =  binding.userPhoneNumberEdit.text.toString()
+                            val user = UpdateUser(name,phone)
 
+                            if (!userCancelled) {
                                 viewModel?.editUserInfo(user)
-                            }else{
-
-                                val email = binding.userEmailEditText.text.toString()
-                                val name= binding.userNameEditText.text.toString()
-                                val phone =  binding.userPhoneNumberEdit.text.toString()
-                                val user = updateUser(email,name,phone)
-                                showDialog2(email)
-                                if (!userCancelled) {
-                                    viewModel?.editUserInfo(user)
-                                }
-
                             }
 
 
@@ -192,35 +170,35 @@ class UserInfoFragment : Fragment() {
             }
             // 카메라 버튼 이미지 수정
             accountIvProfileCamera.setOnClickListener {
-                showDialog()
+                cameraDialog()
             }
 
             // 수정 버튼 클릭시
             btnEdit.setOnCheckedChangeListener{ _, isChecked ->
 
-               if(isChecked){
+                if(isChecked){
 
-                   binding.userEmailTextView.visibility = View.GONE
-                   binding.userNameTextView.visibility = View.GONE
-                   binding.userPhoneNumberView.visibility = View.GONE
-                   binding.userEmailEditText.visibility = View.VISIBLE
-                   binding.userNameEditText.visibility = View.VISIBLE
-                   binding.userPhoneNumberEdit.visibility = View.VISIBLE
-                   btnOk.setTextColor(Color.WHITE)
-                   binding.btnOk.isEnabled = true
-                   nickNameChanged = true
-               }else{
-                   btnEdit.text = getString(R.string.edit)
-                   binding.userEmailTextView.visibility = View.VISIBLE
-                   binding.userNameTextView.visibility = View.VISIBLE
-                   binding.userPhoneNumberView.visibility = View.VISIBLE
-                   binding.userEmailEditText.visibility = View.GONE
-                   binding.userNameEditText.visibility = View.GONE
-                   binding.userPhoneNumberEdit.visibility = View.GONE
-                   btnOk.setTextColor(Color.parseColor("#FF9674"))
-                   binding.btnOk.isEnabled = false
-                   nickNameChanged = false
-               }
+                    binding.userEmailTextView.visibility = View.GONE
+                    binding.userNameTextView.visibility = View.GONE
+                    binding.userPhoneNumberView.visibility = View.GONE
+                    binding.userEmailEditText.visibility = View.VISIBLE
+                    binding.userNameEditText.visibility = View.VISIBLE
+                    binding.userPhoneNumberEdit.visibility = View.VISIBLE
+                    btnOk.setTextColor(Color.WHITE)
+                    binding.btnOk.isEnabled = true
+                    nickNameChanged = true
+                }else{
+                    btnEdit.text = getString(R.string.edit)
+                    binding.userEmailTextView.visibility = View.VISIBLE
+                    binding.userNameTextView.visibility = View.VISIBLE
+                    binding.userPhoneNumberView.visibility = View.VISIBLE
+                    binding.userEmailEditText.visibility = View.GONE
+                    binding.userNameEditText.visibility = View.GONE
+                    binding.userPhoneNumberEdit.visibility = View.GONE
+                    btnOk.setTextColor(Color.parseColor("#FF9674"))
+                    binding.btnOk.isEnabled = false
+                    nickNameChanged = false
+                }
             }
 
         }
@@ -243,7 +221,7 @@ class UserInfoFragment : Fragment() {
 
 
         // 유저 정보 setting
-        viewModel.getUserInfo()
+//        viewModel.getUserInfo()
         viewModel.getUserInfoResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
@@ -299,37 +277,41 @@ class UserInfoFragment : Fragment() {
                 }
             }*/
         }
-        viewModel.getUserImage()
+
         viewModel.getUserImgResponse.observe(viewLifecycleOwner){ res ->
             when(res){
                 is Resource.Loading -> {
-
+                    binding.infoLinearLayout.visibility = View.GONE
+                    binding.imageConstraintLayout.visibility = View.GONE
+                    binding.progressbar2.visibility = View.VISIBLE
                 }
                 is Resource.Success -> {
-                    imgPath = res.data
-                    if (imgPath == null) {
+                    binding.infoLinearLayout.visibility = View.VISIBLE
+                    binding.imageConstraintLayout.visibility = View.VISIBLE
+                    binding.progressbar2.visibility = View.GONE
+                    val imgUri: Uri? = res.data
 
-                    } else {
-                        Glide.with(requireContext()).load(imgPath).into(binding.accountIvProfile)
-                    }
-                }is Resource.Error -> {
-                Toast.makeText(requireContext(), "이미지 로딩 에러", Toast.LENGTH_SHORT).show()
-            }
+                    Glide.with(requireContext()).load(imgUri).error(R.drawable.img_user).into(binding.accountIvProfile)
+
+                }
+                is Resource.Error -> {
+                    Toast.makeText(requireContext(), res.string, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
     private fun deleteUserImage(){
         viewModel.deleteUserImage()
-        viewModel.deleteUserImgResponse.observe(viewLifecycleOwner){
+        viewModel.getUserImgResponse.observe(viewLifecycleOwner){
             if(it is Resource.Success){
-                Toast.makeText(requireContext(), it.data, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "이미지 삭제 완료", Toast.LENGTH_SHORT).show()
             }else if(it is Resource.Error){
                 Toast.makeText(requireContext(), it.string ,Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun showDialog(){
+    private fun cameraDialog(){
         val builder = AlertDialog.Builder(requireContext()).create()
         val dialogView = layoutInflater.inflate(R.layout.profile_edit_dialog,null)
         val changeProfile = dialogView.findViewById<TextView>(R.id.change_profile)
@@ -348,7 +330,7 @@ class UserInfoFragment : Fragment() {
                 imageChanged = false
                 builder.dismiss()
             }else{
-                    Toast.makeText(requireContext(), "인터넷 연결을 확인해주세요" ,Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "인터넷 연결을 확인해주세요" ,Toast.LENGTH_SHORT).show()
                 builder.dismiss()
             }
         }
@@ -356,22 +338,22 @@ class UserInfoFragment : Fragment() {
         builder.show()
     }
 
-    private fun showDialog2(email: String){
-        val builder = AlertDialog.Builder(requireContext()).create()
-        val dialogView = layoutInflater.inflate(R.layout.confirm_dialog,null)
-        val confirmBtn = dialogView.findViewById<MaterialButton>(R.id.dialogConfirm)
-        val cancelBtn = dialogView.findViewById<MaterialButton>(R.id.dialogCancel)
+    /* private fun showDialog2(email: String){
+         val builder = AlertDialog.Builder(requireContext()).create()
+         val dialogView = layoutInflater.inflate(R.layout.confirm_dialog,null)
+         val confirmBtn = dialogView.findViewById<MaterialButton>(R.id.dialogConfirm)
+         val cancelBtn = dialogView.findViewById<MaterialButton>(R.id.dialogCancel)
 
-        confirmBtn.setOnClickListener{
-            userCancelled = false
-            editAuthEmail(email)
-            builder.dismiss()
-        }
-        cancelBtn.setOnClickListener {
-            userCancelled = true
-            builder.dismiss()
-        }
-        builder.setView(dialogView)
-        builder.show()
-    }
+         confirmBtn.setOnClickListener{
+             userCancelled = false
+             editAuthEmail(email)
+             builder.dismiss()
+         }
+         cancelBtn.setOnClickListener {
+             userCancelled = true
+             builder.dismiss()
+         }
+         builder.setView(dialogView)
+         builder.show()
+     }*/
 }

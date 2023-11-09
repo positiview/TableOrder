@@ -117,8 +117,8 @@ class LoginFragment : Fragment() {
 
                         viewModel.login(email, password)
                         viewModel.getUserImage()
-                        viewModel.getUserInfo()
-                        viewModel.loginRequest.observe(viewLifecycleOwner){
+
+                        viewModel.getUserInfoResponse.observe(viewLifecycleOwner){
                             when(it){
                                 is Resource.Loading -> {
                                     binding.progressCircular.isVisible = true
@@ -165,6 +165,7 @@ class LoginFragment : Fragment() {
 
                 }
             }
+
         }
         binding.googleLogin.setOnClickListener {
 

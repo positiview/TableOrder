@@ -18,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.whenCreated
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -46,16 +47,15 @@ class MainActivity : AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var auth: FirebaseAuth
-    private lateinit var imgUri: Uri
-    private lateinit var userType: String
-//    private var authStateListener: FirebaseAuth.AuthStateListener? = null
+
+    //    private var authStateListener: FirebaseAuth.AuthStateListener? = null
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory = AuthViewModelFactory(authRepository)
     private val viewModel: UserViewModel by viewModels() { authViewModelFactory }
     private val TAG = "userInfo"
 
-   /* private lateinit var firebaseDatabase: FirebaseDatabase
-    private lateinit var databaseReference: DatabaseReference*/
+    /* private lateinit var firebaseDatabase: FirebaseDatabase
+     private lateinit var databaseReference: DatabaseReference*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity(){
 
                 R.id.infoFragment,
                 R.id.restaurantHomeFragment,
-                
+
                 R.id.mypageFragment
 
             ), drawerLayout
@@ -187,8 +187,7 @@ class MainActivity : AppCompatActivity(){
         var userEmailText = header.findViewById<TextView>(R.id.useremail)
         // lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) 엑티비티가 시작할때마다 활성화
 
-
-        /*lifecycleScope.launch {
+        lifecycleScope.launch {
 
 
             val user = auth.currentUser
@@ -211,9 +210,30 @@ class MainActivity : AppCompatActivity(){
                     }
             }
 
-        }*/
-        viewModel.getUserImage()
-        // 이미지 초기화
+        }
+
+
+        /* // 이미지 초기화
+         viewModel.getUserImgResponse.observe(this){
+             when(it){
+                 is Resource.Loading -> {
+                 }
+                 is Resource.Error -> {
+                     Toast.makeText(this, it.string, Toast.LENGTH_SHORT).show()
+                 }
+                 is Resource.Success -> {
+                     imgUri = it.data
+                     Glide.with(this)
+                         .load(imgUri)
+                         .apply(RequestOptions().override(150, 150))
+                         .placeholder(R.drawable.ic_person)
+                         .error(R.drawable.ic_person)
+                         .into(imageView)
+                 }
+             }
+         }*/
+        // 이미지 가져오기
+
         viewModel.getUserImgResponse.observe(this){
             when(it){
                 is Resource.Loading -> {
@@ -222,7 +242,7 @@ class MainActivity : AppCompatActivity(){
                     Toast.makeText(this, it.string, Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Success -> {
-                    imgUri = it.data
+                    val imgUri: Uri? = it.data
                     Glide.with(this)
                         .load(imgUri)
                         .apply(RequestOptions().override(150, 150))
@@ -232,33 +252,15 @@ class MainActivity : AppCompatActivity(){
                 }
             }
         }
-        // 이미지 업데이트
-        viewModel.getUpdateImgResponse.observe(this){
-            when(it){
-                is Resource.Loading -> {
-                }
-                is Resource.Error -> {
-                    Toast.makeText(this, it.string, Toast.LENGTH_SHORT).show()
-                }
-                is Resource.Success -> {
-                    imgUri = it.data
-                    Glide.with(this)
-                        .load(imgUri)
-                        .apply(RequestOptions().override(150, 150))
-                        .placeholder(R.drawable.ic_person)
-                        .error(R.drawable.ic_person)
-                        .into(imageView)
-                }
-            }
-        }
-        viewModel.getUserInfo()
+        var userType: String? = null
+        // 유져 정보 가져오기
+
         viewModel.getUserInfoResponse.observe(this){
             if(it is Resource.Success){
                 userType = it.data?.get("user_type") as String
                 userEmailText.text = it.data?.get("email") as String
             }
         }
-
         val sharedPref = this.getSharedPreferences("userType", Context.MODE_PRIVATE)
         userType = sharedPref.getString("user_type", "user").toString()
 

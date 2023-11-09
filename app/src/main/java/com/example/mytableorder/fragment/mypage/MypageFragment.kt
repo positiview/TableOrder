@@ -25,6 +25,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.Db.db
+import com.example.mytableorder.MainActivity
 import com.example.mytableorder.model.User
 
 class MypageFragment : Fragment() {
@@ -33,8 +34,8 @@ class MypageFragment : Fragment() {
     private lateinit var binding : FragmentMypageBinding
     private  var auth: FirebaseAuth = Firebase.auth
 
-   /* private lateinit var viewModel : MypageViewModel
-    private lateinit var viewModelFactory: MypageViewModelFactory*/
+    /* private lateinit var viewModel : MypageViewModel
+     private lateinit var viewModelFactory: MypageViewModelFactory*/
 
     val user = auth.currentUser
 
@@ -43,11 +44,11 @@ class MypageFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         binding = FragmentMypageBinding.inflate(inflater, container, false)
         val view = binding.root
-        val auth = Firebase.auth
-       /* binding.lifecycleOwner = this
-        viewModelFactory = MypageViewModelFactory(AuthRepository())
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MypageViewModel::class.java)
-        binding.viewmodel = viewModel*/
+
+        /* binding.lifecycleOwner = this
+         viewModelFactory = MypageViewModelFactory(AuthRepository())
+         viewModel = ViewModelProvider(this, viewModelFactory).get(MypageViewModel::class.java)
+         binding.viewmodel = viewModel*/
         if (CheckInternet.isConnected(requireActivity())) {
 
             binding.connectedLayout.visibility = View.VISIBLE
@@ -77,18 +78,18 @@ class MypageFragment : Fragment() {
 //        setViewModel()
     }
 
-   /* fun setViewModel() {
-        viewModel.getLogoutResponse.observe(viewLifecycleOwner) {
-            if(it.success) {
-                Toast.makeText(activity, it.response, Toast.LENGTH_SHORT).show()
-                MyApplication.prefs.clear()
-                val intent = Intent(binding.root.context, SignInActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                binding.mypageProgressBar.hide()
-                binding.root.context?.startActivity(intent)
-            }
-        }
-    }*/
+    /* fun setViewModel() {
+         viewModel.getLogoutResponse.observe(viewLifecycleOwner) {
+             if(it.success) {
+                 Toast.makeText(activity, it.response, Toast.LENGTH_SHORT).show()
+                 MyApplication.prefs.clear()
+                 val intent = Intent(binding.root.context, SignInActivity::class.java)
+                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                 binding.mypageProgressBar.hide()
+                 binding.root.context?.startActivity(intent)
+             }
+         }
+     }*/
 
     private fun setButton() {
         binding.apply {
@@ -117,30 +118,30 @@ class MypageFragment : Fragment() {
 
             }
 
-         /*   btnMypageDeleteMember.setOnClickListener {
-                val intent = Intent(it.context, DeleteMemberActivity::class.java)
-                it.context.startActivity(intent)
-            }*/
+            /*   btnMypageDeleteMember.setOnClickListener {
+                   val intent = Intent(it.context, DeleteMemberActivity::class.java)
+                   it.context.startActivity(intent)
+               }*/
 
-           /* btnMypageReservationHistory.setOnClickListener {
-                val intent = Intent(it.context, ReservationHistoryActivity::class.java)
-                it.context.startActivity(intent)
-            }
+            /* btnMypageReservationHistory.setOnClickListener {
+                 val intent = Intent(it.context, ReservationHistoryActivity::class.java)
+                 it.context.startActivity(intent)
+             }
 
-            btnMypageWriteHistory.setOnClickListener {
-                val intent = Intent(it.context, WriteHistoryActivity::class.java)
-                it.context.startActivity(intent)
-            }
+             btnMypageWriteHistory.setOnClickListener {
+                 val intent = Intent(it.context, WriteHistoryActivity::class.java)
+                 it.context.startActivity(intent)
+             }
 
-            btnMypageCommentHistory.setOnClickListener {
-                val intent = Intent(it.context, CommentHistoryActivity::class.java)
-                it.context.startActivity(intent)
-            }
+             btnMypageCommentHistory.setOnClickListener {
+                 val intent = Intent(it.context, CommentHistoryActivity::class.java)
+                 it.context.startActivity(intent)
+             }
 
-            btnMypageSetting.setOnClickListener {
-                val intent = Intent(it.context, SettingActivity::class.java)
-                it.context.startActivity(intent)
-            }*/
+             btnMypageSetting.setOnClickListener {
+                 val intent = Intent(it.context, SettingActivity::class.java)
+                 it.context.startActivity(intent)
+             }*/
 
             btnMypageLogout.setOnClickListener {
                 showLogoutDialog()
@@ -148,15 +149,15 @@ class MypageFragment : Fragment() {
         }
     }
 
-    fun showLogoutDialog(){
+    private fun showLogoutDialog(){
         MaterialAlertDialogBuilder(binding.root.context)
             .setTitle("로그아웃")
             .setMessage("로그아웃하시겠습니까?")
             .setPositiveButton("확인") { _, _ ->
                 if(CheckInternet.isConnected(requireActivity())){
-                    auth = Firebase.auth
+
                     auth.signOut()
-                    val navController = findNavController()
+
                     val sharedPreference = requireContext().getSharedPreferences("userType",
                         AppCompatActivity.MODE_PRIVATE
                     )
@@ -166,7 +167,10 @@ class MypageFragment : Fragment() {
                     // 전체 삭제는 editor.clear()
                     editor.commit()
                     Toast.makeText(requireContext(), "로그아웃 완료", Toast.LENGTH_SHORT).show()
-                    navController.navigate(R.id.splashFragment)
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    requireActivity().finish()
                     binding.mypageProgressBar.visibility = View.VISIBLE
                 }
                 else

@@ -4,28 +4,23 @@ import android.net.Uri
 import android.util.Log
 import com.example.mytableorder.Db.db
 import com.example.mytableorder.Db.storage
+import com.example.mytableorder.model.UpdateUser
 import com.example.mytableorder.model.User
-import com.example.mytableorder.model.updateUser
 import com.example.mytableorder.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
-import java.io.File
-import java.io.FileInputStream
-
-import javax.inject.Inject
 
 class AuthRepositoryImpl : AuthRepository {
 
 
-//    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val auth: FirebaseAuth = Firebase.auth
+
+    val auth: FirebaseAuth = Firebase.auth
     private val storageRef: StorageReference = storage.reference
 
-    private val uid = auth.currentUser?.uid
+    val user = Firebase.auth.currentUser
     override suspend fun login(
         email: String,
         password: String,
@@ -36,14 +31,17 @@ class AuthRepositoryImpl : AuthRepository {
             .addOnSuccessListener {
                 val currentUser = auth.currentUser
                 if(currentUser!!.isEmailVerified){
+                    Log.d("$$", "버그 찾기 uid : ${auth.currentUser?.uid}")
                     db.collection("users")
                         .document(currentUser.uid)
                         .get()
                         .addOnSuccessListener {
-                            val user = it.data
-//                            val userType = it.get("user_type") as String
-                            result.invoke(Resource.Success(user))
-
+                            val userInfo = it.data
+                            result.invoke(Resource.Success(userInfo))
+                            Log.d("$$","로그인 성공!!")
+                        }
+                        .addOnFailureListener { exception ->
+                            result.invoke(Resource.Error("사용자 정보를 가져오는 중에 오류가 발생했습니다: ${exception.message}"))
                         }
                 }else{
                     result.invoke(Resource.Error("이메일 인증을 먼저해주세요"))
@@ -53,13 +51,64 @@ class AuthRepositoryImpl : AuthRepository {
             }
 
     }
+    override suspend fun getUserInfo(result: (Resource<Map<String, Any>?>) -> Unit) {
+        val currentUser = auth.currentUser
+        Log.d("$$","get User Info check: $currentUser")
+        if (currentUser != null) {
+            db.collection("users")
+                .document(currentUser.uid)
+                .get()
+                .addOnSuccessListener {
+                    val user = it.data
 
+                    result.invoke(Resource.Success(user))
+
+                }
+        }else{
+            result.invoke(Resource.Error("TableOrder에 오신것을 환영합니다."))
+        }
+    }
+    override suspend fun setUserInfo(user: UpdateUser, result: (Resource<Map<String, Any>?>) -> Unit) {
+        val uid = auth.currentUser?.uid
+        if (uid != null) {
+            db.collection("users")
+                .document(uid)
+                .set(user, SetOptions.merge())
+                .addOnSuccessListener {
+                    getUser(result)
+                }.addOnFailureListener {
+                    result.invoke(Resource.Error("사용자 정보 업데이트에 실패했습니다."))
+                }
+        }else{
+            result.invoke(Resource.Error("회원정보를 찾을 수가 없습니다."))
+        }
+    }
+    private fun getUser(result: (Resource<Map<String, Any>?>) -> Unit) {
+        val uid = auth.currentUser?.uid
+        Log.d("$$","currentUser uid : $uid")
+        if(uid != null) {
+            db.collection("users")
+                .document(uid!!)
+                .get()
+                .addOnSuccessListener {
+                    val userInfo = it.data
+                    result.invoke(Resource.Success(userInfo))
+                }
+                .addOnFailureListener { exception ->
+                    result.invoke(Resource.Error("사용자 정보를 가져오는 중에 오류가 발생했습니다: ${exception.message}"))
+                }
+        }else{
+            result.invoke(Resource.Error("회원 정보를 찾을 수가 없습니다."))
+        }
+    }
     override suspend fun getUserImage(result: (Resource<Uri>) -> Unit) {
-
+        val user = Firebase.auth.currentUser
+        val uid = user?.uid
+        Log.d("$$","uid 여기.. : $uid")
         if(uid != null){
             val imgRef: StorageReference = storageRef.child("user/$uid")
             imgRef.downloadUrl.addOnSuccessListener {
-
+                Log.d("$$","check downloadUrl : $it")
                 result.invoke(Resource.Success(it))
             }
         }else{
@@ -69,7 +118,7 @@ class AuthRepositoryImpl : AuthRepository {
     }
 
     override suspend fun setUserImage(imagePath: Uri, result: (Resource<Uri>) -> Unit) {
-
+        val uid = auth.currentUser?.uid
         if(uid != null){
             Log.d("$$", "uid : $uid")
             val imgRef: StorageReference = storageRef.child("user/$uid")
@@ -103,31 +152,19 @@ class AuthRepositoryImpl : AuthRepository {
 
         }
     }
-    override suspend fun deleteUserImage(result: (Resource<String>) -> Unit) {
+    override suspend fun deleteUserImage(result: (Resource<Uri?>) -> Unit) {
+        val uid = auth.currentUser?.uid
         if(uid != null){
             val desertRef : StorageReference = storageRef.child("user/$uid")
 
             desertRef.delete().addOnSuccessListener{
-                result.invoke(Resource.Success("이미지가 삭제되었습니다."))
+                val uri: Uri? = null
+                result.invoke(Resource.Success(uri))
             }.addOnFailureListener {
                 result.invoke(Resource.Error("이미지 삭제에 실패했습니다."))
             }
         }else{
             result.invoke(Resource.Error("회원정보를 찾을 수가 없습니다."))
-        }
-    }
-    override suspend fun getUserInfo(result: (Resource<Map<String, Any>?>) -> Unit) {
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            db.collection("users")
-                .document(currentUser.uid)
-                .get()
-                .addOnSuccessListener {
-                    val user = it.data
-    //                            val userType = it.get("user_type") as String
-                    result.invoke(Resource.Success(user))
-
-                }
         }
     }
 
@@ -154,25 +191,9 @@ class AuthRepositoryImpl : AuthRepository {
             }
     }
 
-    override suspend fun logout(result: () -> Unit) {
-        auth.signOut()
-        result.invoke()
-    }
 
-    override suspend fun updateUserInfo(user: updateUser, result: (Resource<String>) -> Unit) {
-        if (uid != null) {
-            db.collection("users")
-                .document(uid)
-                .set(user, SetOptions.merge())
-                .addOnSuccessListener {
-                    result.invoke(Resource.Success("사용자 정보가 업데이트 되었습니다."))
-                }.addOnFailureListener {
-                    result.invoke(Resource.Error("사용자 정보 업데이트에 실패했습니다."))
-                }
-        }else{
-            result.invoke(Resource.Error("회원정보를 찾을 수가 없습니다."))
-        }
-    }
+
+
 
     override suspend fun updateAuthEmail(email: String) {
         TODO("Not yet implemented")

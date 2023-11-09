@@ -47,8 +47,8 @@ class SignUpFragment : Fragment() {
 
         /*var firebaseDatabase = FirebaseDatabase.getInstance()
         var databaseReference = firebaseDatabase.getReference("Users")*/
-       /* var db = FirebaseDatabase.getInstance()
-        databaseReference = db.getReference("User")*/
+        /* var db = FirebaseDatabase.getInstance()
+         databaseReference = db.getReference("User")*/
 
         auth = Firebase.auth
 
@@ -111,7 +111,7 @@ class SignUpFragment : Fragment() {
                         //Toast.makeText(activity, "Internet is available", Toast.LENGTH_SHORT).show()
                         binding.progressCircular.isVisible = true
 
-
+                        Log.d("$$", "인터넷 연결 확인 in SingUpFragment")
 
                         val user = User(
                             email,
@@ -144,6 +144,7 @@ class SignUpFragment : Fragment() {
                                             .document(auth.uid.toString())
                                             .set(user)
                                             .addOnSuccessListener {
+                                                Log.d("$$", "회원 가인 완료")
                                                 val popupText =
                                                     Snackbar.make(view,"Account Created Successfully\n Check your email for verification Link", Snackbar.LENGTH_LONG)
                                                 popupText.show()
@@ -152,46 +153,14 @@ class SignUpFragment : Fragment() {
                                     }
                             }
                             .addOnFailureListener {
-                               Resource.Error(it.message.toString())
-                            }
-
-                        // 아래는 realtime database 이용하는 방법 위는 fire
-                        /*auth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener {
-                                if (it.isSuccessful) {
-                                    val currentUser = auth.currentUser
-                                    val popupText = Snackbar.make(view, "인증링크를 이메일로 보냈습니다. 확인해주세요.", Snackbar.LENGTH_SHORT)
-                                    binding.progressCircular.isVisible = false
-                                    currentUser?.sendEmailVerification()
-                                        ?.addOnCompleteListener {
-                                            
-                                            popupText.show()
-                                    }
-                                    val userId = currentUser?.uid
-                                    val user =
-                                        userId?.let { id -> User(email, name, phone, userType) }
-                                    // 위 코드는 userId가 null이 아닐 때만 User 객체를 생성하고 해당 객체를 user 변수에 할당합니다.
-
-                                    if (userId != null) {
-                                        val popupText = Snackbar.make(view, "계정이 성공적으로 생성되었습니다.", Snackbar.LENGTH_SHORT)
-                                        databaseReference.child(userId).setValue(user)
-                                            .addOnSuccessListener {
-                                                Log.d("$$", "successful signUp")
-                                                popupText.show()
-                                            }
-                                            .addOnFailureListener{ e -> Log.e("fail","error",e)}
-
-
-                                    }
-                                    requireActivity().onBackPressed()
-                                }
-                            }
-                            .addOnFailureListener {
-                                binding.progressCircular.isVisible = false
-                                binding.btnRegister.isEnabled = true
                                 Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT)
                                     .show()
-                            }*/
+                                Log.d("$$","회원가입 실패")
+                                binding.progressCircular.isVisible = false
+                                binding.btnRegister.isEnabled = true
+                            }
+
+
                     }
                 }
             }

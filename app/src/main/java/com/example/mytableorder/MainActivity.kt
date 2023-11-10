@@ -91,10 +91,7 @@ class MainActivity : AppCompatActivity(){
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
                     0 -> navController.navigate(R.id.homeFragment)
-                    1 -> {
-                        // 스와이프 동작을 위한 리사이클러뷰가 있는 Fragment로 이동
-                        navController.navigate(R.id.infoFragment)
-                    }
+                    1 -> navController.navigate(R.id.bookingListFragment)
                     2 -> navController.navigate(R.id.userListFragment)
                     3 -> navController.navigate(R.id.BoardFragment)
                     4 -> navController.navigate(R.id.mypageFragment)
@@ -112,9 +109,9 @@ class MainActivity : AppCompatActivity(){
                     0 -> navController.navigate(R.id.homeFragment)
                     1 -> {
                         // 스와이프 동작을 위한 리사이클러뷰가 있는 Fragment로 이동
-                        navController.navigate(R.id.infoFragment)
+                        navController.navigate(R.id.bookingListFragment)
                     }
-//                    2 -> navController.navigate(R.id.InfoFragment)
+                    2 -> navController.navigate(R.id.userListFragment)
                     3 -> navController.navigate(R.id.BoardFragment)
                     4 -> navController.navigate(R.id.mypageFragment)
                     // 다른 탭에 대한 액션을 추가합니다.
@@ -137,13 +134,13 @@ class MainActivity : AppCompatActivity(){
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.homeFragment,
-                R.id.adminHomeFragment,
+                R.id.bookingListFragment,
                 R.id.userListFragment,
                 R.id.BoardFragment,
 
                 R.id.infoFragment,
+                R.id.restaurantHomeFragment,
 
-                
                 R.id.mypageFragment
 
             ), drawerLayout
@@ -156,7 +153,8 @@ class MainActivity : AppCompatActivity(){
             if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment, R.id.signUpFragment )) {
                 supportActionBar?.hide()
                 tabLayout.visibility = View.GONE
-            }else if(destination.id in listOf(R.id.adminHomeFragment, R.id.adminListFragment, R.id.adminWriteFragment, R.id.restaurantHomeFragment)){
+            }else if(destination.id in listOf(R.id.adminHomeFragment, R.id.adminListFragment, R.id.adminWriteFragment,
+                    R.id.restaurantHomeFragment, R.id.BookedUserListFragment)){
                 tabLayout.visibility = View.GONE
             }else {
                 supportActionBar?.show()
@@ -206,7 +204,6 @@ class MainActivity : AppCompatActivity(){
                         Log.e(TAG, "Error: ${it.message}")
                     }
             }
-
         }
 
 
@@ -265,8 +262,13 @@ class MainActivity : AppCompatActivity(){
 
         val navAdminhome = navView.menu.findItem(R.id.adminHome)
         val navRegiRestautrant = navView.menu.findItem(R.id.regiRestaurant)
-        navAdminhome.isVisible = userType == "admin"
+        val navMypage = navView.menu.findItem(R.id.myPage)
+        navAdminhome.isVisible = userType == "admin" || userType == "shop"
+        if(userType == "shop"){
+            navAdminhome.title = "가게 페이지"
+        }
         navRegiRestautrant.isVisible = userType == "admin"
+        navMypage.isVisible = userType == "user"
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 /*R.id.action_help -> {
@@ -361,16 +363,7 @@ class MainActivity : AppCompatActivity(){
 
 
     }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // 클릭된 메뉴 아이템의 아이디 마다 when 구절로 클릭시 동작을 설정한다.
-        when(item!!.itemId){
-            android.R.id.home->{ // 메뉴 버튼
-                Log.i("onOptionsItemSelected", "home selected")
-                drawerLayout.openDrawer(GravityCompat.START)
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)

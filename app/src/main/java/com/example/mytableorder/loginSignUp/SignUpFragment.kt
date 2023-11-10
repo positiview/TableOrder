@@ -26,6 +26,7 @@ import com.google.firebase.ktx.Firebase
 class SignUpFragment : Fragment() {
     private lateinit var binding: FragmentSignUpBinding
     private lateinit var databaseReference: DatabaseReference
+  
     lateinit var auth :FirebaseAuth
 
     override fun onCreateView(
@@ -154,6 +155,7 @@ class SignUpFragment : Fragment() {
                                             }
                                     }
                             }
+
                             .addOnFailureListener {
                                 Resource.Error(it.message.toString())
                             }

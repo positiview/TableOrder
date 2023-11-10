@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentMypageBinding
@@ -20,6 +21,11 @@ import com.google.firebase.ktx.Firebase
 import com.example.mytableorder.Db.db
 import com.example.mytableorder.MainActivity
 import com.example.mytableorder.model.UserDTO
+import com.example.mytableorder.repository.AuthRepository
+import com.example.mytableorder.repository.AuthRepositoryImpl
+import com.example.mytableorder.utils.Resource
+import com.example.mytableorder.viewModel.UserViewModel
+import com.example.mytableorder.viewmodelFactory.AuthViewModelFactory
 
 class MypageFragment : Fragment() {
 
@@ -27,8 +33,9 @@ class MypageFragment : Fragment() {
     private lateinit var binding : FragmentMypageBinding
     private  var auth: FirebaseAuth = Firebase.auth
 
-    /* private lateinit var viewModel : MypageViewModel
-     private lateinit var viewModelFactory: MypageViewModelFactory*/
+    private val authRepository: AuthRepository = AuthRepositoryImpl()
+    private val authViewModelFactory = AuthViewModelFactory(authRepository)
+    private val viewModel: UserViewModel by activityViewModels() { authViewModelFactory }
 
     val user = auth.currentUser
 
@@ -68,21 +75,14 @@ class MypageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(backPressedDispatcher)
         setButton()
+
+        if(user == null){
+            findNavController().navigate(R.id.action_mypageFragment_to_loginFragment)
+        }
 //        setViewModel()
     }
 
-    /* fun setViewModel() {
-         viewModel.getLogoutResponse.observe(viewLifecycleOwner) {
-             if(it.success) {
-                 Toast.makeText(activity, it.response, Toast.LENGTH_SHORT).show()
-                 MyApplication.prefs.clear()
-                 val intent = Intent(binding.root.context, SignInActivity::class.java)
-                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                 binding.mypageProgressBar.hide()
-                 binding.root.context?.startActivity(intent)
-             }
-         }
-     }*/
+
 
     private fun setButton() {
         binding.apply {

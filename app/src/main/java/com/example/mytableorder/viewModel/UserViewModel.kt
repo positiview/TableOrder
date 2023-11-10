@@ -38,6 +38,9 @@ class UserViewModel (
                 repository.login(email, password){
                     _getUserInfoResponse.value = it
                 }
+                repository.getUserImage {
+                    _getUserImgResponse.value = it
+                }
             }catch (e: Exception){
                 _getUserInfoResponse.value = Resource.Error(e.message.toString())
             }

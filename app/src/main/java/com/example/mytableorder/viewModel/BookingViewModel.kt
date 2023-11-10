@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mytableorder.fragment.booking.BookingDTO
 import com.example.mytableorder.repository.BookingRepository
 import com.example.mytableorder.utils.Resource
 import kotlinx.coroutines.launch
@@ -15,11 +16,11 @@ class BookingViewModel(private val repository: BookingRepository): ViewModel() {
     val getBookingResponse : LiveData<Resource<Map<String, Any>?>> get() = _getBookingResponse
 
 
-    fun setBookingData(){
+    fun setBookingData(bookingDTO: BookingDTO){
         viewModelScope.launch {
             _getBookingResponse.value = Resource.Loading
             try{
-                repository.setBookingList(){
+                repository.setBookingList(bookingDTO){
                     _getBookingResponse.value = it
                 }
             }catch (e:Exception){

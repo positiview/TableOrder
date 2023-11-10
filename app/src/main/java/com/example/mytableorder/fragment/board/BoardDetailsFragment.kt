@@ -53,13 +53,13 @@ class BoardDetailsFragment : Fragment() {
         }
 
         // SharedPreferences 초기화
-        /* sharedPreferences = requireContext().getSharedPreferences("board_likes", Context.MODE_PRIVATE)
- //        postId = requireArguments().getString("postId")
-         isLikedByUser = sharedPreferences.getBoolean(postId, false) // SharedPreferences에서 값 불러오기
-         Log.d("$$","isLikedByUser : $isLikedByUser")
+       /* sharedPreferences = requireContext().getSharedPreferences("board_likes", Context.MODE_PRIVATE)
+//        postId = requireArguments().getString("postId")
+        isLikedByUser = sharedPreferences.getBoolean(postId, false) // SharedPreferences에서 값 불러오기
+        Log.d("$$","isLikedByUser : $isLikedByUser")
 
 
-         hasLiked = sharedPreferences.getBoolean("hasLiked_$postId", false)*/
+        hasLiked = sharedPreferences.getBoolean("hasLiked_$postId", false)*/
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -120,8 +120,13 @@ class BoardDetailsFragment : Fragment() {
                             isLikedByUser = false
                             likes--
 
+<<<<<<< HEAD
                             // 좋아요 상태를 저장하는 코드를 추가합니다. (예: SharedPreferences)
                             saveLikedState(postId)
+=======
+                // 좋아요 상태를 저장하는 코드를 추가합니다. (예: SharedPreferences)
+                saveLikedState(postId)
+>>>>>>> fdf88e9f3278b864d84bd0e6d8803c1a01803cbc
 
                             // 좋아요 수를 업데이트하는 코드
                             updateLikes()
@@ -132,7 +137,19 @@ class BoardDetailsFragment : Fragment() {
                             // 좋아요 삭제 실패
                             Log.e("BoardDetailsFragment", "좋아요 삭제 실패: ${task.exception}")
                         }
+<<<<<<< HEAD
                     }
+=======
+                        .addOnFailureListener { e ->
+                            Log.e("BoardDetailsFragment", "사용자 ID 제거 실패: $e")
+                        }
+                }
+
+                // 이미지 변경 코드
+                updateLikeImage(isLikedByUser)
+
+                // 여기에 사용자에게 좋아요가 성공적으로 취소되었다는 안내 메시지를 표시하는 코드를 추가할 수 있습니다.
+>>>>>>> fdf88e9f3278b864d84bd0e6d8803c1a01803cbc
             } else {
                 // 좋아요 버튼을 누른 경우
                 likesRef.child(currentUserId!!).setValue(true)
@@ -142,8 +159,13 @@ class BoardDetailsFragment : Fragment() {
                             isLikedByUser = true
                             likes++
 
+<<<<<<< HEAD
                             // 좋아요 상태를 저장하는 코드를 추가합니다. (예: SharedPreferences)
                             saveLikedState(postId)
+=======
+                // 좋아요 상태를 저장하는 코드를 추가합니다. (예: SharedPreferences)
+                saveLikedState(postId)
+>>>>>>> fdf88e9f3278b864d84bd0e6d8803c1a01803cbc
 
                             // 좋아요 수를 업데이트하는 코드
                             updateLikes()
@@ -154,13 +176,28 @@ class BoardDetailsFragment : Fragment() {
                             // 좋아요 추가 실패
                             Log.e("BoardDetailsFragment", "좋아요 추가 실패: ${task.exception}")
                         }
+<<<<<<< HEAD
                     }
+=======
+                        .addOnFailureListener { e ->
+                            Log.e("BoardDetailsFragment", "사용자 ID 저장 실패: $e")
+                        }
+                }
+
+                // 이미지 변경 코드
+                updateLikeImage(isLikedByUser)
+
+                // 여기에 사용자에게 좋아요가 성공적으로 등록되었다는 안내 메시지를 표시하는 코드를 추가할 수 있습니다.
+>>>>>>> fdf88e9f3278b864d84bd0e6d8803c1a01803cbc
             }
         }
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> fdf88e9f3278b864d84bd0e6d8803c1a01803cbc
         isLikedByUser = likes > 0 // 0이 아니면 true
 
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {

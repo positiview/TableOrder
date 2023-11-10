@@ -11,7 +11,7 @@
         tools:layout="@layout/fragment_home" >
     </fragment>
     <fragment
-        android:id="@+id/bookignListFragment"
+        android:id="@+id/bookingListFragment"
         android:name="com.example.mytableorder.fragment.booking.BookingListFragment"
         android:label="Home"
         tools:layout="@layout/fragment_booking_list" >
@@ -26,7 +26,7 @@
         tools:layout="@layout/fragment_book_write" >
         <action
             android:id="@+id/action_bookWriteFragment_to_bookignListFragment"
-            app:destination="@id/bookignListFragment" />
+            app:destination="@id/bookingListFragment" />
     </fragment>
     <fragment
         android:id="@+id/userListFragment"
@@ -226,6 +226,11 @@
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
         <action
+            android:id="@+id/action_loginFragment_to_restaurantHomeFragment"
+            app:destination="@id/restaurantHomeFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
             android:id="@+id/action_loginFragment_to_resetPasswordFragment"
             app:destination="@id/resetPasswordFragment" />
 
@@ -309,6 +314,9 @@
         <action
             android:id="@+id/action_mypageFragment_to_resetPasswordFragment"
             app:destination="@+id/resetPasswordFragment"/>
+        <action
+            android:id="@+id/action_mypageFragment_to_loginFragment"
+            app:destination="@+id/loginFragment"/>
 
     </fragment>
     <dialog
@@ -338,14 +346,14 @@
         android:label="Home"
         tools:layout="@layout/fragment_restaurant_home" >
         <!--<action
-            android:id="@+id/action_donorsHomeFragment_to_loginFragment"
+            android:id="@+id/action_restaurantHomeFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/donorsHomeFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true" />-->
         <action
-            android:id="@+id/action_donorsHomeFragment_to_donateFragment"
-            app:destination="@id/donateFragment" />
-        <action
+            android:id="@+id/action_restaurantHomeFragment_to_BookedUserListFragment"
+            app:destination="@id/BookedUserListFragment" />
+        <!--<action
             android:id="@+id/action_donorsHomeFragment_to_historyFragment"
             app:destination="@id/historyFragment" />
         <action
@@ -354,6 +362,13 @@
         <action
             android:id="@+id/action_donorsHomeFragment_to_contactUsFragment"
             app:destination="@id/contactUsFragment" />-->
+    </fragment>
+    <fragment
+        android:id="@+id/BookedUserListFragment"
+        android:name="com.example.mytableorder.fragment.restaurant.BookedUserListFragment"
+        android:label="예약 현황"
+        tools:layout="@layout/fragment_restaurant_bookedusers">
+
     </fragment>
     <fragment
         android:id="@+id/adminHomeFragment"

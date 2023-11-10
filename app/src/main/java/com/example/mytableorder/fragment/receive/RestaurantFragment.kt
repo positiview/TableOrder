@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.mytableorder.databinding.FragmentHomeBinding
+import com.example.mytableorder.databinding.FragmentRestaurantHomeBinding
 
 
 class RestaurantFragment : Fragment() {
-    private lateinit var binding: FragmentHomeBinding
+    private lateinit var binding: FragmentRestaurantHomeBinding
     /*private val viewModel: DonationsViewModel by viewModels()
     private val adapter by lazy { DonationsAdapter() }*/
     override fun onCreateView(
@@ -17,7 +17,7 @@ class RestaurantFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding = FragmentRestaurantBookedusersBinding.inflate(inflater, container, false)
         val view = binding.root
 
 

@@ -10,12 +10,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.liveData
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
+import com.example.mytableorder.fragment.admin.AdminListDTO
+import com.example.mytableorder.model.UserDTO
 import com.example.mytableorder.repository.AuthRepository
 import com.example.mytableorder.repository.AuthRepositoryImpl
 import com.example.mytableorder.repository.BookingRepository
@@ -25,17 +26,32 @@ import com.example.mytableorder.viewModel.BookingViewModel
 import com.example.mytableorder.viewModel.UserViewModel
 import com.example.mytableorder.viewmodelFactory.AuthViewModelFactory
 import com.example.mytableorder.viewmodelFactory.BookingViewModelFactory
-import com.google.firebase.database.FirebaseDatabase
-import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 
 class BookWriteFragment : Fragment() {
+
     private val bookingRepository: BookingRepository = BookingRepositoryImpl()
-    private val bookingViewModelFactory: BookingViewModelFactory = BookingViewModelFactory(bookingRepository)
-    private val viewModel: BookingViewModel by activityViewModels() { bookingViewModelFactory }
+    private val authRepository: AuthRepository = AuthRepositoryImpl()
+    private var auth: FirebaseAuth = Firebase.auth
+
+
+    // 이친구가  BookingViewModel 안에 있는 거들고오고
+    private val viewModel: BookingViewModel by activityViewModels {
+        BookingViewModelFactory(bookingRepository)
+    }
+
+    //이친구가 UserViewModel 유저정보  Live 데이터 들고와서 쓸수 있게.
+    private val viewModel2: UserViewModel by activityViewModels {
+        AuthViewModelFactory(authRepository)
+    }
+
+    //    viewModel= ViewModelProvider(bookingRepository).get(BookingDTO::class.java)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,6 +60,7 @@ class BookWriteFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_book_write, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -55,41 +72,77 @@ class BookWriteFragment : Fragment() {
         arguments?.let { bundle ->
             val raName = bundle.getString("raName")
             val raNum = bundle.getInt("raNum")
-            val userName = bundle.getString("userName")
+
 
             // 받은 데이터 화면에 표시
             raNameTextView.text = raName
 
             // '등록' 버튼 클릭 리스너 설정
             registerButton.setOnClickListener {
-                val memberCount = memberCountEditText.text.toString().toIntOrNull() ?: 0
+                val user = auth.currentUser
+                if(user == null){
+//                    findNavController().navigate(R.id.action_bookWriteFragment_to_loginFragment)
+                }else{
+                    val memberCount = memberCountEditText.text.toString().toIntOrNull() ?: 0
 
-                // 현재 시간을 문자열로 변환
-                val currentDateTimeString = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
+                    // 현재 시간을 문자열로 변환
+                    val currentDateTimeString =
+                        LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
+                   viewModel2.getUserInfo()
+                    // UserDTO를 가져오는 로직
+                    viewModel2.getUserInfoResponse.observe(viewLifecycleOwner) { resource ->
+                        when (resource) {
+                            is Resource.Success -> {
+                                val userData = resource.data
+                                var bookingDTO = BookingDTO()
 
-                // BookingDTO 객체 생성
-                val bookingDto = BookingDTO(
+                                    if(userData!=null) {
 
-                    userName = userName ?: "",
-                    resturantNum = raNum,
-                    memberCount = memberCount,
-                    reservationTime = currentDateTimeString
-                )
+                                        // BookingDTO 객체 생성, UserDTO 포함
+                                        bookingDTO = BookingDTO(
+                                            uid = auth.currentUser?.uid.toString(),
+                                            userName = userData["name"] as? String ?: "",
+                                            restaurantNum = raNum,
+                                            memberCount = memberCount,
+                                            reservationTime = currentDateTimeString,
 
-                // 파이어베이스 데이터베이스에 저장
-                // 값 가져오기
-                viewModel.setBookingData(bookingDto)
-                viewModel.getBookingResponse.observe(viewLifecycleOwner){
-                    if(it is Resource.Success){
-                        findNavController().navigate(R.id.action_bookWriteFragment_to_bookignListFragment)
+                                            )
+                                    }
+
+
+
+
+                                // 파이어베이스 데이터베이스에 저장
+                                viewModel.setBookingData(bookingDTO)
+                                navigateToNextPage()
+
+
+                            }
+
+                            is Resource.Error -> {
+                                // 오류 처리
+                                Toast.makeText(context, resource.string, Toast.LENGTH_LONG).show()
+                            }
+
+                            is Resource.Loading -> {
+                                // 로딩 처리
+                            }
+                        }
                     }
                 }
-
-
             }
         }
     }
-
-
-
+    private fun navigateToNextPage() {
+        findNavController().navigate(R.id.action_bookWriteFragment_to_bookingListFragment)
+        // 여기에서 새 페이지로 이동합니다
+        // 예를 들어 findNavController().navigate(R.id.action_current_fragment_to_next_fragment)와 같은 코드를 사용할 수 있습니다
+    }
 }
+
+
+
+
+
+
+

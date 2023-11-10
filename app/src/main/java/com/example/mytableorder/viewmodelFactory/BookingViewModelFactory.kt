@@ -9,13 +9,13 @@ import com.example.mytableorder.viewModel.BookingViewModel
 import com.example.mytableorder.viewModel.UserViewModel
 
 class BookingViewModelFactory(
-    private val repository: BookingRepository
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(BookingDTO::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return BookingViewModel(repository) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
+    private val bookingRepository: BookingRepository
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(BookingViewModel::class.java)) {
+            return BookingViewModel(bookingRepository) as T
         }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
+}

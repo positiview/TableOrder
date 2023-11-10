@@ -8,12 +8,12 @@ import java.time.LocalDateTime
 data class BookingDTO(
 
     //UserDTO DTO 를 들고와서
-    val userDTO: UserDTO = UserDTO(),
-    val userName: String = userDTO.name?: "",
+    val uid: String="",
+    val userName: String =  "",
 
     //AdminListDTO 에서 가게번호 들고와서
-    val adminDTO: AdminListDTO = AdminListDTO(),
-    val resturantNum: Int = adminDTO.raNum,
+
+    val restaurantNum: Int = 0,
 
     //예약인원수
     val memberCount: Int=0,

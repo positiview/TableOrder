@@ -10,5 +10,5 @@ interface BookingRepository {
 
     suspend fun getBookingList(result: (Resource<Map<String, Any>?>) -> Unit)
 
-    suspend fun confirmBookingList(result: (Resource<Map<String, Any>?>) -> Unit)
+   // suspend fun confirmBookingList(result: (Resource<Map<String, Any>?>) -> Unit)
 }

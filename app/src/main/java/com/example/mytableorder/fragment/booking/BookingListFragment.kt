@@ -9,54 +9,101 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
+import com.example.mytableorder.databinding.FragmentBookingListBinding
+import com.example.mytableorder.repository.BookingRepository
+import com.example.mytableorder.repository.BookingRepositoryImpl
+import com.example.mytableorder.utils.Resource
+import com.example.mytableorder.viewModel.BookingViewModel
+import com.example.mytableorder.viewmodelFactory.BookingViewModelFactory
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
 class BookingListFragment : Fragment() {
-    private lateinit var tvReservationName: TextView
-    private lateinit var tvReservationNumber: TextView
-    private lateinit var tvReservationCount: TextView
-    private lateinit var tvReservationTime: TextView
+
+    private var _binding: FragmentBookingListBinding? = null
+    private val binding get() = _binding!!
+
+    private val bookingRepository: BookingRepository = BookingRepositoryImpl()
+    private val bookingViewModelFactory: BookingViewModelFactory = BookingViewModelFactory(bookingRepository)
+    private val viewModel: BookingViewModel by activityViewModels() { bookingViewModelFactory }
+    private var auth: FirebaseAuth = Firebase.auth
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_booking_list, container, false)
+        _binding = FragmentBookingListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // View 초기화
-        tvReservationName = view.findViewById(R.id.bookUser)
-        tvReservationNumber = view.findViewById(R.id.bookNum)
-        tvReservationCount = view.findViewById(R.id.bookCount)
-        tvReservationTime = view.findViewById(R.id.bookTime)
 
-        // 예약 정보 설정, 예를 들어 BookingDTO 객체를 전달받았다고 가정
-        arguments?.let { bundle ->
-            val bookingDto: BookingDTO = bundle.getSerializable("bookingDto") as BookingDTO
-            displayReservationInfo(bookingDto)
-        }
 
-        view.findViewById<Button>(R.id.buttonHome).setOnClickListener {
-            // HomeFragment로 이동
-            findNavController().navigate(R.id.action_bookignListFragment_to_homeFragment)
+        viewModel.getBookingData()
+
+        viewModel.getBookingResponse.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    binding.progressCircular.visibility = View.VISIBLE
+                }
+                is Resource.Success -> {
+                    binding.progressCircular.visibility = View.GONE
+                    resource.data?.let {
+                        Log.d("$$","viewBooking : $it")
+                        displayBooking(it)
+                    }
+                }
+                is Resource.Error -> {
+                    binding.progressCircular.visibility = View.GONE
+                    Toast.makeText(context, resource.string, Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 
-    private fun displayReservationInfo(bookingDto: BookingDTO) {
-        // TextView에 예약 정보를 표시
-        tvReservationName.text = bookingDto.userName
-        tvReservationNumber.text = bookingDto.bookNum.toString()
-        tvReservationCount.text = bookingDto.memberCount.toString()
-        tvReservationTime.text = bookingDto.reservationTime
+    private fun displayBooking(bookings: Map<String, Any>?) {
+        Log.d("$$","Bookings : $bookings")
+        bookings?.forEach { (_, value) ->
+            // value가 실제로 BookingDTO 타입인지 확인합니다.
+            if (value is BookingDTO) {
+                // BookingDTO에서 값을 추출하고 TextView에 설정합니다.
+                val userName1 = value.userName
+                val bookNum1 = value.restaurantNum
+                val bookCount1 = value.memberCount
+                val bookTime1 = value.reservationTime
+
+                Log.e("$$", "userName =$userName1")
+                Log.e("$$", "bookNum =$bookNum1")
+                Log.e("$$", "bookCount =$bookCount1")
+                Log.e("$$", "bookTime =$bookTime1")
+
+                with(binding) {
+                    bookUser.text = userName1
+                    bookNum.text = bookNum1.toString()
+                    bookCount.text = bookCount1.toString()
+                    bookTime.text = bookTime1 ?: "No time specified"
+                }
+            }
+        }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

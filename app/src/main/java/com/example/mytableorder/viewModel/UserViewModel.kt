@@ -19,6 +19,8 @@ class UserViewModel (
     /*private val _loginRequest = MutableLiveData<Resource<Map<String, Any>?>>() // 쓰기
     val loginRequest = _loginRequest as LiveData<Resource<Map<String, Any>?>> // 읽기*/
     private val _getUserInfoResponse : MutableLiveData<Resource<Map<String, Any>?>> = MutableLiveData()
+
+    //현재접속해있는 유저 정보 DTO
     val getUserInfoResponse : LiveData<Resource<Map<String, Any>?>> get() = _getUserInfoResponse
 
 

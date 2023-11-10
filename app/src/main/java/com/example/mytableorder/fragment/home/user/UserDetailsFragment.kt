@@ -66,6 +66,7 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
 
 
 
+
             // 클래스 레벨 변수인 shopLocation에 값을 할당합니다.
             raLatitude = bundle.getDouble("raLatitude")
             raLongitude = bundle.getDouble("raLongitude")
@@ -108,6 +109,7 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
             val bundle = Bundle().apply {
                 putString("raName", raName) // 클래스 레벨 변수 raName 사용
                 putInt("raNum", raNum!!)
+                Log.e("$$","$raNum")
                 // 필요하다면 raImg, raMenu 등 다른 정보도 여기에 넣을 수 있습니다.
             }
             findNavController().navigate(R.id.action_userDetailsFragment_to_bookWriteFragment,bundle)

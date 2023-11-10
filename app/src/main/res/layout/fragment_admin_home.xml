@@ -73,14 +73,18 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:hint="@string/description"
                         app:boxStrokeColor="@color/orange"/>
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="300dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="관리자모드"
-                        android:textSize="50dp"
-                        />
+
+                    <ImageView
+                        android:id="@+id/admin"
+                        android:layout_width="match_parent"
+                        android:layout_height="375dp"
+                        android:gravity="center"
+                        android:src="@drawable/admin"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.497"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/buttonR"
                         android:layout_width="match_parent"

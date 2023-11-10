@@ -20,6 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.tabs.TabLayout
 
 
 class UserDetailsFragment : Fragment(), OnMapReadyCallback {
@@ -48,6 +49,8 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val tabLayout: TabLayout = requireActivity().findViewById(R.id.tabs)
 
         // 지도 프래그먼트를 초기화합니다.
         val mapFragment =
@@ -92,10 +95,13 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
 
         // 리스너로 돌아가는 클릭 리스너
         view.findViewById<MaterialButton>(R.id.buttonList).setOnClickListener {
-            findNavController().navigate(R.id.action_userDetailsFragment_to_userListFragment)
+            tabLayout.getTabAt(2)?.select() // 세 번째 탭을 선택한 상태로 표시
+//            findNavController().navigate(R.id.action_userDetailsFragment_to_userListFragment)
+
         }
         view.findViewById<MaterialButton>(R.id.buttonHome).setOnClickListener {
-            findNavController().navigate(R.id.action_userDetailsFragment_to_homeFragment)
+            tabLayout.getTabAt(0)?.select() // 첫 번째 탭을 선택한 상태로 표시
+//            findNavController().navigate(R.id.action_serDetailsFragment_to_homeFragment)
         }
         view.findViewById<MaterialButton>(R.id.buttonBooking).setOnClickListener {
             // 예약하기 버튼이 클릭되면 BookWriteFragment로 데이터를 넘깁니다.

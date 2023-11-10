@@ -13,7 +13,7 @@
     <fragment
         android:id="@+id/bookingListFragment"
         android:name="com.example.mytableorder.fragment.booking.BookingListFragment"
-        android:label="Home"
+        android:label="예약 내역"
         tools:layout="@layout/fragment_booking_list" >
         <action
             android:id="@+id/action_bookignListFragment_to_homeFragment"
@@ -31,7 +31,7 @@
     <fragment
         android:id="@+id/userListFragment"
         android:name="com.example.mytableorder.fragment.home.user.UserListFragment"
-        android:label="Home"
+        android:label="매장 리스트"
         tools:layout="@layout/fragment_user_list" >
         <action
             android:id="@+id/action_userListFragment_to_userDetailsFragment"
@@ -40,7 +40,7 @@
     <fragment
         android:id="@+id/userDetailsFragment"
         android:name="com.example.mytableorder.fragment.home.user.UserDetailsFragment"
-        android:label="Home"
+        android:label=""
         tools:layout="@layout/fragment_user_details" >
         <action
             android:id="@+id/action_userDetailsFragment_to_userListFragment"
@@ -186,7 +186,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.mytableorder.fragment.home.HomeFragment"
-        android:label="Dashboard"
+        android:label="홈"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homFragment_to_user_details_fragment"

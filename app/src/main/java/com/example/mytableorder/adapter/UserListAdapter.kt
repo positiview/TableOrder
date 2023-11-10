@@ -7,9 +7,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.mytableorder.R
 import com.example.mytableorder.fragment.admin.AdminListDTO
+
 
 class UserListAdapter : RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
     private var restaurants: List<AdminListDTO> = listOf()
@@ -26,6 +29,7 @@ class UserListAdapter : RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val userImageView: ImageView = view.findViewById(R.id.userImgView)
         val userTextView: TextView = view.findViewById(R.id.userImgViewText)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,7 +44,13 @@ class UserListAdapter : RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
         holder.userTextView.text = restaurant.raName
 
         Glide.with(holder.userImageView.context)
-            .load(restaurant.raImg) // 이미지 URL을 로드
+            .load(restaurant.raImg)
+            .apply(
+                RequestOptions().transform(
+                    CenterCrop(),
+                    RoundedCorners(25)
+                )
+            )
             .into(holder.userImageView)
 
         //아이템뷰 추가

@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity(){
             when (position) {
                 0 -> tab.text = "홈"
                 1 -> tab.text = "예약\n내역"
-                2 -> tab.text = "가게\n리스트"
+                2 -> tab.text = "매장\n리스트"
                 3 -> tab.text = "자유\n게시판"
                 4 -> tab.text = "마이\n페이지"
                 // 다른 탭에 대한 설정을 추가합니다.

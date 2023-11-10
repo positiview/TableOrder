@@ -11,15 +11,31 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.liveData
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
+import com.example.mytableorder.repository.AuthRepository
+import com.example.mytableorder.repository.AuthRepositoryImpl
+import com.example.mytableorder.repository.BookingRepository
+import com.example.mytableorder.repository.BookingRepositoryImpl
+import com.example.mytableorder.utils.Resource
+import com.example.mytableorder.viewModel.BookingViewModel
+import com.example.mytableorder.viewModel.UserViewModel
+import com.example.mytableorder.viewmodelFactory.AuthViewModelFactory
+import com.example.mytableorder.viewmodelFactory.BookingViewModelFactory
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 
 class BookWriteFragment : Fragment() {
+    private val bookingRepository: BookingRepository = BookingRepositoryImpl()
+    private val bookingViewModelFactory: BookingViewModelFactory = BookingViewModelFactory(bookingRepository)
+    private val viewModel: BookingViewModel by activityViewModels() { bookingViewModelFactory }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +55,7 @@ class BookWriteFragment : Fragment() {
         arguments?.let { bundle ->
             val raName = bundle.getString("raName")
             val raNum = bundle.getInt("raNum")
+            val userName = bundle.getString("userName")
 
             // 받은 데이터 화면에 표시
             raNameTextView.text = raName
@@ -52,38 +69,27 @@ class BookWriteFragment : Fragment() {
 
                 // BookingDTO 객체 생성
                 val bookingDto = BookingDTO(
-                    userName = raName ?: "",
+
+                    userName = userName ?: "",
                     resturantNum = raNum,
                     memberCount = memberCount,
                     reservationTime = currentDateTimeString
                 )
 
                 // 파이어베이스 데이터베이스에 저장
-                saveBookingToFirebase(bookingDto)
-            }
-        }
-    }
-
-    private fun saveBookingToFirebase(bookingDto: BookingDTO) {
-        // 파이어베이스 데이터베이스 인스턴스를 가져옴
-        val database = FirebaseDatabase.getInstance()
-        // 'bookings' 노드 아래에 새 데이터를 생성
-        val myRef = database.getReference("bookings").push()
-
-        // 데이터베이스에 객체를 저장
-        myRef.setValue(bookingDto).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                // 성공적으로 데이터베이스에 저장되면 BookingListFragment로 이동
-                findNavController().navigate(R.id.action_bookWriteFragment_to_bookignListFragment)
-            } else {
-                // 실패한 경우 오류 처리
-                task.exception?.message?.let {
-                    Log.e("BookWriteFragment", it)
-                    // 여기에서 사용자에게 오류를 표시하거나 다른 처리를 할 수 있음
+                // 값 가져오기
+                viewModel.setBookingData(bookingDto)
+                viewModel.getBookingResponse.observe(viewLifecycleOwner){
+                    if(it is Resource.Success){
+                        findNavController().navigate(R.id.action_bookWriteFragment_to_bookignListFragment)
+                    }
                 }
+
+
             }
         }
     }
+
 
 
 }

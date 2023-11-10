@@ -34,7 +34,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardDonate"
+                android:id="@+id/cardBookedList"
                 android:clickable="true"
                 android:layout_width="160dp"
                 android:layout_height="160dp"

@@ -2,6 +2,7 @@ package com.example.mytableorder.loginSignUp
 
 import android.content.Context
 import android.content.Intent
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -153,6 +154,9 @@ class LoginFragment : Fragment() {
                                                     moveAdmin()
 
                                                     Toast.makeText(requireContext(), "관리자 로그인에 성공햇씁니다.", Toast.LENGTH_SHORT).show()
+                                                }else if(result == "shop"){
+                                                    moveShop()
+                                                    Toast.makeText(requireContext(), "가게 로그인에 성공햇씁니다.", Toast.LENGTH_SHORT).show()
                                                 }else{
                                                     Toast.makeText(requireContext(), "You are not registered yet or an error occurred", Toast.LENGTH_SHORT).show()
                                                 }
@@ -183,7 +187,8 @@ class LoginFragment : Fragment() {
                         binding.btnLogin.isEnabled = true
                         binding.btnLogin.text = "Login"
                     }
-
+                    binding.emailTinputLayout.isEnabled = true
+                    binding.passwordInputLayout.isEnabled = true
                 }
             }
 
@@ -196,6 +201,16 @@ class LoginFragment : Fragment() {
         }
         return view
     }
+
+    private fun moveShop() {
+        Toast.makeText(
+            requireContext(),
+            "가게 로그인 성공!!",
+            Toast.LENGTH_SHORT
+        ).show()
+        findNavController().navigate(R.id.action_loginFragment_to_restaurantHomeFragment)
+    }
+
     private fun moveFragment() {
         Toast.makeText(
             requireContext(),

@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity(){
                 R.id.BoardFragment,
 
                 R.id.infoFragment,
-
+                R.id.restaurantHomeFragment,
 
                 R.id.mypageFragment
 
@@ -156,7 +156,8 @@ class MainActivity : AppCompatActivity(){
             if (destination.id in listOf(R.id.splashFragment, R.id.loginFragment, R.id.signUpFragment )) {
                 supportActionBar?.hide()
                 tabLayout.visibility = View.GONE
-            }else if(destination.id in listOf(R.id.adminHomeFragment, R.id.adminListFragment, R.id.adminWriteFragment, R.id.restaurantHomeFragment)){
+            }else if(destination.id in listOf(R.id.adminHomeFragment, R.id.adminListFragment, R.id.adminWriteFragment,
+                    R.id.restaurantHomeFragment, R.id.BookedUserListFragment)){
                 tabLayout.visibility = View.GONE
             }else {
                 supportActionBar?.show()
@@ -265,8 +266,13 @@ class MainActivity : AppCompatActivity(){
 
         val navAdminhome = navView.menu.findItem(R.id.adminHome)
         val navRegiRestautrant = navView.menu.findItem(R.id.regiRestaurant)
-        navAdminhome.isVisible = userType == "admin"
+        val navMypage = navView.menu.findItem(R.id.myPage)
+        navAdminhome.isVisible = userType == "admin" || userType == "shop"
+        if(userType == "shop"){
+            navAdminhome.title = "가게 페이지"
+        }
         navRegiRestautrant.isVisible = userType == "admin"
+        navMypage.isVisible = userType == "user"
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 /*R.id.action_help -> {

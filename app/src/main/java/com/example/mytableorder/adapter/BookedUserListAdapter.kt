@@ -13,7 +13,10 @@ class BookedUserListAdapter : RecyclerView.Adapter<BookedUserListAdapter.ViewHol
     class ViewHolder(val binding: BookedUserItemBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(bookingDTO: BookingDTO){
             Log.d("$$","bookingDTO binding!")
-
+            binding.bookingNumberView.text
+            binding.usernameView.text
+            binding.peooleNumberView.text
+            binding.bookingTimeView.text
         }
     }
 

@@ -104,7 +104,7 @@ class AdminWriteListFragment : Fragment() {
         //val btnUpdate = view.findViewById<Button>(R.id.btnUpdate)
 
         // '등록' 버튼에 클릭 리스너를 설정합니다.
-            binding.btnUpdate.setOnClickListener {
+        binding.btnUpdate.setOnClickListener {
             val raNum = addRaNum.text.toString().toInt()
             val raName = addRaName.text.toString()
             val raInfo = addRaInfo.text.toString()
@@ -112,7 +112,7 @@ class AdminWriteListFragment : Fragment() {
             val raLatitude = addRaLatitude.text.toString().toDouble()
             val raLongitude = addRaLongitude.text.toString().toDouble()
 
-                // 사용자가 입력한 데이터를 기반으로 AdminListDTO 객체를 생성합니다.
+            // 사용자가 입력한 데이터를 기반으로 AdminListDTO 객체를 생성합니다.
             val adminListDTO = AdminListDTO(
                 raNum = raNum,
                 raName = raName,
@@ -123,7 +123,7 @@ class AdminWriteListFragment : Fragment() {
                 raLongitude = raLongitude
             )
 
-                //중복됐었구나;;;일단 대기
+            //중복됐었구나;;;일단 대기
 //            // Firebase Realtime Database에 데이터 쓰기
 //            val databaseReference = FirebaseDatabase.getInstance().getReference("Restaurants")
 //            databaseReference.child(raNum.toString()).setValue(adminListDTO)
@@ -198,27 +198,27 @@ class AdminWriteListFragment : Fragment() {
     }
 
     // 이미지를 Firebase Storage에 업로드하고 URL을 가져오는 함수
-   /* private fun uploadImageToFirebaseStorage(fileUri: Uri) {
-        // 파일명을 현재 시간을 기준으로 설정
-        val fileName = "images/${System.currentTimeMillis()}-${fileUri.lastPathSegment}"
-        // Firebase Storage에 파일을 업로드하기 위한 참조
-        val imageRef = storage.reference.child(fileName)
+    /* private fun uploadImageToFirebaseStorage(fileUri: Uri) {
+         // 파일명을 현재 시간을 기준으로 설정
+         val fileName = "images/${System.currentTimeMillis()}-${fileUri.lastPathSegment}"
+         // Firebase Storage에 파일을 업로드하기 위한 참조
+         val imageRef = storage.reference.child(fileName)
 
-        // 파일을 업로드하고 성공 시 해당 이미지의 URL을 가져오는 로직
-        imageRef.putFile(fileUri)
-            .addOnSuccessListener { taskSnapshot ->
-                taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUri ->
-                    val imageUrl = downloadUri.toString()
-                    // 이미지 URL을 가져왔으므로 이제 Realtime Database에 저장할 수 있음
-                    // 이 예제에서는 이미지 URL을 AdminListDTO 객체에 저장하고 데이터베이스에 업데이트
-                    updateRestaurantWithImageUrl(imageUrl)
-                }
-            }
-            // 업로드 실패 시 토스트 메시지 표시
-            .addOnFailureListener {
-                Toast.makeText(context, "이미지 업로드 실패: ${it.message}", Toast.LENGTH_LONG).show()
-            }
-    }*/
+         // 파일을 업로드하고 성공 시 해당 이미지의 URL을 가져오는 로직
+         imageRef.putFile(fileUri)
+             .addOnSuccessListener { taskSnapshot ->
+                 taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUri ->
+                     val imageUrl = downloadUri.toString()
+                     // 이미지 URL을 가져왔으므로 이제 Realtime Database에 저장할 수 있음
+                     // 이 예제에서는 이미지 URL을 AdminListDTO 객체에 저장하고 데이터베이스에 업데이트
+                     updateRestaurantWithImageUrl(imageUrl)
+                 }
+             }
+             // 업로드 실패 시 토스트 메시지 표시
+             .addOnFailureListener {
+                 Toast.makeText(context, "이미지 업로드 실패: ${it.message}", Toast.LENGTH_LONG).show()
+             }
+     }*/
     private fun uploadImageToFirebaseStorage(fileUri: Uri) {
         val fileName = "images/${System.currentTimeMillis()}-${fileUri.lastPathSegment}"
         val imageRef = storage.reference.child(fileName)

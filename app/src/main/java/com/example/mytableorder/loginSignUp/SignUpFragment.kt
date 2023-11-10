@@ -1,6 +1,7 @@
 package com.example.mytableorder.loginSignUp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,6 @@ import com.google.firebase.ktx.Firebase
 class SignUpFragment : Fragment() {
     private lateinit var binding: FragmentSignUpBinding
     private lateinit var databaseReference: DatabaseReference
-    private  val viewModel : SignUpViewModel by viewModels()
     lateinit var auth :FirebaseAuth
 
     override fun onCreateView(
@@ -64,27 +64,33 @@ class SignUpFragment : Fragment() {
                     binding.nameInputLayout.error = "Name is required"
                     binding.nameInputLayout.isErrorEnabled = true
                 }
+
                 email.isEmpty() -> {
                     binding.emailInputLayout.error = "Email is required"
                     binding.emailInputLayout.isErrorEnabled = true
                 }
+
                 phone.isEmpty() -> {
                     binding.phoneNumberInputLayout.error = "Phone number is required"
                     binding.phoneNumberInputLayout.isErrorEnabled = true
                 }
+
                 password.isEmpty() -> {
                     binding.passInputLayout.error = "Password is required"
                     binding.passInputLayout.isErrorEnabled = true
                 }
+
                 confirmPassword.isEmpty() -> {
                     binding.confPassInputLayout.error = "Confirm password is required"
                     binding.confPassInputLayout.isErrorEnabled = true
                 }
+
                 password != confirmPassword -> {
                     binding.passInputLayout.error = "Password does not match"
                     binding.confPassInputLayout.error = "Password does not match"
                     binding.passInputLayout.isErrorEnabled = true
                 }
+
                 else -> {
                     binding.nameInputLayout.isErrorEnabled = false
                     binding.emailInputLayout.isErrorEnabled = false
@@ -138,67 +144,25 @@ class SignUpFragment : Fragment() {
                                             .addOnSuccessListener {
                                                 Log.d("$$", "회원 가인 완료")
                                                 val popupText =
-                                                    Snackbar.make(view,"Account Created Successfully\n Check your email for verification Link", Snackbar.LENGTH_LONG)
+                                                    Snackbar.make(
+                                                        view,
+                                                        "Account Created Successfully\n Check your email for verification Link",
+                                                        Snackbar.LENGTH_LONG
+                                                    )
                                                 popupText.show()
                                                 requireActivity().onBackPressed()
                                             }
                                     }
                             }
                             .addOnFailureListener {
-<<<<<<< HEAD
-                               Resource.Error(it.message.toString())
+                                Resource.Error(it.message.toString())
                             }
-
-                        // 아래는 realtime database 이용하는 방법 위는 fire
-                        /*auth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener {
-                                if (it.isSuccessful) {
-                                    val currentUser = auth.currentUser
-                                    val popupText = Snackbar.make(view, "인증링크를 이메일로 보냈습니다. 확인해주세요.", Snackbar.LENGTH_SHORT)
-                                    binding.progressCircular.isVisible = false
-                                    currentUser?.sendEmailVerification()
-                                        ?.addOnCompleteListener {
-                                            
-                                            popupText.show()
-                                    }
-                                    val userId = currentUser?.uid
-                                    val user =
-                                        userId?.let { id -> UserDTO(email, name, phone, userType) }
-                                    // 위 코드는 userId가 null이 아닐 때만 UserDTO 객체를 생성하고 해당 객체를 user 변수에 할당합니다.
-
-                                    if (userId != null) {
-                                        val popupText = Snackbar.make(view, "계정이 성공적으로 생성되었습니다.", Snackbar.LENGTH_SHORT)
-                                        databaseReference.child(userId).setValue(user)
-                                            .addOnSuccessListener {
-                                                Log.d("$$", "successful signUp")
-                                                popupText.show()
-                                            }
-                                            .addOnFailureListener{ e -> Log.e("fail","error",e)}
-
-
-                                    }
-                                    requireActivity().onBackPressed()
-                                }
-                            }
-                            .addOnFailureListener {
-                                binding.progressCircular.isVisible = false
-                                binding.btnRegister.isEnabled = true
-=======
->>>>>>> f8390cfc84dc3cff46018721c0563892eb44e205
-                                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT)
-                                    .show()
-                                Log.d("$$","회원가입 실패")
-                                binding.progressCircular.isVisible = false
-                                binding.btnRegister.isEnabled = true
-                            }
-
-
                     }
                 }
             }
         }
 
         return view
-    }
 
+    }
 }

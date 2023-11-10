@@ -51,6 +51,9 @@
         <action
             android:id="@+id/action_userDetailsFragment_to_reviewListFragment"
             app:destination="@id/ReviewListFragment" />
+        <action
+            android:id="@+id/action_userDetailsFragment_to_bookWriteFragment"
+            app:destination="@id/bookWriteFragment" />
     </fragment>
     <fragment
         android:id="@+id/ReviewListFragment"

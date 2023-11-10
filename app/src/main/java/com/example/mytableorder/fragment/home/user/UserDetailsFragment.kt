@@ -25,9 +25,6 @@ import com.google.android.material.button.MaterialButton
 class UserDetailsFragment : Fragment(), OnMapReadyCallback {
 
 
-
-
-
     private lateinit var googleMap: GoogleMap
     private var shopLocation: LatLng? = null
 
@@ -48,11 +45,13 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_user_details, container, false)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // 지도 프래그먼트를 초기화합니다.
-        val mapFragment = childFragmentManager.findFragmentById(R.id.userMapView) as SupportMapFragment?
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.userMapView) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
         // 넘겨진 Bundle에서 데이터를 추출합니다.
@@ -95,33 +94,36 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
         }
         view.findViewById<MaterialButton>(R.id.buttonReview).setOnClickListener {
             findNavController().navigate(R.id.action_userDetailsFragment_to_reviewListFragment)
-        view.findViewById<MaterialButton>(R.id.buttonBooking).setOnClickListener {
-
-            //d예약하기버튼이 클릭되면 BookWriteFragment 로 데이터 넘김
-            val bundle = Bundle().apply {
-                putString("raName", raName)
-                putInt("raNum",raNum!!)
-            }
-
-            findNavController().navigate(R.id.action_userDetailsFragment_to_bookWriteFragment)
         }
 
+
+            view.findViewById<MaterialButton>(R.id.buttonBooking).setOnClickListener {
+
+                //d예약하기버튼이 클릭되면 BookWriteFragment 로 데이터 넘김
+                val bundle = Bundle().apply {
+                    putString("raName", raName)
+                    putInt("raNum", raNum!!)
+                }
+
+                findNavController().navigate(R.id.action_userDetailsFragment_to_bookWriteFragment)
+            }
+
+        }
+        override fun onMapReady(map: GoogleMap) {
+            googleMap = map
+            //확대 축소
+            googleMap.uiSettings.isZoomControlsEnabled = true
+            // 로그를 추가하여 위도와 경도가 올바르게 로드되는지 확인합니다.
+            Log.d("AdminListViewFragment", "Lat: $raLatitude, Lng: $raLongitude")
+
+            shopLocation?.let { location ->
+                googleMap.addMarker(MarkerOptions().position(location).title("Shop Location"))
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
+            } ?: Log.e("AdminListViewFragment", "Shop location is null")
+        }
     }
-    override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-        //확대 축소
-        googleMap.uiSettings.isZoomControlsEnabled = true
-        // 로그를 추가하여 위도와 경도가 올바르게 로드되는지 확인합니다.
-        Log.d("AdminListViewFragment", "Lat: $raLatitude, Lng: $raLongitude")
-
-        shopLocation?.let { location ->
-            googleMap.addMarker(MarkerOptions().position(location).title("Shop Location"))
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
-        } ?: Log.e("AdminListViewFragment", "Shop location is null")
-    }
 
 
 
 
 
-}

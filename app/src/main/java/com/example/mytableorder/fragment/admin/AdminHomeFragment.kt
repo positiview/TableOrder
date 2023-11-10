@@ -1,11 +1,14 @@
 package com.example.mytableorder.fragment.admin
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.core.view.MenuProvider
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
@@ -67,7 +70,15 @@ class AdminHomeFragment : Fragment(), MenuProvider {
                 findNavController().navigate(R.id.homeFragment)
             }
         }
+        if (menuItem.itemId == android.R.id.home) {
+            // Drawer를 열도록 설정
+            val drawerLayout = activity?.findViewById<DrawerLayout>(R.id.drawer_layout)
+            drawerLayout?.openDrawer(GravityCompat.START)
+            return true
+        }
         return true
     }
+
+
 
 }

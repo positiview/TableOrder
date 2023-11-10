@@ -15,6 +15,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.mytableorder.Db
 import com.example.mytableorder.R
 import com.example.mytableorder.databinding.FragmentLoginBinding
 import com.example.mytableorder.viewModel.UserViewModel
@@ -114,45 +115,65 @@ class LoginFragment : Fragment() {
                         binding.btnLogin.isEnabled = false
                         binding.btnLogin.text = "Loading..."
 
-                        viewModel.login(email, password)
 
 
-//                        viewModel.getUserImage()
-                        viewModel.getUserInfoResponse.observe(viewLifecycleOwner){
-                            when(it){
-                                is Resource.Loading -> {
-                                    binding.progressCircular.isVisible = true
-                                }
-                                is Resource.Error -> {
+                        auth.signInWithEmailAndPassword(email, password)
+                            .addOnSuccessListener {
+                                if(auth.currentUser!!.isEmailVerified){
+                                    Log.d("$$","로그인 성공!!")
+
+                                    viewModel.getUserImage()
+                                    viewModel.getUserInfo()
+                                    viewModel.getUserInfoResponse.observe(viewLifecycleOwner){
+                                        when(it){
+                                            is Resource.Loading -> {
+                                                binding.progressCircular.isVisible = true
+                                            }
+                                            is Resource.Error -> {
+                                                binding.progressCircular.isVisible = false
+                                                binding.emailTinputLayout.isEnabled = true
+                                                binding.passwordInputLayout.isEnabled = true
+                                                binding.btnLogin.isEnabled = true
+                                                binding.btnLogin.text = "Login"
+                                                Toast.makeText(requireContext(), it.string, Toast.LENGTH_SHORT).show()
+                                            }
+                                            is Resource.Success -> {
+                                                binding.progressCircular.isVisible = false
+                                                val result = it.data?.get("user_type") as String?
+                                                //UserType(result)
+                                                val sharedPref = requireActivity().getSharedPreferences("userType", Context.MODE_PRIVATE)
+                                                val editor = sharedPref.edit()
+                                                editor.putString("user_type", result)
+                                                editor.apply()
+
+                                                if (result == "user"){
+                                                    moveFragment()
+                                                    Toast.makeText(requireContext(), "로그인에 성공했습니다. ", Toast.LENGTH_SHORT).show()
+                                                }else if(result == "admin"){
+                                                    moveAdmin()
+
+                                                    Toast.makeText(requireContext(), "관리자 로그인에 성공햇씁니다.", Toast.LENGTH_SHORT).show()
+                                                }else{
+                                                    Toast.makeText(requireContext(), "You are not registered yet or an error occurred", Toast.LENGTH_SHORT).show()
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                }else{
+                                    Toast.makeText(requireContext(), "이메일 인증을 먼저 해주세요", Toast.LENGTH_SHORT).show()
                                     binding.progressCircular.isVisible = false
-                                    binding.emailTinputLayout.isEnabled = true
-                                    binding.passwordInputLayout.isEnabled = true
                                     binding.btnLogin.isEnabled = true
                                     binding.btnLogin.text = "Login"
-                                    Toast.makeText(requireContext(), it.string, Toast.LENGTH_SHORT).show()
                                 }
-                                is Resource.Success -> {
-                                    binding.progressCircular.isVisible = false
-                                    val result = it.data?.get("user_type") as String?
-                                    //UserType(result)
-                                    val sharedPref = requireActivity().getSharedPreferences("userType", Context.MODE_PRIVATE)
-                                    val editor = sharedPref.edit()
-                                    editor.putString("user_type", result)
-                                    editor.apply()
-
-                                    if (result == "user"){
-                                        moveFragment()
-                                        Toast.makeText(requireContext(), "로그인에 성공했습니다. ", Toast.LENGTH_SHORT).show()
-                                    }else if(result == "admin"){
-                                        moveAdmin()
-
-                                        Toast.makeText(requireContext(), "관리자 로그인에 성공햇씁니다.", Toast.LENGTH_SHORT).show()
-                                    }else{
-                                        Toast.makeText(requireContext(), "You are not registered yet or an error occurred", Toast.LENGTH_SHORT).show()
-                                    }
-                                }
+                            }.addOnFailureListener {
+                                Toast.makeText(requireContext(), "회원 정보를 찾지 못했습니다.", Toast.LENGTH_SHORT).show()
+                                binding.progressCircular.isVisible = false
+                                binding.btnLogin.isEnabled = true
+                                binding.btnLogin.text = "Login"
                             }
-                        }
+
+
 
 
                     } else {

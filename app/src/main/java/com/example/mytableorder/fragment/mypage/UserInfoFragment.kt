@@ -35,8 +35,8 @@ class UserInfoFragment : Fragment() {
 
     /*private lateinit var viewModel : MypageViewModel
     private lateinit var viewModelFactory: MypageViewModelFactory*/
-    lateinit var nickName: String
-    lateinit var filePath: Uri
+
+    private lateinit var filePath: Uri
 
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private val authViewModelFactory = AuthViewModelFactory(authRepository)
@@ -57,6 +57,7 @@ class UserInfoFragment : Fragment() {
             filePath = result.uriContent!!
             binding.btnOk.isEnabled = true
             binding.btnOk.setTextColor(Color.WHITE)
+            binding.btnOk.text = "수정 완료"
             imageChanged = true
         }
     }
@@ -167,7 +168,7 @@ class UserInfoFragment : Fragment() {
                 cameraDialog()
             }
 
-            // 수정 버튼 클릭시
+            // 수정하기 버튼 클릭시 (토글 버튼)
             btnEdit.setOnCheckedChangeListener{ _, isChecked ->
 
                 if(isChecked){
@@ -180,6 +181,7 @@ class UserInfoFragment : Fragment() {
                     binding.userPhoneNumberEdit.visibility = View.VISIBLE
                     btnOk.setTextColor(Color.WHITE)
                     binding.btnOk.isEnabled = true
+                    btnOk.text = "수정 완료"
                     nickNameChanged = true
                 }else{
                     btnEdit.text = getString(R.string.edit)
@@ -191,6 +193,9 @@ class UserInfoFragment : Fragment() {
                     binding.userPhoneNumberEdit.visibility = View.GONE
                     btnOk.setTextColor(Color.parseColor("#FF9674"))
                     binding.btnOk.isEnabled = false
+                    if(!imageChanged){
+                        btnOk.text = "수정 준비"
+                    }
                     nickNameChanged = false
                 }
             }
@@ -213,9 +218,8 @@ class UserInfoFragment : Fragment() {
 
     private fun initViewModel() {
 
-
-        // 유저 정보 setting
-//        viewModel.getUserInfo()
+        viewModel.getUserImage()
+        viewModel.getUserInfo()
         viewModel.getUserInfoResponse.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {

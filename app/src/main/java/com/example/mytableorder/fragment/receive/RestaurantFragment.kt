@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.mytableorder.databinding.FragmentRestaurantBookedusersBinding
+import com.example.mytableorder.databinding.FragmentRestaurantHomeBinding
 
 
 class RestaurantFragment : Fragment() {
-    private lateinit var binding: FragmentRestaurantBookedusersBinding
+    private lateinit var binding: FragmentRestaurantHomeBinding
     /*private val viewModel: DonationsViewModel by viewModels()
     private val adapter by lazy { DonationsAdapter() }*/
     override fun onCreateView(

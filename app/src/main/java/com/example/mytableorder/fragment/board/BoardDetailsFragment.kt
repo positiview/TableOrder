@@ -53,15 +53,18 @@ class BoardDetailsFragment : Fragment() {
         }
 
         // SharedPreferences 초기화
-        sharedPreferences = requireContext().getSharedPreferences("board_likes", Context.MODE_PRIVATE)
+       /* sharedPreferences = requireContext().getSharedPreferences("board_likes", Context.MODE_PRIVATE)
 //        postId = requireArguments().getString("postId")
         isLikedByUser = sharedPreferences.getBoolean(postId, false) // SharedPreferences에서 값 불러오기
-        if (isLikedByUser) {
-            updateLikeImage()
-        }
-        hasLiked = sharedPreferences.getBoolean("hasLiked_$postId", false)
-    }
+        Log.d("$$","isLikedByUser : $isLikedByUser")
 
+
+        hasLiked = sharedPreferences.getBoolean("hasLiked_$postId", false)*/
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        updateLikeImage(isLikedByUser)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -109,7 +112,7 @@ class BoardDetailsFragment : Fragment() {
                 ivLike.setImageResource(R.drawable.heart2)
 
                 // 좋아요 상태를 저장하는 코드를 추가합니다. (예: SharedPreferences)
-                saveLikedState()
+                saveLikedState(postId)
 
                 // 좋아요 수를 업데이트하는 코드
                 updateLikes()
@@ -127,7 +130,7 @@ class BoardDetailsFragment : Fragment() {
                 }
 
                 // 이미지 변경 코드
-                updateLikeImage()
+                updateLikeImage(isLikedByUser)
 
                 // 여기에 사용자에게 좋아요가 성공적으로 취소되었다는 안내 메시지를 표시하는 코드를 추가할 수 있습니다.
             } else {
@@ -136,7 +139,7 @@ class BoardDetailsFragment : Fragment() {
                 isLikedByUser = true
 
                 // 좋아요 상태를 저장하는 코드를 추가합니다. (예: SharedPreferences)
-                saveLikedState()
+                saveLikedState(postId)
 
                 // 좋아요 수를 업데이트하는 코드
                 updateLikes()
@@ -156,7 +159,7 @@ class BoardDetailsFragment : Fragment() {
                 }
 
                 // 이미지 변경 코드
-                updateLikeImage()
+                updateLikeImage(isLikedByUser)
 
                 // 여기에 사용자에게 좋아요가 성공적으로 등록되었다는 안내 메시지를 표시하는 코드를 추가할 수 있습니다.
             }
@@ -164,7 +167,7 @@ class BoardDetailsFragment : Fragment() {
 
 
 
-        isLikedByUser = likes > 0
+        isLikedByUser = likes > 0 // 0이 아니면 true
 
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -198,6 +201,8 @@ class BoardDetailsFragment : Fragment() {
                     val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
                     if (currentUserId != null) {
                         isLikedByUser = likesSnapshot.child(currentUserId).exists()
+                        Log.d("$$", "isLikedByUser 상태 :$isLikedByUser")
+                        updateLikeImage(isLikedByUser)
                     }
                 }
             }
@@ -246,7 +251,7 @@ class BoardDetailsFragment : Fragment() {
     }
 
     // 좋아요 이미지 변경
-    private fun updateLikeImage() {
+    private fun updateLikeImage(isLikedByUser:Boolean) {
         val ivLike = view?.findViewById<ImageView>(R.id.ivLike)
         if (isLikedByUser) {
             ivLike?.setImageResource(R.drawable.heart2)
@@ -259,7 +264,7 @@ class BoardDetailsFragment : Fragment() {
         tvLikes.text = "좋아요 $likes 개"
     }
 
-    private fun saveLikedState() {
+    private fun saveLikedState(postId: String?) {
         val postId = postId ?: return  // postId가 null이면 함수를 종료합니다.
 
         val sharedPreferences = requireContext().getSharedPreferences("board_likes", Context.MODE_PRIVATE)

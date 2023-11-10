@@ -17,7 +17,7 @@ class RestaurantFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentRestaurantHomeBinding.inflate(inflater, container, false)
+        binding = FragmentRestaurantBookedusersBinding.inflate(inflater, container, false)
         val view = binding.root
 
 

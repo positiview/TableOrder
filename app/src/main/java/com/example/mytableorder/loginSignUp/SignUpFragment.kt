@@ -65,27 +65,33 @@ class SignUpFragment : Fragment() {
                     binding.nameInputLayout.error = "Name is required"
                     binding.nameInputLayout.isErrorEnabled = true
                 }
+
                 email.isEmpty() -> {
                     binding.emailInputLayout.error = "Email is required"
                     binding.emailInputLayout.isErrorEnabled = true
                 }
+
                 phone.isEmpty() -> {
                     binding.phoneNumberInputLayout.error = "Phone number is required"
                     binding.phoneNumberInputLayout.isErrorEnabled = true
                 }
+
                 password.isEmpty() -> {
                     binding.passInputLayout.error = "Password is required"
                     binding.passInputLayout.isErrorEnabled = true
                 }
+
                 confirmPassword.isEmpty() -> {
                     binding.confPassInputLayout.error = "Confirm password is required"
                     binding.confPassInputLayout.isErrorEnabled = true
                 }
+
                 password != confirmPassword -> {
                     binding.passInputLayout.error = "Password does not match"
                     binding.confPassInputLayout.error = "Password does not match"
                     binding.passInputLayout.isErrorEnabled = true
                 }
+
                 else -> {
                     binding.nameInputLayout.isErrorEnabled = false
                     binding.emailInputLayout.isErrorEnabled = false
@@ -151,19 +157,14 @@ class SignUpFragment : Fragment() {
                             }
 
                             .addOnFailureListener {
-
                                 Resource.Error(it.message.toString())
                             }
-
-
-
-
                     }
                 }
             }
         }
 
         return view
-    }
 
+    }
 }

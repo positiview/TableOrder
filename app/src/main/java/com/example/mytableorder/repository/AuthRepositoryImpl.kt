@@ -39,6 +39,7 @@ class AuthRepositoryImpl : AuthRepository {
                             val userInfo = it.data
                             result.invoke(Resource.Success(userInfo))
                             Log.d("$$","로그인 성공!!")
+//                            getUserImg()
                         }
                         .addOnFailureListener { exception ->
                             result.invoke(Resource.Error("사용자 정보를 가져오는 중에 오류가 발생했습니다: ${exception.message}"))
@@ -117,6 +118,23 @@ class AuthRepositoryImpl : AuthRepository {
         }
     }
 
+   /* private fun getUserImg() : Uri {
+        val user = Firebase.auth.currentUser
+        val uid = user?.uid
+        var uri: Uri = null
+        Log.d("$$","uid 여기.. : $uid")
+        if(uid != null){
+            val imgRef: StorageReference = storageRef.child("user/$uid")
+            imgRef.downloadUrl.addOnSuccessListener {
+                Log.d("$$","check downloadUrl : $it")
+                uri = it
+            }
+        }else{
+
+
+        }
+        return uri
+    }*/
     override suspend fun setUserImage(imagePath: Uri, result: (Resource<Uri>) -> Unit) {
         val uid = auth.currentUser?.uid
         if(uid != null){

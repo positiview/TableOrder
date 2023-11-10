@@ -353,16 +353,7 @@ class MainActivity : AppCompatActivity(){
 
 
     }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // 클릭된 메뉴 아이템의 아이디 마다 when 구절로 클릭시 동작을 설정한다.
-        when(item!!.itemId){
-            android.R.id.home->{ // 메뉴 버튼
-                Log.i("onOptionsItemSelected", "home selected")
-                drawerLayout.openDrawer(GravityCompat.START)
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)

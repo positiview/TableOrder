@@ -255,7 +255,7 @@ class BoardFragment : Fragment() {
             databaseReference.orderByChild("title").startAt(query).endAt(query + "\uf8ff")
         }
 
-        searchQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+        searchQuery.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val newBoardList: MutableList<String> = mutableListOf()
                 val newTimestampList: MutableList<String> = mutableListOf()
@@ -266,7 +266,7 @@ class BoardFragment : Fragment() {
                     val timestamp = dataSnapshot.child("timestamp").getValue(String::class.java)
                     val postId = dataSnapshot.key
 
-                    if (title != null) {
+                    if (title != null && title.contains(query)) {
                         newBoardList.add(title)
                         newTimestampList.add(timestamp ?: "")
 
@@ -293,6 +293,5 @@ class BoardFragment : Fragment() {
             }
         })
     }
-
 
 }

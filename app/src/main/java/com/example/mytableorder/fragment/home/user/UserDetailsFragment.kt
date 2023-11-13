@@ -6,12 +6,22 @@ import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.activityViewModels
 
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.mytableorder.R
+import com.example.mytableorder.repository.BookingRepository
+import com.example.mytableorder.repository.BookingRepositoryImpl
+import com.example.mytableorder.utils.Resource
+import com.example.mytableorder.viewModel.BookingViewModel
+import com.example.mytableorder.viewmodelFactory.BookingViewModelFactory
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -21,6 +31,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 
 
 class UserDetailsFragment : Fragment(), OnMapReadyCallback {
@@ -28,6 +44,7 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var googleMap: GoogleMap
     private var shopLocation: LatLng? = null
+    private val auth = Firebase.auth
 
     // 클래스 레벨 변수로 위도와 경도를 저장할 변수를 선언합니다.
     private var raName: String? = null
@@ -37,6 +54,11 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
     private var raLatitude: Double? = null
     private var raLongitude: Double? = null
     private var raNum: Int? = null // 이 변수는 리스트에서 아이템을 클릭할 때 넘겨져야 함
+
+    private val bookingRepository: BookingRepository = BookingRepositoryImpl()
+    private val viewModel: BookingViewModel by activityViewModels {
+        BookingViewModelFactory(bookingRepository)
+    }
 
 
     override fun onCreateView(
@@ -57,6 +79,8 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
             childFragmentManager.findFragmentById(R.id.userMapView) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
+
+
         // 넘겨진 Bundle에서 데이터를 추출합니다.
         arguments?.let { bundle ->
              raName = bundle.getString("raName")
@@ -71,6 +95,18 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
             raLatitude = bundle.getDouble("raLatitude")
             raLongitude = bundle.getDouble("raLongitude")
             raNum = bundle.getInt("raNum")
+            viewModel.getBookingCount(raNum)
+            viewModel.getBookingCountResponse.observe(viewLifecycleOwner){
+                if(it is Resource.Success){
+                    if(it.data == 0){
+                        Toast.makeText(requireContext(),"현재 예약그룹이 아무도 없습니다.",Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(requireContext(),"현재 ${it.data}그룹이 예약 대기중입니다.",Toast.LENGTH_SHORT).show()
+                    }
+                }else if(it is Resource.Error){
+                    Toast.makeText(requireContext(),"예약 대기 인원을 찾을 수 없습니다.",Toast.LENGTH_SHORT).show()
+                }
+            }
             if (raLatitude != null && raLongitude != null) {
                 shopLocation = LatLng(raLatitude!!, raLongitude!!)
             }
@@ -104,32 +140,82 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
             tabLayout.getTabAt(0)?.select() // 첫 번째 탭을 선택한 상태로 표시
 //            findNavController().navigate(R.id.action_serDetailsFragment_to_homeFragment)
         }
+
+        //예약하기
         view.findViewById<MaterialButton>(R.id.buttonBooking).setOnClickListener {
-            // 예약하기 버튼이 클릭되면 BookWriteFragment로 데이터를 넘깁니다.
+            /*val bundle = Bundle().apply {
+                putString("raName", raName) // 클래스 레벨 변수 raName 사용
+                putInt("raNum", raNum!!)
+                Log.e("$$","$raNum")
+                // 필요하다면 raImg, raMenu 등 다른 정보도 여기에 넣을 수 있습니다.
+            }
+            findNavController().navigate(R.id.action_userDetailsFragment_to_bookWriteFragment,bundle)*/
+            viewModel.checkingReserve()
+            // 예약했는지 확인하는 코드
+            viewModel.getCheckingReserveResponse.observe(viewLifecycleOwner){
+                when(it){
+                    is Resource.Loading->{
+                        view.findViewById<ProgressBar>(R.id.progress_circular).visibility = View.VISIBLE
+                    }
+                    is Resource.Success->{
+                        view.findViewById<ProgressBar>(R.id.progress_circular).visibility = View.GONE
+                        if(it.data){
+                            checkDialog()
+                        }else{
+                            val bundle = Bundle().apply {
+                                putString("raName", raName) // 클래스 레벨 변수 raName 사용
+                                putInt("raNum", raNum!!)
+                                Log.e("$$","$raNum")
+                                // 필요하다면 raImg, raMenu 등 다른 정보도 여기에 넣을 수 있습니다.
+                            }
+                            findNavController().navigate(R.id.action_userDetailsFragment_to_bookWriteFragment,bundle)
+                        }
+
+                        // 예약하기 버튼이 클릭되면 BookWriteFragment로 데이터를 넘깁니다.
+                    }
+                    else ->{
+                        view.findViewById<ProgressBar>(R.id.progress_circular).visibility = View.GONE
+                        Toast.makeText(requireContext(),"예약 여부 확인 오류.",Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+
+
+        }
+
+
+
+
+        }
+
+    private fun checkDialog() {
+        val builder = AlertDialog.Builder(requireContext()).create()
+        val dialogView = layoutInflater.inflate(R.layout.confirm_dialog, null)
+        val okBtn = dialogView.findViewById<MaterialButton>(R.id.dialogConfirm)
+        val cancelBtn = dialogView.findViewById<MaterialButton>(R.id.dialogCancel)
+
+        okBtn.setOnClickListener {
             val bundle = Bundle().apply {
                 putString("raName", raName) // 클래스 레벨 변수 raName 사용
                 putInt("raNum", raNum!!)
                 Log.e("$$","$raNum")
                 // 필요하다면 raImg, raMenu 등 다른 정보도 여기에 넣을 수 있습니다.
             }
+            builder.dismiss()
             findNavController().navigate(R.id.action_userDetailsFragment_to_bookWriteFragment,bundle)
-
         }
 
-
-            view.findViewById<MaterialButton>(R.id.buttonBooking).setOnClickListener {
-
-                //d예약하기버튼이 클릭되면 BookWriteFragment 로 데이터 넘김
-                val bundle = Bundle().apply {
-                    putString("raName", raName)
-                    putInt("raNum", raNum!!)
-                }
-
-                findNavController().navigate(R.id.action_userDetailsFragment_to_bookWriteFragment,bundle)
-            }
-
+        cancelBtn.setOnClickListener {
+            builder.dismiss()
         }
-        override fun onMapReady(map: GoogleMap) {
+
+        builder.setView(dialogView)
+        builder.show()
+    }
+
+
+    override fun onMapReady(map: GoogleMap) {
             googleMap = map
             //확대 축소
             googleMap.uiSettings.isZoomControlsEnabled = true

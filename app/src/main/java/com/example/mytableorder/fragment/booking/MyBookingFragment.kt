@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
@@ -16,6 +17,9 @@ import com.example.mytableorder.repository.BookingRepositoryImpl
 import com.example.mytableorder.utils.Resource
 import com.example.mytableorder.viewModel.BookingViewModel
 import com.example.mytableorder.viewmodelFactory.BookingViewModelFactory
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -52,6 +56,47 @@ class MyBookingFragment : Fragment() {
         // 방금 예약한 예약결과
         viewModel.getBookingData()
 
+        checkBookingData()
+
+
+        val buttonCancel = binding.buttonCancel
+        buttonCancel.setOnClickListener {
+            bookingCancel()
+
+
+        }
+
+
+        val buttonHome = binding.buttonHome
+        buttonHome.setOnClickListener {
+            findNavController().navigate(R.id.action_myBookingFragment_to_homeFragment)
+        }
+    }
+
+    private fun bookingCancel() {
+        val builder = AlertDialog.Builder(requireContext()).create()
+        val dialogView = layoutInflater.inflate(R.layout.confirm_dialog, null)
+        dialogView.findViewById<MaterialTextView>(R.id.confirm).text = "정말 예약 취소하시겠습니까?"
+        val okBtn = dialogView.findViewById<MaterialButton>(R.id.dialogConfirm)
+        val cancelBtn = dialogView.findViewById<MaterialButton>(R.id.dialogCancel)
+
+        okBtn.setOnClickListener {
+
+            viewModel.deleteBookingData()
+            Toast.makeText(requireContext(),"에약 취소 완료",Toast.LENGTH_SHORT).show()
+
+            builder.dismiss()
+        }
+
+        cancelBtn.setOnClickListener {
+            builder.dismiss()
+        }
+
+        builder.setView(dialogView)
+        builder.show()
+    }
+
+    private fun checkBookingData() {
         viewModel.getBookingResponse.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Loading -> {
@@ -59,9 +104,18 @@ class MyBookingFragment : Fragment() {
                 }
                 is Resource.Success -> {
                     binding.progressCircular.visibility = View.GONE
-                    resource.data?.let {
-                        Log.d("$$","viewBooking : $it")
-                        displayBooking(it)
+                    if (resource.data == null) {
+                        MaterialAlertDialogBuilder(binding.root.context)
+                            .setTitle("Alert")
+                            .setMessage("현재 예약 내역이 없습니다.")
+                            .setPositiveButton("확인") { dialog, _ ->
+                                dialog.dismiss()
+                                findNavController().popBackStack()
+                            }
+                            .setCancelable(false)
+                            .show()
+                    } else {
+                        displayBooking(resource.data)
                     }
                 }
                 is Resource.Error -> {
@@ -70,35 +124,31 @@ class MyBookingFragment : Fragment() {
                 }
             }
         }
-        val buttonHome = binding.buttonHome
-        buttonHome.setOnClickListener {
-            findNavController().navigate(R.id.action_myBookingFragment_to_homeFragment)
-        }
     }
 
-    private fun displayBooking(bookings: Map<String, Any>?) {
+    private fun displayBooking(bookings: BookingDTO?) {
         Log.d("$$","Bookings : $bookings")
-        bookings?.forEach { (_, value) ->
+        bookings?.let { value ->
             // value가 실제로 BookingDTO 타입인지 확인합니다.
-            if (value is BookingDTO) {
-                // BookingDTO에서 값을 추출하고 TextView에 설정합니다.
-                val userName1 = value.userName
-                val bookNum1 = value.restaurantNum
-                val bookCount1 = value.memberCount
-                val bookTime1 = value.reservationTime
 
-                Log.e("$$", "userName =$userName1")
-                Log.e("$$", "bookNum =$bookNum1")
-                Log.e("$$", "bookCount =$bookCount1")
-                Log.e("$$", "bookTime =$bookTime1")
+            // BookingDTO에서 값을 추출하고 TextView에 설정합니다.
+            val userName1 = value.userName
+            val bookNum1 = value.restaurantNum
+            val bookCount1 = value.memberCount
+            val bookTime1 = value.reservationTime
 
-                with(binding) {
-                    bookUser.text = userName1
-                    bookNum.text = bookNum1.toString()
-                    bookCount.text = bookCount1.toString()
-                    bookTime.text = bookTime1 ?: "No time specified"
-                }
+            Log.e("$$", "userName =$userName1")
+            Log.e("$$", "bookNum =$bookNum1")
+            Log.e("$$", "bookCount =$bookCount1")
+            Log.e("$$", "bookTime =$bookTime1")
+
+            with(binding) {
+                bookUser.text = userName1
+                bookNum.text = bookNum1.toString()
+                bookCount.text = bookCount1.toString()
+                bookTime.text = bookTime1 ?: "No time specified"
             }
+
         }
     }
 

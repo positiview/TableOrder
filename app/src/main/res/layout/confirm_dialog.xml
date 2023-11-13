@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="@string/confirm_email"
+        android:text="@string/confirm_mybooking"
         android:textSize="18sp"
         android:textColor="?android:attr/textColorPrimary" />
 

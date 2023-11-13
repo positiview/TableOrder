@@ -13,9 +13,9 @@ import kotlinx.coroutines.launch
 class BookingViewModel(private val repository: BookingRepository): ViewModel() {
 
 
-    private val _getBookingResponse : MutableLiveData<Resource<Map<String, Any>?>> = MutableLiveData()
+    private val _getBookingResponse : MutableLiveData<Resource<BookingDTO?>> = MutableLiveData()
 
-    val getBookingResponse : LiveData<Resource<Map<String, Any>?>> get() = _getBookingResponse
+    val getBookingResponse : LiveData<Resource<BookingDTO?>> get() = _getBookingResponse
 
     private val _setBookingResponse : MutableLiveData<Resource<String>> = MutableLiveData()
 
@@ -24,6 +24,14 @@ class BookingViewModel(private val repository: BookingRepository): ViewModel() {
     private val _getBookingListResponse : MutableLiveData<Resource<List<BookingDTO>>?> = MutableLiveData()
 
     val getBookingListResponse : LiveData<Resource<List<BookingDTO>>?> get() = _getBookingListResponse
+
+    private val _getCheckingReserveResponse : MutableLiveData<Resource<Boolean>> = MutableLiveData()
+
+    val getCheckingReserveResponse : LiveData<Resource<Boolean>> get() = _getCheckingReserveResponse
+
+    private val _getBookingCountResponse :MutableLiveData<Resource<Int>> = MutableLiveData()
+
+    val getBookingCountResponse : LiveData<Resource<Int>> get() = _getBookingCountResponse
 
 
 
@@ -67,5 +75,43 @@ class BookingViewModel(private val repository: BookingRepository): ViewModel() {
         }
     }
 
+    fun checkingReserve(){
+        viewModelScope.launch {
+            _getCheckingReserveResponse.value = Resource.Loading
+            try{
+                repository.checkingReserve(){
+                    _getCheckingReserveResponse.value = it
+                }
+            }catch (e:Exception){
+                _getCheckingReserveResponse.value = Resource.Error(e.message.toString())
+            }
+        }
+    }
+
+    fun getBookingCount(raNum: Int?){
+        viewModelScope.launch {
+            _getBookingCountResponse.value = Resource.Loading
+            try{
+                repository.getBookingCount(raNum){
+                    _getBookingCountResponse.value = it
+                }
+            }catch (e:Exception){
+                _getBookingCountResponse.value = Resource.Error(e.message.toString())
+            }
+        }
+    }
+
+    fun deleteBookingData(){
+        viewModelScope.launch {
+            _getBookingResponse.value = Resource.Loading
+            try{
+                repository.deleteBookingData(){
+                    _getBookingResponse.value = it
+                }
+            }catch (e:Exception){
+                _getBookingResponse.value = Resource.Error(e.message.toString())
+            }
+        }
+    }
 
 }

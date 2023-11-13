@@ -165,10 +165,23 @@
 
 
                         <com.google.android.material.button.MaterialButton
+                            android:id="@+id/buttonCancel"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:backgroundTint="@color/orange"
+                            android:text="예약 취소"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            app:cornerRadius="20dp"
+                            tools:ignore="UnusedAttribute" />
+
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/buttonHome"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             android:backgroundTint="@color/orange"
+                            android:layout_marginTop="50dp"
                             android:text="메인"
                             android:textAllCaps="false"
                             android:textColor="@color/black"

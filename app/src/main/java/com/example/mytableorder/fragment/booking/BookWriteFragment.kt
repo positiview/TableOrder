@@ -44,6 +44,7 @@ class BookWriteFragment : Fragment() {
     private lateinit var bookNum:String
 
 
+
     // 이친구가  BookingViewModel 안에 있는 거들고오고
     private val viewModel: BookingViewModel by activityViewModels {
         BookingViewModelFactory(bookingRepository)
@@ -85,18 +86,21 @@ class BookWriteFragment : Fragment() {
         // '등록' 버튼 클릭 리스너 설정
         registerButton.setOnClickListener {
             val user = auth.currentUser
-            if(user == null){
-//                    findNavController().navigate(R.id.action_bookWriteFragment_to_loginFragment)
+            if (user == null) {
+                //                    findNavController().navigate(R.id.action_bookWriteFragment_to_loginFragment)
             }else{
+
+
+
                 val memberCount = memberCountEditText.text.toString().toIntOrNull() ?: 0
                 val now = LocalDateTime.now()
                 val formatter = DateTimeFormatter.ofPattern("MMdd")
                 val formatted = now.format(formatter)
                 val random = java.util.Random()
                 val randomNumber = random.nextInt(999)
-                bookNum = formatted+String.format("%03d", randomNumber)
+                bookNum = formatted + String.format("%03d", randomNumber)
                 // bookNum 형식 : [오늘날짜 월일+랜덤숫자3자리] 예)1112972  --> 11월 12일 랜덤 숫자 3자리
-                Log.d("$$","bookNum : $bookNum")
+                Log.d("$$", "bookNum : $bookNum")
                 getUserName { userName ->
                     // 현재 시간을 문자열로 변환
                     val currentDateTimeString = now.format(DateTimeFormatter.ISO_DATE_TIME)
@@ -114,21 +118,25 @@ class BookWriteFragment : Fragment() {
                 }
 
 
-                viewModel.setBookingResponse.observe(viewLifecycleOwner){
-                    when(it){
-                        is Resource.Loading ->{
+                viewModel.setBookingResponse.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is Resource.Loading -> {
                             progressBar.visibility = View.VISIBLE
                         }
-                        is Resource.Success ->{
+
+                        is Resource.Success -> {
                             progressBar.visibility = View.GONE
                             Toast.makeText(requireContext(), it.data, Toast.LENGTH_SHORT).show()
                             navigateToNextPage()
                         }
-                        is Resource.Error ->{
+
+                        is Resource.Error -> {
                             progressBar.visibility = View.GONE
                             Toast.makeText(requireContext(), "예약 실패", Toast.LENGTH_SHORT).show()
                         }
                     }
+
+
 
                 }
             }

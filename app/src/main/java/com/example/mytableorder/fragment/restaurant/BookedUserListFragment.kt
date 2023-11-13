@@ -35,7 +35,7 @@ class BookedUserListFragment : Fragment() {
     private val bookingRepository: BookingRepository = BookingRepositoryImpl()
     private val bookingViewModelFactory = BookingViewModelFactory(bookingRepository)
     private val viewModel: BookingViewModel by activityViewModels() { bookingViewModelFactory }
-    private lateinit var raName:String
+    private var raName:String? = null
 
     private val auth = Firebase.auth
     /*private val viewModel: ViewModel by activityViewModels{  }
@@ -66,6 +66,15 @@ class BookedUserListFragment : Fragment() {
                 else ->{
                     binding.progressCircular.visibility = View.GONE
                 }
+            }
+        }
+        binding.btnConfirm.setOnClickListener {
+            // 체크된 아이템이 있으면 체크된 아이템들을 삭제하고,
+            // 체크된 아이템이 없으면 첫 번째 아이템을 삭제합니다.
+            if (bookedUserListAdapter.hasCheckedItems()) {
+                bookedUserListAdapter.removeCheckedItems()
+            } else {
+                bookedUserListAdapter.removeFirstItem()
             }
         }
 
@@ -108,7 +117,7 @@ class BookedUserListFragment : Fragment() {
 
                     for (data in snapshot.children) {
                         raNum = data.child("raNum").getValue(Int::class.java)
-                        raName = data.child("raName").getValue(String::class.java).toString()
+                        raName = data.child("raName").getValue(String::class.java)
                         Log.d("$$", "raNum: $raNum")
                         Log.d("$$", "raName: $raName")
 

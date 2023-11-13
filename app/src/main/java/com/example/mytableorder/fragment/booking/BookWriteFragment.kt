@@ -103,7 +103,9 @@ class BookWriteFragment : Fragment() {
                 Log.d("$$", "bookNum : $bookNum")
                 getUserName { userName ->
                     // 현재 시간을 문자열로 변환
-                    val currentDateTimeString = now.format(DateTimeFormatter.ISO_DATE_TIME)
+
+                    val format = DateTimeFormatter.ofPattern("MM월 dd일 HH시 mm분")
+                    val currentDateTimeString = now.format(format)
                     val bookingDTO = BookingDTO(
                         uid = auth.currentUser!!.uid,
                         userName = userName,

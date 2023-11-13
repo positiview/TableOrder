@@ -5,21 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListAdapter
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.mytableorder.adapter.AdminListAdapter
 import com.example.mytableorder.adapter.BookedUserListAdapter
 import com.example.mytableorder.databinding.FragmentRestaurantBookedusersBinding
-import com.example.mytableorder.repository.AuthRepository
-import com.example.mytableorder.repository.AuthRepositoryImpl
 import com.example.mytableorder.repository.BookingRepository
 import com.example.mytableorder.repository.BookingRepositoryImpl
 import com.example.mytableorder.utils.Resource
 import com.example.mytableorder.viewModel.BookingViewModel
-import com.example.mytableorder.viewModel.UserViewModel
-import com.example.mytableorder.viewmodelFactory.AuthViewModelFactory
 import com.example.mytableorder.viewmodelFactory.BookingViewModelFactory
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -108,12 +101,35 @@ class BookedUserListFragment : Fragment() {
 
         return view
     }
+
+    // 알람(notification) 띄우기
+   /* private fun sendNotification(message: String) {
+        val channelId = "channel_id"
+        val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Android Oreo 이상에서는 채널을 만들어야 합니다.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(channelId, "Notification Channel", NotificationManager.IMPORTANCE_DEFAULT)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notification = NotificationCompat.Builder(context!!, channelId)
+            .setContentTitle("New Booking")
+            .setContentText(message)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .build()
+
+        notificationManager.notify(0, notification)
+    }*/
     private fun fetchMyRestNum() {
         val databaseReference = FirebaseDatabase.getInstance().getReference("Restaurants")
         val query = databaseReference.orderByChild("userId").equalTo(auth.currentUser?.uid)
 
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                /*if (bookedUserListAdapter.itemCount > prevCount) {
+                    sendNotification("New booking added.")
+                }*/
                 if (snapshot.exists()) {
                     var raNum:Int? = 0
 

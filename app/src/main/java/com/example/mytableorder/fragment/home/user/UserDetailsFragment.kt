@@ -125,7 +125,7 @@ class UserDetailsFragment : Fragment(), OnMapReadyCallback {
                     putInt("raNum", raNum!!)
                 }
 
-                findNavController().navigate(R.id.action_userDetailsFragment_to_bookWriteFragment)
+                findNavController().navigate(R.id.action_userDetailsFragment_to_bookWriteFragment,bundle)
             }
 
         }

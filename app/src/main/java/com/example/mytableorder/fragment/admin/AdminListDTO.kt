@@ -3,7 +3,7 @@ package com.example.mytableorder.fragment.admin
 data class AdminListDTO(
     //레스트랑번호
 
-    //userId = 가게 주인 추가
+    var userId : String = "",
 
     var raNum: Int=0 ,
     //레스토랑 이름
@@ -19,7 +19,5 @@ data class AdminListDTO(
     //경도
     var raLongitude: Double=0.0
 )
-{
-    constructor() : this(0, "", "", "", "", 0.0, 0.0)
-}
+
 

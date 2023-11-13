@@ -1,5 +1,6 @@
 package com.example.mytableorder.viewModel
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,19 +17,25 @@ class BookingViewModel(private val repository: BookingRepository): ViewModel() {
 
     val getBookingResponse : LiveData<Resource<Map<String, Any>?>> get() = _getBookingResponse
 
+    private val _setBookingResponse : MutableLiveData<Resource<String>> = MutableLiveData()
 
+    val setBookingResponse : LiveData<Resource<String>> get() = _setBookingResponse
+
+    private val _getBookingListResponse : MutableLiveData<Resource<List<BookingDTO>>?> = MutableLiveData()
+
+    val getBookingListResponse : LiveData<Resource<List<BookingDTO>>?> get() = _getBookingListResponse
 
 
 
     fun setBookingData(bookingDTO: BookingDTO){
         viewModelScope.launch {
-            _getBookingResponse.value = Resource.Loading
+            _setBookingResponse.value = Resource.Loading
             try{
                 repository.setBookingList(bookingDTO){
-//                    _getBookingResponse.value = it
+                    _setBookingResponse.value = it
                 }
             }catch (e:Exception){
-                _getBookingResponse.value = Resource.Error(e.message.toString())
+                _setBookingResponse.value = Resource.Error(e.message.toString())
             }
         }
     }
@@ -47,16 +54,18 @@ class BookingViewModel(private val repository: BookingRepository): ViewModel() {
         }
     }
 
-//    fun confirmBookingData(){
-//        viewModelScope.launch {
-//            _getBookingResponse.value = Resource.Loading
-//            try{
-//                repository.confirmBookingList(){
-//                    _getBookingResponse.value = it
-//                }
-//            }catch (e:Exception){
-//                _getBookingResponse.value = Resource.Error(e.message.toString())
-//            }
-//        }
-//    }
+    fun restaurantBookingData(raNum: Int?){
+        viewModelScope.launch {
+            _getBookingListResponse.value = Resource.Loading
+            try{
+                repository.restaurantBookingList(raNum){
+                    _getBookingListResponse.value = it
+                }
+            }catch (e:Exception){
+                _getBookingListResponse.value = Resource.Error(e.message.toString())
+            }
+        }
+    }
+
+
 }

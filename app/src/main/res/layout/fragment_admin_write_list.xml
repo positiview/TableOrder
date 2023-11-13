@@ -177,7 +177,7 @@
                 android:textSize="30sp" />
 
             <TextView
-                android:id="@+id/userId"
+                android:id="@+id/raUserId"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"

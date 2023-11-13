@@ -32,6 +32,8 @@ import com.google.firebase.ktx.Firebase
 class UserInfoFragment : Fragment() {
 
     private lateinit var binding: FragmentUserInfoBinding
+    private val auth = Firebase.auth
+    private val uid = auth.currentUser?.uid
 
     /*private lateinit var viewModel : MypageViewModel
     private lateinit var viewModelFactory: MypageViewModelFactory*/
@@ -218,7 +220,9 @@ class UserInfoFragment : Fragment() {
 
     private fun initViewModel() {
 
-        viewModel.getUserImage()
+        if (uid != null) {
+            viewModel.getUserImage(uid)
+        }
         viewModel.getUserInfo()
         viewModel.getUserInfoResponse.observe(viewLifecycleOwner) {
             when (it) {

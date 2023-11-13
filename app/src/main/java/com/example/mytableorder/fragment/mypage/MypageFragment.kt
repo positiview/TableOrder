@@ -116,22 +116,21 @@ class MypageFragment : Fragment() {
                    it.context.startActivity(intent)
                }*/
 
-            /* btnMypageReservationHistory.setOnClickListener {
-                 val intent = Intent(it.context, ReservationHistoryActivity::class.java)
-                 it.context.startActivity(intent)
+             btnMypageReservationHistory.setOnClickListener {
+                 findNavController().navigate(R.id.action_mypageFragment_to_myBookingFragment)
              }
 
-             btnMypageWriteHistory.setOnClickListener {
+            /* btnMypageWriteHistory.setOnClickListener {
                  val intent = Intent(it.context, WriteHistoryActivity::class.java)
                  it.context.startActivity(intent)
-             }
+             }*/
 
-             btnMypageCommentHistory.setOnClickListener {
+            /* btnMypageCommentHistory.setOnClickListener {
                  val intent = Intent(it.context, CommentHistoryActivity::class.java)
                  it.context.startActivity(intent)
              }
-
-             btnMypageSetting.setOnClickListener {
+*/
+            /* btnMypageSetting.setOnClickListener {
                  val intent = Intent(it.context, SettingActivity::class.java)
                  it.context.startActivity(intent)
              }*/

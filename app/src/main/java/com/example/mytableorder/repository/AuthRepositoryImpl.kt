@@ -102,9 +102,9 @@ class AuthRepositoryImpl : AuthRepository {
             result.invoke(Resource.Error("회원 정보를 찾을 수가 없습니다."))
         }
     }
-    override suspend fun getUserImage(result: (Resource<Uri>) -> Unit) {
-        val user = Firebase.auth.currentUser
-        val uid = user?.uid
+    override suspend fun getUserImage(uid: String, result: (Resource<Uri>) -> Unit) {
+
+
         Log.d("$$","uid 여기.. : $uid")
         if(uid != null){
             val imgRef: StorageReference = storageRef.child("user/$uid")

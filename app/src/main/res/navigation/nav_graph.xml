@@ -11,13 +11,14 @@
         tools:layout="@layout/fragment_home" >
     </fragment>
     <fragment
-        android:id="@+id/bookingListFragment"
-        android:name="com.example.mytableorder.fragment.booking.BookingListFragment"
+        android:id="@+id/myBookingFragment"
+        android:name="com.example.mytableorder.fragment.booking.MyBookingFragment"
         android:label="예약 내역"
-        tools:layout="@layout/fragment_booking_list" >
+        tools:layout="@layout/fragment_my_booking" >
         <action
-            android:id="@+id/action_bookignListFragment_to_homeFragment"
+            android:id="@+id/action_myBookingFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/bookWriteFragment"
@@ -25,8 +26,8 @@
         android:label="Home"
         tools:layout="@layout/fragment_book_write" >
         <action
-            android:id="@+id/action_bookWriteFragment_to_bookingListFragment"
-            app:destination="@id/bookingListFragment" />
+            android:id="@+id/action_bookWriteFragment_to_myBookingFragment"
+            app:destination="@id/myBookingFragment" />
         <action
             android:id="@+id/action_bookWriteFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -249,8 +250,8 @@
     </fragment>
     <fragment
         android:id="@+id/adminWriteFragment"
-        android:name="com.example.mytableorder.fragment.admin.AdminWriteListFragment"
-        android:label="fragment_sign_up"
+        android:name="com.example.mytableorder.fragment.admin.AdminWriteFragment"
+        android:label="가게 등록하기"
         tools:layout="@layout/fragment_admin_write_list" >
 
     </fragment>
@@ -300,10 +301,14 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_splashFragment_to_restaurantHomeFragment"
-            app:destination="@id/restaurantHomeFragment" />
+            app:destination="@id/restaurantHomeFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"/>
          <action
              android:id="@+id/action_splashFragment_to_adminHomeFragment"
-             app:destination="@id/adminHomeFragment" />
+             app:destination="@id/adminHomeFragment"
+             app:popUpTo="@id/splashFragment"
+             app:popUpToInclusive="true"/>
 
     </fragment>
     <fragment
@@ -320,6 +325,9 @@
         <action
             android:id="@+id/action_mypageFragment_to_loginFragment"
             app:destination="@+id/loginFragment"/>
+        <action
+            android:id="@+id/action_mypageFragment_to_myBookingFragment"
+            app:destination="@+id/myBookingFragment"/>
 
     </fragment>
     <dialog

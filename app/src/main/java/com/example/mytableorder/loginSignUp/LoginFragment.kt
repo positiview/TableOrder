@@ -123,7 +123,7 @@ class LoginFragment : Fragment() {
                                 if(auth.currentUser!!.isEmailVerified){
                                     Log.d("$$","로그인 성공!!")
 
-                                    viewModel.getUserImage()
+                                    viewModel.getUserImage(auth.currentUser!!.uid)
                                     viewModel.getUserInfo()
                                     viewModel.getUserInfoResponse.observe(viewLifecycleOwner){
                                         when(it){

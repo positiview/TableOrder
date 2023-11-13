@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mytableorder.R
 
-class DialogAdapter(private val userIdList: List<String>) :
+class DialogAdapter(private val userNameList: List<String>) :
     RecyclerView.Adapter<DialogAdapter.ViewHolder>() {
 
 
@@ -15,7 +15,7 @@ class DialogAdapter(private val userIdList: List<String>) :
 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val userIdTextView: TextView = itemView.findViewById(R.id.userId)
+        val userIdTextView: TextView = itemView.findViewById(R.id.userIdItem)
     }
 
 
@@ -26,17 +26,17 @@ class DialogAdapter(private val userIdList: List<String>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val userId = userIdList[position]
-        holder.userIdTextView.text = userId
+        val userName = userNameList[position]
+        holder.userIdTextView.text = userName
 
         holder.itemView.setOnClickListener {
             // 클릭 이벤트 발생 시 콜백 호출
-            onItemClickListener?.onItemClicked(userId)
+            onItemClickListener?.onItemClicked(position)
         }
     }
 
     interface OnItemClickListener {
-        fun onItemClicked(userId: String)
+        fun onItemClicked(position: Int)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -44,7 +44,7 @@ class DialogAdapter(private val userIdList: List<String>) :
     }
 
     override fun getItemCount(): Int {
-        return userIdList.size
+        return userNameList.size
     }
 
 }

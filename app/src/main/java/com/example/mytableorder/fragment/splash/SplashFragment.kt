@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.ActionOnlyNavDirections
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
@@ -17,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 import javax.inject.Inject
 
@@ -46,7 +49,8 @@ class SplashFragment : Fragment() {
         val user = auth.currentUser
 
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        viewLifecycleOwner.lifecycleScope.launch{
+            delay(3000)
             if (user != null) {
                 /*val action =
                     SplashFragmentDirections.actionSplashFragmentToHomeFragment()
@@ -81,7 +85,8 @@ class SplashFragment : Fragment() {
                  findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
 
             }
-        }, 3000)
+        }
+
 
 
         return view

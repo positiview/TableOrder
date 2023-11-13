@@ -6,9 +6,10 @@ import com.example.mytableorder.utils.Resource
 interface BookingRepository {
 
 
-    suspend fun setBookingList(bookingDTO: BookingDTO, result: (Resource<Map<String, Any>?>) -> Unit)
+    suspend fun setBookingList(bookingDTO: BookingDTO, result: (Resource<String>) -> Unit)
 
     suspend fun getBookingList(result: (Resource<Map<String, Any>?>) -> Unit)
 
-   // suspend fun confirmBookingList(result: (Resource<Map<String, Any>?>) -> Unit)
+    suspend fun restaurantBookingList(raNum: Int?, result: (Resource<List<BookingDTO>>?) -> Unit)
+
 }

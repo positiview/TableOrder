@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -39,6 +40,8 @@ class BookWriteFragment : Fragment() {
     private val bookingRepository: BookingRepository = BookingRepositoryImpl()
     private val authRepository: AuthRepository = AuthRepositoryImpl()
     private var auth: FirebaseAuth = Firebase.auth
+    private var raNum:Int = 0
+    private lateinit var bookNum:String
 
 
     // 이친구가  BookingViewModel 안에 있는 거들고오고
@@ -68,73 +71,99 @@ class BookWriteFragment : Fragment() {
         val raNameTextView: TextView = view.findViewById(R.id.bookReName)
         val memberCountEditText: EditText = view.findViewById(R.id.bookMemberCount)
         val registerButton: Button = view.findViewById(R.id.buttonBookRegi)
-
+        val bookNumView:TextView = view.findViewById(R.id.bookRaNum)
+        val progressBar: ProgressBar = view.findViewById(R.id.progress_circular)
         arguments?.let { bundle ->
             val raName = bundle.getString("raName")
-            val raNum = bundle.getInt("raNum")
+            raNum = bundle.getInt("raNum")
 
 
             // 받은 데이터 화면에 표시
             raNameTextView.text = raName
-
-            // '등록' 버튼 클릭 리스너 설정
-            registerButton.setOnClickListener {
-                val user = auth.currentUser
-                if(user == null){
+            bookNumView.text = raNum.toString()
+        }
+        // '등록' 버튼 클릭 리스너 설정
+        registerButton.setOnClickListener {
+            val user = auth.currentUser
+            if(user == null){
 //                    findNavController().navigate(R.id.action_bookWriteFragment_to_loginFragment)
-                }else{
-                    val memberCount = memberCountEditText.text.toString().toIntOrNull() ?: 0
-
+            }else{
+                val memberCount = memberCountEditText.text.toString().toIntOrNull() ?: 0
+                val now = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("MMdd")
+                val formatted = now.format(formatter)
+                val random = java.util.Random()
+                val randomNumber = random.nextInt(999)
+                bookNum = formatted+String.format("%03d", randomNumber)
+                // bookNum 형식 : [오늘날짜 월일+랜덤숫자3자리] 예)1112972  --> 11월 12일 랜덤 숫자 3자리
+                Log.d("$$","bookNum : $bookNum")
+                getUserName { userName ->
                     // 현재 시간을 문자열로 변환
-                    val currentDateTimeString =
-                        LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
-                   viewModel2.getUserInfo()
-                    // UserDTO를 가져오는 로직
-                    viewModel2.getUserInfoResponse.observe(viewLifecycleOwner) { resource ->
-                        when (resource) {
-                            is Resource.Success -> {
-                                val userData = resource.data
-                                var bookingDTO = BookingDTO()
+                    val currentDateTimeString = now.format(DateTimeFormatter.ISO_DATE_TIME)
+                    val bookingDTO = BookingDTO(
+                        uid = auth.currentUser!!.uid,
+                        userName = userName,
+                        restaurantNum = raNum,
+                        memberCount = memberCount,
+                        reservationTime = currentDateTimeString,
+                        bookNum = bookNum
+                    )
+                    // 파이어베이스 데이터베이스에 저장
+                    viewModel.setBookingData(bookingDTO)
 
-                                    if(userData!=null) {
-
-                                        // BookingDTO 객체 생성, UserDTO 포함
-                                        bookingDTO = BookingDTO(
-                                            uid = auth.currentUser?.uid.toString(),
-                                            userName = userData["name"] as? String ?: "",
-                                            restaurantNum = raNum,
-                                            memberCount = memberCount,
-                                            reservationTime = currentDateTimeString,
-
-                                            )
-                                    }
+                }
 
 
-
-
-                                // 파이어베이스 데이터베이스에 저장
-                                viewModel.setBookingData(bookingDTO)
-                                navigateToNextPage()
-
-
-                            }
-
-                            is Resource.Error -> {
-                                // 오류 처리
-                                Toast.makeText(context, resource.string, Toast.LENGTH_LONG).show()
-                            }
-
-                            is Resource.Loading -> {
-                                // 로딩 처리
-                            }
+                viewModel.setBookingResponse.observe(viewLifecycleOwner){
+                    when(it){
+                        is Resource.Loading ->{
+                            progressBar.visibility = View.VISIBLE
+                        }
+                        is Resource.Success ->{
+                            progressBar.visibility = View.GONE
+                            Toast.makeText(requireContext(), it.data, Toast.LENGTH_SHORT).show()
+                            navigateToNextPage()
+                        }
+                        is Resource.Error ->{
+                            progressBar.visibility = View.GONE
+                            Toast.makeText(requireContext(), "예약 실패", Toast.LENGTH_SHORT).show()
                         }
                     }
+
+                }
+            }
+        }
+
+
+    }
+
+    private fun getUserName(onUserNameLoaded: (String) -> Unit) {
+        Log.d("$$","getUserName 진입")
+        viewModel2.getUserInfo()
+        viewModel2.getUserInfoResponse.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    val userData = resource.data
+                    if(userData!=null) {
+                        val userName= userData["name"] as? String ?: ""
+                        Log.d("$$","userName 은 ? $userName")
+                        onUserNameLoaded(userName)
+                    }
+                }
+                is Resource.Error -> {
+                    // 오류 처리
+                    Toast.makeText(context, resource.string, Toast.LENGTH_LONG).show()
+                }
+                is Resource.Loading -> {
+                    // 로딩 처리
                 }
             }
         }
     }
+
     private fun navigateToNextPage() {
-        findNavController().navigate(R.id.action_bookWriteFragment_to_bookingListFragment)
+
+        findNavController().navigate(R.id.action_bookWriteFragment_to_myBookingFragment)
         // 여기에서 새 페이지로 이동합니다
         // 예를 들어 findNavController().navigate(R.id.action_current_fragment_to_next_fragment)와 같은 코드를 사용할 수 있습니다
     }

@@ -33,7 +33,7 @@ class UserViewModel (
     val deleteUserImgResponse : LiveData<Resource<String>> get() = _deleteUserImgResponse
 
 
-    fun login(email: String, password: String){
+    /*fun login(email: String, password: String){
         viewModelScope.launch {
             _getUserInfoResponse.value = Resource.Loading
             try {
@@ -47,7 +47,7 @@ class UserViewModel (
                 _getUserInfoResponse.value = Resource.Error(e.message.toString())
             }
         }
-    }
+    }*/
 
 
     fun editUserImage(imagePath: Uri){
@@ -65,11 +65,11 @@ class UserViewModel (
         }
     }
 
-    fun getUserImage(){
+    fun getUserImage(uid : String){
         viewModelScope.launch {
             _getUserImgResponse.value = Resource.Loading
             try {
-                repository.getUserImage() {
+                repository.getUserImage(uid) {
                     _getUserImgResponse.value = it
                     Log.d("$$","img Uri : $it")
                 }

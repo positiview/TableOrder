@@ -6,15 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.mytableorder.R
-import com.example.mytableorder.databinding.FragmentBookingListBinding
+import com.example.mytableorder.databinding.FragmentMyBookingBinding
 import com.example.mytableorder.repository.BookingRepository
 import com.example.mytableorder.repository.BookingRepositoryImpl
 import com.example.mytableorder.utils.Resource
@@ -22,21 +18,20 @@ import com.example.mytableorder.viewModel.BookingViewModel
 import com.example.mytableorder.viewmodelFactory.BookingViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
-class BookingListFragment : Fragment() {
+class MyBookingFragment : Fragment() {
 
-    private var _binding: FragmentBookingListBinding? = null
+    private var _binding: FragmentMyBookingBinding? = null
     private val binding get() = _binding!!
 
     private val bookingRepository: BookingRepository = BookingRepositoryImpl()
     private val bookingViewModelFactory: BookingViewModelFactory = BookingViewModelFactory(bookingRepository)
     private val viewModel: BookingViewModel by activityViewModels() { bookingViewModelFactory }
     private var auth: FirebaseAuth = Firebase.auth
+
+    private lateinit var bookNum:String
 
 
 
@@ -45,7 +40,7 @@ class BookingListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentBookingListBinding.inflate(inflater, container, false)
+        _binding = FragmentMyBookingBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -54,6 +49,7 @@ class BookingListFragment : Fragment() {
 
 
 
+        // 방금 예약한 예약결과
         viewModel.getBookingData()
 
         viewModel.getBookingResponse.observe(viewLifecycleOwner) { resource ->
@@ -73,6 +69,10 @@ class BookingListFragment : Fragment() {
                     Toast.makeText(context, resource.string, Toast.LENGTH_LONG).show()
                 }
             }
+        }
+        val buttonHome = binding.buttonHome
+        buttonHome.setOnClickListener {
+            findNavController().navigate(R.id.action_myBookingFragment_to_homeFragment)
         }
     }
 

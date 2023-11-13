@@ -9,29 +9,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.mytableorder.R
-import com.example.mytableorder.adapter.AdminListAdapter
 import com.example.mytableorder.databinding.FragmentAdminWriteListBinding
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 
 
 // AdminWriteListFragment 클래스는 Fragment를 상속
-class AdminWriteListFragment : Fragment() {
+class AdminWriteFragment : Fragment() {
 
     // Firebase Realtime Database와 Firebase Storage에 접근하기 위한 변수를 선언
-    private lateinit var db : FirebaseDatabase
-    private lateinit var storage: FirebaseStorage
+    private var storage = FirebaseStorage.getInstance()
     //이거 안쓰는듯....
-    //private var addImageUri: Uri? = null
+    private var addImageUri: Uri? = null
 
     // 사용자 입력을 받기 위한 EditText와 Button에 대한 변수를 선언
     private  lateinit var addRaNum: EditText
@@ -41,8 +35,9 @@ class AdminWriteListFragment : Fragment() {
     private  lateinit var addRaMenu: EditText
     private  lateinit var addRaLatitude: EditText
     private  lateinit var addRaLongitude: EditText
+    private lateinit var addUserId: TextView
 
-
+    private lateinit var userIdTextView: TextView
 
     // View Binding을 사용하여 레이아웃과의 상호작용을 쉽게
     private var _binding: FragmentAdminWriteListBinding? = null
@@ -58,10 +53,11 @@ class AdminWriteListFragment : Fragment() {
             binding.addedImage.setImageURI(uri)
 
             // 선택된 이미지를 Firebase Storage에 업로드합니다.
-            uploadImageToFirebaseStorage(uri)
+            addImageUri = uri
         } else {
             Toast.makeText(context,"이미지를 선택하지 않았습니다.",Toast.LENGTH_SHORT).show()
         }
+
 
 
 
@@ -73,8 +69,9 @@ class AdminWriteListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Firebase Storage 인스턴스를 초기화합니다.
-        storage = FirebaseStorage.getInstance()
+
         return inflater.inflate(R.layout.fragment_admin_write_list, container, false)
+
     }
 
     // 뷰가 생성된 직후에 호출되는 메서드
@@ -91,9 +88,23 @@ class AdminWriteListFragment : Fragment() {
         addRaMenu = binding.raMenu
         addRaLatitude = binding.raLatitude
         addRaLongitude = binding.raLongitude
+        addUserId = binding.raUserId
 
+        userIdTextView = binding.raUserId // userIdTextView 초기화
 
-
+        // 사장 가게 userId 선택버튼
+        binding.showDialogButton.setOnClickListener {
+            val customDialog = CustomDialog()
+            Log.d("$$","customDialog 실행")
+            customDialog.setOnItemClickListener(object : CustomDialog.OnItemClickListener {
+                override fun onItemClicked(userId: String) {
+                    // 클릭 이벤트 발생 시 다이얼로그의 userId 값을 userIdTextView에 표시
+                    userIdTextView.text = userId
+                    Log.d("$$","ItemClicked view userID : $userId")
+                }
+            })
+            customDialog.show(parentFragmentManager, "")
+        }
 
 
         // '이미지 추가' 버튼에 클릭 리스너를 설정합니다.
@@ -101,41 +112,16 @@ class AdminWriteListFragment : Fragment() {
             openImagePicker()
         }
 
+
         //val btnUpdate = view.findViewById<Button>(R.id.btnUpdate)
 
         // '등록' 버튼에 클릭 리스너를 설정합니다.
-        binding.btnUpdate.setOnClickListener {
-            val raNum = addRaNum.text.toString().toInt()
-            val raName = addRaName.text.toString()
-            val raInfo = addRaInfo.text.toString()
-            val raMenu = addRaMenu.text.toString()
-            val raLatitude = addRaLatitude.text.toString().toDouble()
-            val raLongitude = addRaLongitude.text.toString().toDouble()
+            binding.btnUpdate.setOnClickListener {
 
-            // 사용자가 입력한 데이터를 기반으로 AdminListDTO 객체를 생성합니다.
-            val adminListDTO = AdminListDTO(
-                raNum = raNum,
-                raName = raName,
-                raImg = "",
-                raInfo = raInfo,
-                raMenu = raMenu,
-                raLatitude = raLatitude,
-                raLongitude = raLongitude
-            )
+                addImageUri?.let {
+                    uploadImageToFirebaseStorage(it)
+                }
 
-            //중복됐었구나;;;일단 대기
-//            // Firebase Realtime Database에 데이터 쓰기
-//            val databaseReference = FirebaseDatabase.getInstance().getReference("Restaurants")
-//            databaseReference.child(raNum.toString()).setValue(adminListDTO)
-//                .addOnSuccessListener {
-//                    // 데이터베이스 쓰기 성공 하면 콜백 함수
-//                    navigateBackToHome() // 여기서 성공적으로 돌아가는 메소드를 호출.
-//                }
-//                .addOnFailureListener {exception->
-//                    // 데이터베이스 쓰기 실패
-//                    Log.e("FirebaseError", "Data write failed", exception)
-//                    Toast.makeText(context, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
-//                }
         }
     }
 
@@ -155,7 +141,7 @@ class AdminWriteListFragment : Fragment() {
         putImage.launch("image/*")
     }
 
-    class AdminListFragment : Fragment() {
+    /*class AdminListFragment : Fragment() {
 
         private lateinit var recyclerView: RecyclerView
         private lateinit var listAdapter: AdminListAdapter
@@ -171,7 +157,7 @@ class AdminWriteListFragment : Fragment() {
             listAdapter = AdminListAdapter()
             recyclerView.adapter = listAdapter
 
-            recyclerView.adapter = listAdapter
+
             fetchRestaurantList() // Firebase Realtime Database에서 데이터 가져오기
             return view
         }
@@ -195,30 +181,30 @@ class AdminWriteListFragment : Fragment() {
         }
 
 
-    }
+    }*/
 
     // 이미지를 Firebase Storage에 업로드하고 URL을 가져오는 함수
-    /* private fun uploadImageToFirebaseStorage(fileUri: Uri) {
-         // 파일명을 현재 시간을 기준으로 설정
-         val fileName = "images/${System.currentTimeMillis()}-${fileUri.lastPathSegment}"
-         // Firebase Storage에 파일을 업로드하기 위한 참조
-         val imageRef = storage.reference.child(fileName)
+   /* private fun uploadImageToFirebaseStorage(fileUri: Uri) {
+        // 파일명을 현재 시간을 기준으로 설정
+        val fileName = "images/${System.currentTimeMillis()}-${fileUri.lastPathSegment}"
+        // Firebase Storage에 파일을 업로드하기 위한 참조
+        val imageRef = storage.reference.child(fileName)
 
-         // 파일을 업로드하고 성공 시 해당 이미지의 URL을 가져오는 로직
-         imageRef.putFile(fileUri)
-             .addOnSuccessListener { taskSnapshot ->
-                 taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUri ->
-                     val imageUrl = downloadUri.toString()
-                     // 이미지 URL을 가져왔으므로 이제 Realtime Database에 저장할 수 있음
-                     // 이 예제에서는 이미지 URL을 AdminListDTO 객체에 저장하고 데이터베이스에 업데이트
-                     updateRestaurantWithImageUrl(imageUrl)
-                 }
-             }
-             // 업로드 실패 시 토스트 메시지 표시
-             .addOnFailureListener {
-                 Toast.makeText(context, "이미지 업로드 실패: ${it.message}", Toast.LENGTH_LONG).show()
-             }
-     }*/
+        // 파일을 업로드하고 성공 시 해당 이미지의 URL을 가져오는 로직
+        imageRef.putFile(fileUri)
+            .addOnSuccessListener { taskSnapshot ->
+                taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUri ->
+                    val imageUrl = downloadUri.toString()
+                    // 이미지 URL을 가져왔으므로 이제 Realtime Database에 저장할 수 있음
+                    // 이 예제에서는 이미지 URL을 AdminListDTO 객체에 저장하고 데이터베이스에 업데이트
+                    updateRestaurantWithImageUrl(imageUrl)
+                }
+            }
+            // 업로드 실패 시 토스트 메시지 표시
+            .addOnFailureListener {
+                Toast.makeText(context, "이미지 업로드 실패: ${it.message}", Toast.LENGTH_LONG).show()
+            }
+    }*/
     private fun uploadImageToFirebaseStorage(fileUri: Uri) {
         val fileName = "images/${System.currentTimeMillis()}-${fileUri.lastPathSegment}"
         val imageRef = storage.reference.child(fileName)
@@ -226,9 +212,8 @@ class AdminWriteListFragment : Fragment() {
         imageRef.putFile(fileUri)
             .addOnSuccessListener { taskSnapshot ->
                 Log.e("download","${taskSnapshot.storage.downloadUrl}")
-                taskSnapshot.storage.downloadUrl?.addOnSuccessListener { downloadUri ->
-
-                    val imageUrl = downloadUri.toString()
+                taskSnapshot.storage.downloadUrl?.addOnSuccessListener {
+                    val imageUrl = it.toString()
                     // 업로드된 이미지 URL로 데이터베이스 업데이트
                     updateRestaurantWithImageUrl(imageUrl)
                 }
@@ -242,18 +227,28 @@ class AdminWriteListFragment : Fragment() {
         val raName = addRaName.text.toString()
         val raInfo = addRaInfo.text.toString()
         val raMenu = addRaMenu.text.toString()
-        val raLatitude = addRaLatitude.text.toString().toDouble()
-        val raLongitude = addRaLongitude.text.toString().toDouble()
+        val raLatitude: Double = if(addRaLatitude.text.toString().isEmpty()) {
+            35.155984
+        } else {
+            addRaLatitude.text.toString().toDouble()
+        }
 
+        val raLongitude: Double = if(addRaLongitude.text.toString().isEmpty()) {
+            129.059478
+        } else {
+            addRaLatitude.text.toString().toDouble()
+        }
+        val userId = addUserId.text.toString()
         // 사용자가 입력한 데이터를 기반으로 AdminListDTO 객체를 생성합니다.
         val adminListDTO = AdminListDTO(
+            userId = userId,
             raNum = raNum,
             raName = raName,
             raImg = imageUrl, // 이미지 URL 저장
             raInfo = raInfo,
             raMenu = raMenu,
             raLatitude = raLatitude,
-            raLongitude = raLongitude
+            raLongitude = raLongitude,
         )
 
         // Firebase Realtime Database에 데이터 쓰기

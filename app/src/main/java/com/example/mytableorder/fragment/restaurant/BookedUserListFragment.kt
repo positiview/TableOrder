@@ -35,6 +35,7 @@ class BookedUserListFragment : Fragment() {
     private val bookingRepository: BookingRepository = BookingRepositoryImpl()
     private val bookingViewModelFactory = BookingViewModelFactory(bookingRepository)
     private val viewModel: BookingViewModel by activityViewModels() { bookingViewModelFactory }
+//    private var eventListener: ValueEventListener? = null
     private var raName:String? = null
 
     private val auth = Firebase.auth
@@ -111,7 +112,7 @@ class BookedUserListFragment : Fragment() {
         val databaseReference = FirebaseDatabase.getInstance().getReference("Restaurants")
         val query = databaseReference.orderByChild("userId").equalTo(auth.currentUser?.uid)
 
-        query.addListenerForSingleValueEvent(object : ValueEventListener {
+        query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     var raNum:Int? = 0
@@ -132,5 +133,15 @@ class BookedUserListFragment : Fragment() {
                 Log.e("MyRestNum", "Failed to fetch restaurant number", error.toException())
             }
         })
+//        query.addValueEventListener(eventListener!!)
     }
+   /* override fun onDestroy() {
+        super.onDestroy()
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Restaurants")
+        val query = databaseReference.orderByChild("userId").equalTo(auth.currentUser?.uid)
+        if (eventListener != null) {
+            query.removeEventListener(eventListener!!)
+        }
+    }*/
 }
+

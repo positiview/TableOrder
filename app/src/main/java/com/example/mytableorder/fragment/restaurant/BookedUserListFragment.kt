@@ -48,7 +48,7 @@ class BookedUserListFragment : Fragment() {
         binding = FragmentRestaurantBookedusersBinding.inflate(inflater, container, false)
         val view = binding.root
         bookedUserListAdapter = BookedUserListAdapter()
-        // 내 식당 번호 얻기
+        // 내 식당 번호로 예약자 리스트 얻기
         fetchMyRestNum()
         // 해당 식당 예약자 리스트
         viewModel.getBookingListResponse.observe(viewLifecycleOwner){
@@ -76,6 +76,7 @@ class BookedUserListFragment : Fragment() {
             } else {
                 bookedUserListAdapter.removeFirstItem()
             }
+            fetchMyRestNum()
         }
 
 

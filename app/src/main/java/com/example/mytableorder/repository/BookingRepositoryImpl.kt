@@ -94,7 +94,7 @@ class BookingRepositoryImpl:BookingRepository {
     }
 
     override suspend fun restaurantBookingList(raNum : Int?, result: (Resource<List<BookingDTO>>?) -> Unit) {
-        val bookingsRef = database.getReference("bookings")
+        val bookingsRef = database.getReference("bookings").orderByChild("reservationTime")
         val bookingDTOList = mutableListOf<BookingDTO>()
         Log.d("$$","요요요요raNum : $raNum")
         bookingsRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -108,7 +108,7 @@ class BookingRepositoryImpl:BookingRepository {
                             }
                         }
                     }
-
+                /*val sortedBookingDTOList = bookingDTOList.sortedBy { it.reservationTime }*/
                 result.invoke(Resource.Success(bookingDTOList))
             }
 

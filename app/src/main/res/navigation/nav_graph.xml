@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/splashFragment">
+    <fragment
+        android:id="@+id/infoFragment"
+        android:name="com.example.mytableorder.fragment.InfoFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" >
+    </fragment>
+    <fragment
+        android:id="@+id/myBookingFragment"
+        android:name="com.example.mytableorder.fragment.booking.MyBookingFragment"
+        android:label="예약 내역"
+        tools:layout="@layout/fragment_my_booking" >
+        <action
+            android:id="@+id/action_myBookingFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/bookWriteFragment"
+        android:name="com.example.mytableorder.fragment.booking.BookWriteFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_book_write" >
+        <action
+            android:id="@+id/action_bookWriteFragment_to_myBookingFragment"
+            app:destination="@id/myBookingFragment" />
+        <action
+            android:id="@+id/action_bookWriteFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userListFragment"
+        android:name="com.example.mytableorder.fragment.home.user.UserListFragment"
+        android:label="매장 리스트"
+        tools:layout="@layout/fragment_user_list" >
+        <action
+            android:id="@+id/action_userListFragment_to_userDetailsFragment"
+            app:destination="@id/userDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userDetailsFragment"
+        android:name="com.example.mytableorder.fragment.home.user.UserDetailsFragment"
+        android:label=""
+        tools:layout="@layout/fragment_user_details" >
+        <action
+            android:id="@+id/action_userDetailsFragment_to_userListFragment"
+            app:destination="@id/userListFragment" />
+        <action
+            android:id="@+id/action_userDetailsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_userDetailsFragment_to_reviewListFragment"
+            app:destination="@id/ReviewListFragment" />
+        <action
+            android:id="@+id/action_userDetailsFragment_to_bookWriteFragment"
+            app:destination="@id/bookWriteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ReviewListFragment"
+        android:name="com.example.mytableorder.fragment.home.user.ReviewListFragment"
+        android:label="Review"
+        tools:layout="@layout/fragment_review" >
+        <action
+            android:id="@+id/action_ReviewListFragment_to_reviewWriteFragment"
+            app:destination="@id/ReviewWriteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ReviewWriteFragment"
+        android:name="com.example.mytableorder.fragment.home.user.ReviewWriteFragment"
+        android:label="Review"
+        tools:layout="@layout/fragment_review_write" >
+    </fragment>
+    <fragment
+        android:id="@+id/adminUpdateFragment"
+        android:name="com.example.mytableorder.fragment.admin.AdminUpdateFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_admin_update" >
+        <action
+            android:id="@+id/action_adminUpdateFragment_to_adminHomeFragment"
+            app:destination="@id/adminHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminListViewFragment"
+        android:name="com.example.mytableorder.fragment.admin.AdminListViewFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_admin_list_view" >
+        <action
+            android:id="@+id/action_adminListViewFragment_to_adminUpdateFragment"
+            app:destination="@id/adminUpdateFragment" />
+        <action
+            android:id="@+id/action_adminListViewFragment_to_adminHomeFragment"
+            app:destination="@id/adminHomeFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/adminListFragment"
+        android:name="com.example.mytableorder.fragment.admin.AdminListFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_admin_card_list" >
+        <action
+            android:id="@+id/action_adminListFragment_to_adminListViewFragment"
+            app:destination="@id/adminListViewFragment" />
+    </fragment>
+
+
+    <!--프레그먼트 디테일즈 추가-->
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.mytableorder.fragment.home.user.UserDetailsFragment"
+        android:label="Details"
+        tools:layout="@layout/fragment_user_details" />
+
+
+    <!--자유게시판-->
+    <fragment
+        android:id="@+id/BoardFragment"
+        android:name="com.example.mytableorder.fragment.board.BoardFragment"
+        android:label="자유게시판"
+        android:icon="@drawable/board"
+        tools:layout="@layout/fragment_board">
+
+
+        <action
+            android:id="@+id/action_boardFragment_to_boardDetailsFragment"
+            app:destination="@id/BoardDetailsFragment" />
+        <action
+            android:id="@+id/action_boardFragment_to_WriteFragment"
+            app:destination="@id/WriteFragment" />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/BoardDetailsFragment"
+        android:name="com.example.mytableorder.fragment.board.BoardDetailsFragment"
+        android:label="자유게시판"
+        tools:layout="@layout/fragment_board_details" >
+        <action
+            android:id="@+id/action_BoardDetailsFragment_to_ModifyFragment"
+            app:destination="@id/ModifyFragment" >
+            <argument
+                android:name="postId"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/action_BoardDetailsFragment_to_BoardFragment"
+            app:destination="@id/BoardFragment" />
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/WriteFragment"
+        android:name="com.example.mytableorder.fragment.board.WriteFragment"
+        android:label="자유게시판 작성"
+        tools:layout="@layout/fragment_board_write" >
+        <action
+            android:id="@+id/action_writeFragment_to_BoardDetailsFragment"
+            app:destination="@id/BoardDetailsFragment" />
+        <action
+            android:id="@+id/action_writeFragment_to_BoardFragment"
+            app:destination="@id/BoardFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ModifyFragment"
+        android:name="com.example.mytableorder.fragment.board.ModifyFragment"
+        android:label="자유게시판 수정"
+        tools:layout="@layout/fragment_board_modify" >
+        <action
+            android:id="@+id/action_ModifyFragment_to_BoardFragment"
+            app:destination="@id/BoardFragment" />
+        <action
+            android:id="@+id/action_ModifyFragment_to_BoardDetailsFragment"
+            app:destination="@id/BoardDetailsFragment" >
+            <argument
+                android:name="postId"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <!--자유게시판-->
+
+
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.mytableorder.fragment.home.HomeFragment"
+        android:label="홈"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homFragment_to_user_details_fragment"
+            app:destination="@id/userDetailsFragment"/>
+        <action
+            android:id="@+id/action_homeFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+        <!--<action
+            android:id="@+id/action_homeFragment_to_donateFragment"
+            app:destination="@id/donateFragment" />-->
+        <!--  <action
+              android:id="@+id/action_homeFragment_to_receiveFragment"
+              app:destination="@id/receiveFragment" />-->
+        <action
+            android:id="@+id/action_homeFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.mytableorder.loginSignUp.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_adminHomeFragment"
+            app:destination="@id/adminHomeFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_restaurantHomeFragment"
+            app:destination="@id/restaurantHomeFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.example.mytableorder.loginSignUp.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminWriteFragment"
+        android:name="com.example.mytableorder.fragment.admin.AdminWriteFragment"
+        android:label="가게 등록하기"
+        tools:layout="@layout/fragment_admin_write_list" >
+
+    </fragment>
+    <!--<fragment
+        android:id="@+id/donateFragment"
+        android:name="com.example.tableorder.fragments.donate.DonateFragment"
+        android:label="Donate"
+        tools:layout="@layout/fragment_donate" />-->
+    <!--<fragment
+        android:id="@+id/receiveFragment"
+        android:name="com.example.tableorder.fragments.receive.ReceiveFragment"
+        android:label="Receive"
+        tools:layout="@layout/fragment_receive" >
+        &lt;!&ndash;<action
+            android:id="@+id/action_receiveFragment_to_donorLocationFragment"
+            app:destination="@id/donorLocationFragment" />&ndash;&gt;
+    </fragment>-->
+    <!-- <fragment
+         android:id="@+id/aboutUsFragment"
+         android:name="com.example.tableorder.about.AboutUsFragment"
+         android:label="About us"
+         tools:layout="@layout/fragment_about_us" />-->
+    <!-- <fragment
+         android:id="@+id/foodMapFragment"
+         android:name="com.example.tableorder.fragments.foodmap.FoodMapFragment"
+         android:label="Food map"
+         tools:layout="@layout/fragment_food_map" />
+     <fragment
+         android:id="@+id/historyFragment"
+         android:name="com.example.tableorder.fragments.history.HistoryFragment"
+         android:label="History"
+         tools:layout="@layout/fragment_history" />-->
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.mytableorder.fragment.splash.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_restaurantHomeFragment"
+            app:destination="@id/restaurantHomeFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"/>
+         <action
+             android:id="@+id/action_splashFragment_to_adminHomeFragment"
+             app:destination="@id/adminHomeFragment"
+             app:popUpTo="@id/splashFragment"
+             app:popUpToInclusive="true"/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/mypageFragment"
+        android:name="com.example.mytableorder.fragment.mypage.MypageFragment"
+        android:label="@string/my_page"
+        tools:layout="@layout/fragment_mypage" >
+        <action
+            android:id="@+id/action_mypageFragment_to_myInfoFragment"
+            app:destination="@+id/myInfoFragment"/>
+        <action
+            android:id="@+id/action_mypageFragment_to_resetPasswordFragment"
+            app:destination="@+id/resetPasswordFragment"/>
+        <action
+            android:id="@+id/action_mypageFragment_to_loginFragment"
+            app:destination="@+id/loginFragment"/>
+        <action
+            android:id="@+id/action_mypageFragment_to_myBookingFragment"
+            app:destination="@+id/myBookingFragment"/>
+
+    </fragment>
+    <dialog
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.example.mytableorder.loginSignUp.ResetPasswordFragment"
+        android:label="ResetPasswordFragment" />
+    <dialog
+        android:id="@+id/confirmLayout"
+        android:name="com.example.mytableorder.fragment.ConfirmLayoutFragment"
+        android:label="ConfirmLayout" />
+    <fragment
+        android:id="@+id/myInfoFragment"
+        android:name="com.example.mytableorder.fragment.mypage.UserInfoFragment"
+        android:label="내 정보 관리"
+        tools:layout="@layout/fragment_user_info" >
+        <!--<argument
+            android:name="donation"
+            app:argType="edu.puo.foodonus.model.Donation" />-->
+    </fragment>
+    <!--<fragment
+        android:id="@+id/contactUsFragment"
+        android:name="com.example.tableorder.fragments.contact.ContactUsFragment"
+        android:label="Contact Us" />-->
+    <fragment
+        android:id="@+id/restaurantHomeFragment"
+        android:name="com.example.mytableorder.fragment.restaurant.RestaurantHomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_restaurant_home" >
+        <!--<action
+            android:id="@+id/action_restaurantHomeFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/donorsHomeFragment"
+            app:popUpToInclusive="true" />-->
+        <action
+            android:id="@+id/action_restaurantHomeFragment_to_BookedUserListFragment"
+            app:destination="@id/BookedUserListFragment" />
+        <!--<action
+            android:id="@+id/action_donorsHomeFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_donorsHomeFragment_to_aboutUsFragment"
+            app:destination="@id/aboutUsFragment" />
+        <action
+            android:id="@+id/action_donorsHomeFragment_to_contactUsFragment"
+            app:destination="@id/contactUsFragment" />-->
+    </fragment>
+    <fragment
+        android:id="@+id/BookedUserListFragment"
+        android:name="com.example.mytableorder.fragment.restaurant.BookedUserListFragment"
+        android:label="예약 현황"
+        tools:layout="@layout/fragment_restaurant_bookedusers">
+
+    </fragment>
+    <fragment
+        android:id="@+id/adminHomeFragment"
+        android:name="com.example.mytableorder.fragment.admin.AdminHomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_admin_home" >
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminWriteFragment"
+            app:destination="@+id/adminWriteFragment"/>
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminListFragment"
+            app:destination="@+id/adminListFragment"/>
+
+    </fragment>
+</navigation>

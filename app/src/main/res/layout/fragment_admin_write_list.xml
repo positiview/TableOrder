@@ -189,7 +189,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:text="dialog"
+            android:text="가게사장선택"
             android:textSize="24dp" />
 
         <!-- 등록 버튼 -->

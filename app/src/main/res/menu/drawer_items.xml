@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single" >
+        <item
+            android:id="@+id/action_home"
+            android:title="@string/home"
+            android:icon="@drawable/ic_baseline_home_24"
+            />
+        <item
+            android:id="@+id/action_help"
+            android:title="@string/help"
+            android:icon="@drawable/ic_help"
+            />
+
+    </group>
+
+    <item android:title="@string/communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:title="@string/share"
+                android:icon="@drawable/ic_share"
+                />
+            <item
+                android:id="@+id/action_feedback"
+                android:title="@string/feedback"
+                android:icon="@drawable/ic_feedback"
+                />
+
+        </menu>
+    </item>
+
+    <item android:title="@string/my_menu">
+
+        <menu>
+            <item
+                android:id="@+id/adminHome"
+                android:title="@string/admin_home"
+                />
+            <item
+                android:id="@+id/regiRestaurant"
+                android:title="@string/admin_regiRestaurant"
+                />
+            <item
+                android:id="@+id/myPage"
+                android:title="@string/my_page"
+                />
+            <item
+                android:id="@+id/logout"
+                android:title="@string/logout"
+                android:icon="@drawable/ic_logout"
+                />
+
+        </menu>
+    </item>
+</menu>

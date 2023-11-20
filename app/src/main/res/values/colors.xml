@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="orange">#5E988E</color>
+    <color name="b">#8BC8BE</color>
+    <color name="a">#DF7861</color>
+    <color name="g">#F2F4F4</color>
+
+
+    <color name="colorDivision">#e0e0e0</color>
+    <color name="colorDivision2">#cccccc</color>
+    <color name="rknu_red">#E60000</color>
+    <color name="knu_red">#b82d28</color>
+    <color name="knu_blue">#042d96</color>
+    <color name="custombutton1">#2E0F01</color>
+    <color name="seat_possible">#ABEE9F</color>
+    <color name="seat_selected">#a8a8a8</color>
+    <color name="gray">#D6D6D6</color>
+
+    <color name="mypage_background_gray">#f2f2f7</color>
+
+</resources>

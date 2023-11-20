@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "52412280507",
+    "firebase_url": "https://tableorder-a307c-default-rtdb.firebaseio.com",
+    "project_id": "tableorder-a307c",
+    "storage_bucket": "tableorder-a307c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52412280507:android:c7d714143a1632a1fd839e",
+        "android_client_info": {
+          "package_name": "com.example.mytableorder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "52412280507-ovkk4ela3adbv2cd0tsmd0sdv84i5d93.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mytableorder",
+            "certificate_hash": "1b136025d6451f28e5981f7ded9ea12789b9c2a1"
+          }
+        },
+        {
+          "client_id": "52412280507-a8dcg8snsc9lf9gvubhhgik25uq7337a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOpgYNRwWbFQMmNPOQh7yzkWurD2Lf_Zg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "52412280507-a8dcg8snsc9lf9gvubhhgik25uq7337a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
